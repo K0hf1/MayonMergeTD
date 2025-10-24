@@ -1,0 +1,39 @@
+[gd_scene load_steps=0 format=3 uid="uid://bdtgpuc4xxooq"]
+
+[node name="TowerSlots" type="Node2D"]
+
+[node name="Slot1" type="Marker2D" parent="."]
+position = Vector2(160, 192)
+
+[node name="Slot2" type="Marker2D" parent="."]
+position = Vector2(288, 192)
+
+[node name="Slot3" type="Marker2D" parent="."]
+position = Vector2(416, 192)
+
+[node name="Slot4" type="Marker2D" parent="."]
+position = Vector2(96, 320)
+
+[node name="Slot5" type="Marker2D" parent="."]
+position = Vector2(224, 320)
+
+[node name="Slot6" type="Marker2D" parent="."]
+position = Vector2(352, 320)
+
+[node name="Slot7" type="Marker2D" parent="."]
+position = Vector2(160, 448)
+
+[node name="Slot8" type="Marker2D" parent="."]
+position = Vector2(288, 448)
+
+[node name="Slot9" type="Marker2D" parent="."]
+position = Vector2(416, 448)
+
+[node name="Slot10" type="Marker2D" parent="."]
+position = Vector2(96, 576)
+
+[node name="Slot11" type="Marker2D" parent="."]
+position = Vector2(224, 576)
+
+[node name="Slot12" type="Marker2D" parent="."]
+position = Vector2(352, 576)

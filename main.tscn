@@ -1,12 +1,15 @@
-[gd_scene load_steps=44 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=47 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://4e3g0qlduxx7" path="res://defender1.tscn" id="2_4c57u"]
 [ext_resource type="Texture2D" uid="uid://cgs288ya075ox" path="res://crystal_dark_64x64_24f_20d_normal.png" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://cwujm1lntowec" path="res://Tower.png" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cb78y0kctovyd" path="res://EnemyPath.tscn" id="7_5vw27"]
 [ext_resource type="Script" uid="uid://cjht2v1hragfh" path="res://crystal_area.gd" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
+[ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1078,6 +1081,10 @@ height = 64.0
 [node name="main" type="Node2D"]
 script = SubResource("GDScript_272bh")
 
+[node name="GameManager" type="Node2D" parent="."]
+script = ExtResource("10_4c57u")
+tower_prefab = ExtResource("2_4c57u")
+
 [node name="MainMap" type="TileMap" parent="."]
 position = Vector2(0, 1)
 tile_set = SubResource("TileSet_h2yge")
@@ -1118,6 +1125,9 @@ script = ExtResource("6_5vw27")
 
 [node name="PathFollow2D" parent="Path2D" instance=ExtResource("7_5vw27")]
 position = Vector2(74, 167)
+script = null
+
+[node name="TowerSlots" parent="." instance=ExtResource("9_4c57u")]
 
 [node name="CrystalArea" type="Area2D" parent="." groups=["Crystal"]]
 script = ExtResource("7_272bh")
@@ -1135,4 +1145,23 @@ z_index = 1
 position = Vector2(416, 640)
 shape = SubResource("CapsuleShape2D_seu75")
 
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BuyTowerButton" type="Button" parent="UI"]
+offset_left = 209.0
+offset_top = 768.0
+offset_right = 352.0
+offset_bottom = 832.0
+text = "BUY TOWER"
+
+[node name="StartWaveButton" type="Button" parent="UI"]
+offset_left = 96.0
+offset_top = 768.0
+offset_right = 160.0
+offset_bottom = 832.0
+text = "START
+WAVE"
+
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
+[connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]
+[connection signal="pressed" from="UI/StartWaveButton" to="GameManager" method="_on_start_wave_button_pressed"]
