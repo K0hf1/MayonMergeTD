@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=44 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cwujm1lntowec" path="res://Tower.png" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cb78y0kctovyd" path="res://EnemyPath.tscn" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://cjht2v1hragfh" path="res://crystal_area.gd" id="7_272bh"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1066,9 +1067,13 @@ animations = [{
 "texture": SubResource("AtlasTexture_qsp4k")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"idleCrystal",
 "speed": 8.0
 }]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seu75"]
+radius = 13.0
+height = 64.0
 
 [node name="main" type="Node2D"]
 script = SubResource("GDScript_272bh")
@@ -1114,9 +1119,20 @@ script = ExtResource("6_5vw27")
 [node name="PathFollow2D" parent="Path2D" instance=ExtResource("7_5vw27")]
 position = Vector2(74, 167)
 
-[node name="AnimatableBody2D" type="AnimatedSprite2D" parent="."]
-z_index = 3
+[node name="CrystalArea" type="Area2D" parent="." groups=["Crystal"]]
+script = ExtResource("7_272bh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CrystalArea"]
+z_index = 1
 position = Vector2(416, 640)
 sprite_frames = SubResource("SpriteFrames_kq58d")
-animation = &"idle"
-frame_progress = 0.6475667
+animation = &"idleCrystal"
+frame = 23
+frame_progress = 0.035286807
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrystalArea"]
+z_index = 1
+position = Vector2(416, 640)
+shape = SubResource("CapsuleShape2D_seu75")
+
+[connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]

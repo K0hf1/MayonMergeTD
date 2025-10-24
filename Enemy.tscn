@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://cyqblcc83l7d4"]
+[gd_scene load_steps=11 format=3 uid="uid://cyqblcc83l7d4"]
 
+[ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://enemy.gd" id="1_s7bn3"]
 [ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Warrior_Run.png" id="1_tt7e2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s7bn3"]
@@ -53,16 +54,23 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
-radius = 23.0
-height = 59.14
+radius = 22.0
+height = 58.75
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Area2D" groups=["Enemy"]]
+z_index = 1
+script = ExtResource("1_s7bn3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_2nxwx")
 animation = &"EnemyRun"
+frame = 2
+frame_progress = 0.3769967
 offset = Vector2(0, -35.535)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
 position = Vector2(0, -31.375)
 shape = SubResource("CapsuleShape2D_tt7e2")
