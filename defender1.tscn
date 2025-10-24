@@ -1,21 +1,112 @@
-[gd_scene load_steps=6 format=3 uid="uid://4e3g0qlduxx7"]
+[gd_scene load_steps=19 format=3 uid="uid://4e3g0qlduxx7"]
 
+[ext_resource type="Script" uid="uid://dq83eb2nmp6cq" path="res://defender_1.gd" id="1_7d1u4"]
 [ext_resource type="Texture2D" uid="uid://bdyk1oaraqcsl" path="res://Evil-Dwende.png" id="1_512i0"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7d1u4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_512i0"]
 atlas = ExtResource("1_512i0")
 region = Rect2(0, 0, 72, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gpx23"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3k6rn"]
 atlas = ExtResource("1_512i0")
 region = Rect2(72, 0, 72, 72)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_y42ho"]
+atlas = ExtResource("1_512i0")
+region = Rect2(144, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypt3k"]
+atlas = ExtResource("1_512i0")
+region = Rect2(0, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ty18g"]
+atlas = ExtResource("1_512i0")
+region = Rect2(72, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5x6sv"]
+atlas = ExtResource("1_512i0")
+region = Rect2(144, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mgv5u"]
+atlas = ExtResource("1_512i0")
+region = Rect2(0, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ct352"]
+atlas = ExtResource("1_512i0")
+region = Rect2(72, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r1gmy"]
+atlas = ExtResource("1_512i0")
+region = Rect2(144, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7d1u4"]
+atlas = ExtResource("1_512i0")
+region = Rect2(0, 216, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpx23"]
+atlas = ExtResource("1_512i0")
+region = Rect2(72, 216, 72, 72)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_exak5"]
+atlas = ExtResource("1_512i0")
+region = Rect2(144, 216, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnr42"]
+atlas = ExtResource("1_512i0")
+region = Rect2(0, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27fhv"]
+atlas = ExtResource("1_512i0")
+region = Rect2(72, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ilfse"]
 atlas = ExtResource("1_512i0")
 region = Rect2(144, 0, 72, 72)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_v315g"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_512i0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3k6rn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y42ho")
+}],
+"loop": true,
+"name": &"Attack_Down",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypt3k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ty18g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5x6sv")
+}],
+"loop": true,
+"name": &"Attack_Left",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mgv5u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ct352")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r1gmy")
+}],
+"loop": true,
+"name": &"Attack_Right",
+"speed": 3.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7d1u4")
@@ -27,15 +118,29 @@ animations = [{
 "texture": SubResource("AtlasTexture_exak5")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"Attack_Up",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnr42")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27fhv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ilfse")
+}],
+"loop": true,
+"name": &"Idle",
 "speed": 3.0
 }]
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_7d1u4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_v315g")
-animation = &"idle"
-frame_progress = 0.31103665
+animation = &"Attack_Down"
 offset = Vector2(0, -25.695)

@@ -3,6 +3,7 @@ extends Node2D
 @export var tower_prefab: PackedScene    # drag your Tier 1 tower scene here in the editor
 @onready var tower_slots_parent = get_parent().get_node("TowerSlots")
 @onready var spawner = $"../Path2D"
+@onready var start_wave_button = get_node("../UI/StartWaveButton")
 
 var tower_slots: Array[Marker2D] = []
 var occupied_slots: Array[Marker2D] = []
@@ -42,4 +43,7 @@ func _on_buy_tower_button_pressed() -> void:
 
 
 func _on_start_wave_button_pressed():
-	spawner.start_wave(5)  # test value
+	if start_wave_button:
+		start_wave_button.disabled = true
+	if spawner:
+		spawner.start_wave(5)

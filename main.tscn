@@ -894,9 +894,9 @@ sources/0 = SubResource("TileSetAtlasSource_1bvp3")
 
 [sub_resource type="Curve2D" id="Curve2D_272bh"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 74, 167, 0, 0, 0, 0, 471, 165, 0, 0, 0, 0, 468, 276, 0, 0, 0, 0, 57, 281, 0, 0, 0, 0, 54, 424, 0, 0, 0, 0, 469, 430, 0, 0, 0, 0, 466, 533, 0, 0, 0, 0, 61, 538, 0, 0, 0, 0, 54, 673, 0, 0, 0, 0, 415, 674)
+"points": PackedVector2Array(0, 0, 0, 0, 74, 167, 0, 0, 0, 0, 471, 165, 0, 0, 0, 0, 468, 276, 0, 0, 0, 0, 57, 281, 0, 0, 0, 0, 54, 424, 0, 0, 0, 0, 469, 430, 0, 0, 0, 0, 466, 533, 0, 0, 0, 0, 61, 538, 0, 0, 0, 0, 54, 673, 0, 0, 0, 0, 415, 674, 0, 0, 0, 0, 951, 672)
 }
-point_count = 10
+point_count = 11
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7mycd"]
 atlas = ExtResource("3_1bvp3")
@@ -1124,7 +1124,8 @@ curve = SubResource("Curve2D_272bh")
 script = ExtResource("6_5vw27")
 
 [node name="PathFollow2D" parent="Path2D" instance=ExtResource("7_5vw27")]
-position = Vector2(74, 167)
+position = Vector2(951, 671.99994)
+progress = 3017.4124
 script = null
 
 [node name="TowerSlots" parent="." instance=ExtResource("9_4c57u")]
