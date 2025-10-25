@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://4e3g0qlduxx7" path="res://defender1.tscn" id="2_4c57u"]
+[ext_resource type="PackedScene" uid="uid://4e3g0qlduxx7" path="res://Defender1Assets/defender1.tscn" id="2_4c57u"]
 [ext_resource type="Texture2D" uid="uid://cgs288ya075ox" path="res://crystal_dark_64x64_24f_20d_normal.png" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://cwujm1lntowec" path="res://Tower.png" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
