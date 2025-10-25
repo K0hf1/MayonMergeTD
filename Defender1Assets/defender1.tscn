@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://4e3g0qlduxx7"]
+[gd_scene load_steps=20 format=3 uid="uid://4e3g0qlduxx7"]
 
 [ext_resource type="Script" uid="uid://dq83eb2nmp6cq" path="res://Defender1Assets/defender_1.gd" id="1_7d1u4"]
 [ext_resource type="Texture2D" uid="uid://bdyk1oaraqcsl" path="res://Evil-Dwende.png" id="1_512i0"]
+[ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Defender1Assets/drag_module.gd" id="3_dx17m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_512i0"]
 atlas = ExtResource("1_512i0")
@@ -146,4 +147,12 @@ animation = &"Attack_Left"
 frame_progress = 0.17558327
 offset = Vector2(0, -25.695)
 
-[node name="AnimatedSprite2D_Attack" type="AnimatedSprite2D" parent="."]
+[node name="DragModule" type="Node2D" parent="."]
+script = ExtResource("3_dx17m")
+
+[node name="Dragging" type="Button" parent="DragModule"]
+modulate = Color(1, 1, 1, 0)
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = 10.0
