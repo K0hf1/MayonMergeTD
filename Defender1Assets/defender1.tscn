@@ -145,3 +145,5 @@ sprite_frames = SubResource("SpriteFrames_v315g")
 animation = &"Attack_Left"
 frame_progress = 0.17558327
 offset = Vector2(0, -25.695)
+
+[node name="AnimatedSprite2D_Attack" type="AnimatedSprite2D" parent="."]
