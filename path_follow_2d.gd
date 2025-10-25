@@ -11,8 +11,8 @@ func _process(delta: float) -> void:
 	
 	var current_x = global_position.x
 	if current_x > previous_x:
-		$Node2D/AnimatedSprite2D.flip_h = false
+		$Warrior/AnimatedSprite2D.flip_h = false
 	elif current_x < previous_x:
-		$Node2D/AnimatedSprite2D.flip_h = true
+		$Warrior/AnimatedSprite2D.flip_h = true
 		
 	previous_x = current_x
