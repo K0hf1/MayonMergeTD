@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://c6rn1x6rym4e8"]
+
+[ext_resource type="Texture2D" uid="uid://shk4s24eafq7" path="res://Defender2Assets/Amaranhig.png" id="1_qe1ha"]
+[ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Defender1Assets/drag_module.gd" id="2_15kue"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3hs5y"]
+atlas = ExtResource("1_qe1ha")
+region = Rect2(0, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oovep"]
+atlas = ExtResource("1_qe1ha")
+region = Rect2(72, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvxpg"]
+atlas = ExtResource("1_qe1ha")
+region = Rect2(144, 0, 72, 72)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_33bha"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Attack_Down",
+"speed": 3.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Attack_Left",
+"speed": 3.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Attack_Right",
+"speed": 3.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Attack_Up",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3hs5y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oovep")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvxpg")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 3.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_33bha")
+animation = &"Idle"
+frame = 1
+frame_progress = 0.6989704
+offset = Vector2(0, -25.695)
+
+[node name="DragModule" type="Node2D" parent="."]
+script = ExtResource("2_15kue")
+
+[node name="Dragging" type="Button" parent="DragModule"]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = -18.0
+offset_top = -35.0
+offset_right = 18.0
+offset_bottom = 10.0
