@@ -77,27 +77,33 @@ func _get_collided_defender() -> Node2D:
 	return null
 
 func _swap_with_defender(other_defender: Node2D) -> void:
-	# Swap slots
-	if tower_root.has_meta("current_slot") and other_defender.has_meta("current_slot"):
-		var other_slot: MarkerSlot = other_defender.get_meta("current_slot")
-		var my_slot: MarkerSlot = current_slot
+	if not (tower_root.has_meta("current_slot") and other_defender.has_meta("current_slot")):
+		return
 
-		# Swap positions
-		tower_root.global_position = other_slot.global_position
-		other_defender.global_position = my_slot.global_position
+	var my_slot: MarkerSlot = tower_root.get_meta("current_slot")
+	var other_slot: MarkerSlot = other_defender.get_meta("current_slot")
 
-		# Swap slot metadata
-		my_slot.current_tower = other_defender
-		other_slot.current_tower = tower_root
+	# Step 1: temporarily free the slots
+	my_slot.is_occupied = false
+	other_slot.is_occupied = false
+	my_slot.current_tower = null
+	other_slot.current_tower = null
 
-		tower_root.set_meta("current_slot", other_slot)
-		other_defender.set_meta("current_slot", my_slot)
+	# Step 2: swap positions
+	tower_root.global_position = other_slot.global_position
+	other_defender.global_position = my_slot.global_position
 
-		# Update slot occupancy
-		my_slot.is_occupied = true
-		other_slot.is_occupied = true
+	# Step 3: update slot occupancy and metadata
+	my_slot.current_tower = other_defender
+	my_slot.is_occupied = true
 
-		current_slot = other_slot
+	other_slot.current_tower = tower_root
+	other_slot.is_occupied = true
+
+	# Step 4: update each defender's current_slot meta
+	tower_root.set_meta("current_slot", other_slot)
+	other_defender.set_meta("current_slot", my_slot)
+
 
 func _snap_to_nearest_slot() -> void:
 	var slots = slots_parent.get_children()
