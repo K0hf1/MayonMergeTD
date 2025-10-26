@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://c6rn1x6rym4e8"]
+[gd_scene load_steps=8 format=3 uid="uid://c6rn1x6rym4e8"]
 
+[ext_resource type="Script" uid="uid://dt22yst4pxiki" path="res://Defender2Assets/defender_2.gd" id="1_15kue"]
 [ext_resource type="Texture2D" uid="uid://shk4s24eafq7" path="res://Defender2Assets/Amaranhig.png" id="1_qe1ha"]
 [ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Defender1Assets/drag_module.gd" id="2_15kue"]
 
@@ -52,7 +53,9 @@ animations = [{
 "speed": 3.0
 }]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" groups=["defender"]]
+z_index = 2
+script = ExtResource("1_15kue")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1

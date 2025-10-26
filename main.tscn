@@ -1113,6 +1113,7 @@ layer_0/z_index = 1
 layer_0/tile_data = PackedInt32Array(2490393, 65536, 0, 2555929, 65536, 1, 2621465, 65536, 2, 2687001, 65536, 3, 2490394, 131072, 0, 2555930, 131072, 1, 2621466, 131072, 2, 2687002, 131072, 3)
 
 [node name="Towers" type="TileMap" parent="MainMap"]
+z_index = 2
 position = Vector2(0, -1)
 scale = Vector2(0.5, 0.5)
 tile_set = SubResource("TileSet_lquwl")

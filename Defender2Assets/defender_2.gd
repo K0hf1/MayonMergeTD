@@ -1,7 +1,7 @@
 extends Node2D
 
 # Tier of this defender
-@export var tier: int = 1
+@export var tier: int = 2
 
 func _ready() -> void:
 	# Play the Idle animation at the start

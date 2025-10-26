@@ -5,11 +5,14 @@ var dragging: bool = false
 var offset: Vector2 = Vector2.ZERO
 var original_position: Vector2
 
-# Reference to tower root
+# Reference to the defender root node
 var tower_root: Node2D
 
 # Reference to the parent node that holds tower slots
 @export var slots_parent: Node
+
+# Current slot reference
+var current_slot: MarkerSlot = null
 
 func _ready() -> void:
 	tower_root = get_parent() as Node2D
@@ -32,11 +35,75 @@ func _on_drag_button_down() -> void:
 func _on_drag_button_up() -> void:
 	dragging = false
 
+	# Get this defender's tier from root
+	var my_tier = tower_root.tier
+
+	# --- Check collision with other defenders ---
+	var collided_defender = _get_collided_defender()
+	if collided_defender:
+		var other_tier = collided_defender.tier
+		if other_tier == my_tier:
+			# Same tier → delete both and request merge
+			if tower_root.has_meta("current_slot"):
+				current_slot.is_occupied = false
+				current_slot.current_tower = null
+			if collided_defender.has_meta("current_slot"):
+				var other_slot: MarkerSlot = collided_defender.get_meta("current_slot")
+				other_slot.is_occupied = false
+				other_slot.current_tower = null
+
+			get_tree().root.get_node("main/GameManager").request_merge(tower_root, collided_defender)
+			tower_root.queue_free()
+			collided_defender.queue_free()
+			return
+		else:
+			# Different tier → swap positions
+			_swap_with_defender(collided_defender)
+			return
+
+	# --- No collision → snap to nearest slot ---
+	_snap_to_nearest_slot()
+
+# --- Helper Methods ---
+
+func _get_collided_defender() -> Node2D:
+	# Iterate all defenders in the "defender" group
+	for defender in get_tree().get_nodes_in_group("defender"):
+		if defender == tower_root:
+			continue
+		var distance = tower_root.global_position.distance_to(defender.global_position)
+		if distance < 32: # collision radius (tweak for your sprite size)
+			return defender
+	return null
+
+func _swap_with_defender(other_defender: Node2D) -> void:
+	# Swap slots
+	if tower_root.has_meta("current_slot") and other_defender.has_meta("current_slot"):
+		var other_slot: MarkerSlot = other_defender.get_meta("current_slot")
+		var my_slot: MarkerSlot = current_slot
+
+		# Swap positions
+		tower_root.global_position = other_slot.global_position
+		other_defender.global_position = my_slot.global_position
+
+		# Swap slot metadata
+		my_slot.current_tower = other_defender
+		other_slot.current_tower = tower_root
+
+		tower_root.set_meta("current_slot", other_slot)
+		other_defender.set_meta("current_slot", my_slot)
+
+		# Update slot occupancy
+		my_slot.is_occupied = true
+		other_slot.is_occupied = true
+
+		current_slot = other_slot
+
+func _snap_to_nearest_slot() -> void:
 	var slots = slots_parent.get_children()
-	var closest_slot: MarkerSlot = null
+	var closest_slot: MarkerSlot = null	
 	var min_dist = INF
 
-	# Find nearest empty slot within snap radius
 	for slot in slots:
 		if slot is MarkerSlot and not slot.is_occupied:
 			var dist = tower_root.global_position.distance_to(slot.global_position)
@@ -45,7 +112,7 @@ func _on_drag_button_up() -> void:
 				closest_slot = slot
 
 	if closest_slot:
-		# Snap to the nearest slot
+		# Snap to nearest slot
 		tower_root.global_position = closest_slot.global_position
 
 		# Clear previous slot occupancy if any
@@ -58,6 +125,12 @@ func _on_drag_button_up() -> void:
 		closest_slot.is_occupied = true
 		closest_slot.current_tower = tower_root
 		tower_root.set_meta("current_slot", closest_slot)
+		current_slot = closest_slot
 	else:
-		# No nearby slot → return to original position
+		# No slot → return to original position
 		tower_root.global_position = original_position
+		
+
+func on_spawn() -> void:
+	# Called when a defender is instantiated programmatically
+	_snap_to_nearest_slot()
