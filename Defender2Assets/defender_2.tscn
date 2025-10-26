@@ -1,0 +1,177 @@
+[gd_scene load_steps=22 format=3 uid="uid://pub35b8tqr55"]
+
+[ext_resource type="Script" uid="uid://dq83eb2nmp6cq" path="res://Defender1Assets/defender_1.gd" id="1_c15rc"]
+[ext_resource type="PackedScene" uid="uid://b6udxggyecspf" path="res://Defender1Assets/Defender1_Projectiles/Defender1_Projectile.tscn" id="2_xo00j"]
+[ext_resource type="Texture2D" uid="uid://shk4s24eafq7" path="res://Defender2Assets/Amaranhig.png" id="3_xo00j"]
+[ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Functionalities/drag_module.gd" id="4_yyt6v"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yyt6v"]
+radius = 80.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yyt6v"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(0, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1vam"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(72, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvakv"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(144, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o1j5"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(144, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_px018"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(72, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tonns"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(0, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8bi6"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(0, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpg3i"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(72, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dox38"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(144, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxjfy"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(0, 216, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2bde"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(72, 216, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cks3s"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(144, 216, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xl3uw"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(0, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qlq0"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(72, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xur2g"]
+atlas = ExtResource("3_xo00j")
+region = Rect2(144, 0, 72, 72)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gh3c4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yyt6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1vam")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvakv")
+}],
+"loop": true,
+"name": &"Attack_Down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o1j5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_px018")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tonns")
+}],
+"loop": true,
+"name": &"Attack_Left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i8bi6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rpg3i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dox38")
+}],
+"loop": true,
+"name": &"Attack_Right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mxjfy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2bde")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cks3s")
+}],
+"loop": true,
+"name": &"Attack_Up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xl3uw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8qlq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xur2g")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Defender2" type="Area2D"]
+visibility_layer = 2
+z_index = 2
+
+[node name="Tower_Behavior" type="Node2D" parent="."]
+script = ExtResource("1_c15rc")
+fireball_scene = ExtResource("2_xo00j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_yyt6v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -22)
+sprite_frames = SubResource("SpriteFrames_gh3c4")
+animation = &"Idle"
+frame_progress = 0.12630273
+
+[node name="DragModule" type="Node2D" parent="."]
+script = ExtResource("4_yyt6v")
+
+[node name="Dragging" type="Button" parent="DragModule"]
+visibility_layer = 0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -22.0
+offset_right = 24.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true

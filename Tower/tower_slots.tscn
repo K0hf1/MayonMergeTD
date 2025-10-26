@@ -1,53 +1,53 @@
 [gd_scene load_steps=2 format=3 uid="uid://bdtgpuc4xxooq"]
 
-[ext_resource type="Script" uid="uid://dmidpuga4bfv" path="res://TowerSlot.gd" id="1_6ndgr"]
+[ext_resource type="Script" uid="uid://ds7g7j5dkk1iw" path="res://Tower/TowerSlot.gd" id="1_rw72i"]
 
 [node name="TowerSlots" type="Node2D"]
 
 [node name="Slot1" type="Marker2D" parent="."]
 position = Vector2(160, 192)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot2" type="Marker2D" parent="."]
 position = Vector2(288, 192)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot3" type="Marker2D" parent="."]
 position = Vector2(416, 192)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot4" type="Marker2D" parent="."]
 position = Vector2(96, 320)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot5" type="Marker2D" parent="."]
 position = Vector2(224, 320)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot6" type="Marker2D" parent="."]
 position = Vector2(352, 320)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot7" type="Marker2D" parent="."]
 position = Vector2(160, 448)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot8" type="Marker2D" parent="."]
 position = Vector2(288, 448)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot9" type="Marker2D" parent="."]
 position = Vector2(416, 448)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot10" type="Marker2D" parent="."]
 position = Vector2(96, 576)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot11" type="Marker2D" parent="."]
 position = Vector2(224, 576)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
 
 [node name="Slot12" type="Marker2D" parent="."]
 position = Vector2(352, 576)
-script = ExtResource("1_6ndgr")
+script = ExtResource("1_rw72i")
