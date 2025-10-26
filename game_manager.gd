@@ -32,19 +32,34 @@ func _on_buy_tower_button_pressed() -> void:
 	# Pick one random empty slot
 	var chosen_slot: Marker2D = available_slots[randi() % available_slots.size()]
 
-	# Spawn a new tower instance
-	var new_tower = tower_prefab.instantiate()
+	# Spawn a new Tier 1 tower instance
+	var folder_name = "Defender1Assets"
+	var scene_name = "defender1.tscn"
+	var scene_path = "res://%s/%s" % [folder_name, scene_name]
+
+	if not ResourceLoader.exists(scene_path):
+		print("Tier 1 tower scene not found!")
+		return
+
+	var tower_scene = load(scene_path)
+	var new_tower: Node2D = tower_scene.instantiate()
 	get_parent().add_child(new_tower)
+
+	# Set initial position at the chosen slot
 	new_tower.global_position = chosen_slot.global_position
-	
-	# Assign slots_parent to the DragModule inside this tower
+
+	# Assign slots_parent to DragModule and snap immediately
 	var drag_module = new_tower.get_node("DragModule")
-	drag_module.slots_parent = tower_slots_parent
+	if drag_module:
+		drag_module.slots_parent = tower_slots_parent
+		# Call snap deferred to ensure the node is fully in the scene tree
+		drag_module.call_deferred("on_spawn")
 
 	# Mark the slot as occupied
 	occupied_slots.append(chosen_slot)
 
-	print("Tower spawned at:", chosen_slot.global_position)
+	print("Tier 1 Tower spawned at:", chosen_slot.global_position)
+
 
 
 func _on_start_wave_button_pressed():

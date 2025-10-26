@@ -4,6 +4,7 @@ extends Node2D
 var dragging: bool = false
 var offset: Vector2 = Vector2.ZERO
 var original_position: Vector2
+var is_snapping: bool = false
 
 # Reference to the defender root node
 var tower_root: Node2D
@@ -77,32 +78,36 @@ func _get_collided_defender() -> Node2D:
 	return null
 
 func _swap_with_defender(other_defender: Node2D) -> void:
-	if not (tower_root.has_meta("current_slot") and other_defender.has_meta("current_slot")):
-		return
-
+	# Ensure both defenders have current_slot updated
 	var my_slot: MarkerSlot = tower_root.get_meta("current_slot")
 	var other_slot: MarkerSlot = other_defender.get_meta("current_slot")
 
-	# Step 1: temporarily free the slots
+	if not my_slot or not other_slot:
+		# Either tower hasn’t finished snapping yet
+		print("Swap aborted: slot data not ready")
+		return
+
+	# Temporarily free the slots
 	my_slot.is_occupied = false
 	other_slot.is_occupied = false
 	my_slot.current_tower = null
 	other_slot.current_tower = null
 
-	# Step 2: swap positions
+	# Swap positions
 	tower_root.global_position = other_slot.global_position
 	other_defender.global_position = my_slot.global_position
 
-	# Step 3: update slot occupancy and metadata
+	# Update slot occupancy
 	my_slot.current_tower = other_defender
 	my_slot.is_occupied = true
 
 	other_slot.current_tower = tower_root
 	other_slot.is_occupied = true
 
-	# Step 4: update each defender's current_slot meta
+	# Update each defender's current_slot meta
 	tower_root.set_meta("current_slot", other_slot)
 	other_defender.set_meta("current_slot", my_slot)
+
 
 
 func _snap_to_nearest_slot() -> void:
@@ -139,4 +144,4 @@ func _snap_to_nearest_slot() -> void:
 
 func on_spawn() -> void:
 	# Called when a defender is instantiated programmatically
-	_snap_to_nearest_slot()
+	call_deferred("_snap_to_nearest_slot")
