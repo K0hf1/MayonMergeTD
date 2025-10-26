@@ -35,6 +35,10 @@ func _on_buy_tower_button_pressed() -> void:
 	var new_tower = tower_prefab.instantiate()
 	get_parent().add_child(new_tower)
 	new_tower.global_position = chosen_slot.global_position
+	
+	# Assign slots_parent to the DragModule inside this tower
+	var drag_module = new_tower.get_node("DragModule")
+	drag_module.slots_parent = tower_slots_parent
 
 	# Mark the slot as occupied
 	occupied_slots.append(chosen_slot)

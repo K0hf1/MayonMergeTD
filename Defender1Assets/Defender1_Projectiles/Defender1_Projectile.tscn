@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://b6udxggyecspf"]
 
 [ext_resource type="Texture2D" uid="uid://bvpv7wiyiaipd" path="res://Pixelart Spells/PNG Files/Arcane Bolt.png" id="1_a7nyi"]
-[ext_resource type="Script" uid="uid://bes18qcunel8k" path="res://Defender1_Projectiles/defender_1_projectile.gd" id="1_t62s3"]
+[ext_resource type="Script" uid="uid://bes18qcunel8k" path="res://Defender1Assets/Defender1_Projectiles/defender_1_projectile.gd" id="1_t62s3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t62s3"]
 atlas = ExtResource("1_a7nyi")

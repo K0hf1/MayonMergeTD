@@ -8,6 +8,10 @@ extends Node2D
 var can_shoot: bool = true
 var enemies_in_range: Array = []
 
+# Merge/upgrade system
+var defender_level: int = 1
+var defender_type: String = "defender1"
+
 func _ready() -> void:
 	# 1. Connect to the PARENT's signals (The parent is the Area2D)
 	var parent_area = get_parent()
@@ -27,7 +31,7 @@ func _ready() -> void:
 	
 	print("Tower Behavior ready.")
 
-func _process(_delta: float) -> void: # <-- FIX APPLIED HERE
+func _process(_delta: float) -> void: 
 	# Clean invalid enemies
 	enemies_in_range = enemies_in_range.filter(func(e): return is_instance_valid(e))
 	
@@ -82,3 +86,23 @@ func get_closest_enemy():
 			closest = enemy
 	
 	return closest
+
+func get_defender_type() -> String:
+	return defender_type
+
+func level_up() -> void:
+	defender_level += 1
+	# Increase stats based on level
+	fire_rate *= 1.2  # 20% faster fire rate
+	detection_range *= 1.1  # 10% more range
+	
+	# Update visual scale to show upgrade
+	var parent_area = get_parent()
+	if parent_area:
+		var sprite = parent_area.get_node_or_null("AnimatedSprite2D")
+		if sprite:
+			sprite.scale *= 1.15  # Slightly bigger
+			# You could also change color modulation
+			sprite.modulate = Color(1.0, 1.0 + (defender_level - 1) * 0.1, 1.0)
+	
+	print("Defender leveled up to level ", defender_level)

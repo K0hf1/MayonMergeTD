@@ -57,6 +57,8 @@ animations = [{
 radius = 41.350822
 
 [node name="Warrior" type="Area2D" groups=["Enemy"]]
+light_mask = 2
+visibility_layer = 4
 z_index = 1
 collision_layer = 2
 collision_mask = 5
