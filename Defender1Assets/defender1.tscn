@@ -1,12 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://4e3g0qlduxx7"]
+[gd_scene load_steps=23 format=3 uid="uid://4e3g0qlduxx7"]
 
 [ext_resource type="Script" uid="uid://dq83eb2nmp6cq" path="res://Defender1Assets/defender_1.gd" id="1_7d1u4"]
-[ext_resource type="Texture2D" uid="uid://bdyk1oaraqcsl" path="res://Defender1Assets/Evil-Dwende.png" id="1_512i0"]
-[ext_resource type="PackedScene" uid="uid://b6udxggyecspf" path="res://Defender1Assets/Defender1_Projectiles/Defender1_Projectile.tscn" id="2_dx17m"]
-[ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Functionalities/drag_module.gd" id="4_xidqv"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_eclx7"]
-radius = 80.0
+[ext_resource type="Texture2D" uid="uid://6140hiw3itq4" path="res://Defender1Assets/Evil-Dwende.png" id="1_512i0"]
+[ext_resource type="PackedScene" uid="uid://bd4xjlry1j74x" path="res://Defender1Assets/Defender1_Projectile/Projectile1.tscn" id="2_xidqv"]
+[ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Defender1Assets/drag_module.gd" id="3_dx17m"]
+[ext_resource type="Script" uid="uid://dbpdry03uuw58" path="res://Defender1Assets/attack_module.gd" id="5_lfyry"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_512i0"]
 atlas = ExtResource("1_512i0")
@@ -141,40 +139,36 @@ animations = [{
 "speed": 3.0
 }]
 
-[node name="Defender1" type="Area2D"]
-process_priority = 1
+[sub_resource type="CircleShape2D" id="CircleShape2D_dx17m"]
+radius = 87.20665
+
+[node name="Node2D" type="Node2D" groups=["defender"]]
 z_index = 2
-collision_mask = 2
-
-[node name="Tower_Behavior" type="Node2D" parent="."]
 script = ExtResource("1_7d1u4")
-fireball_scene = ExtResource("2_dx17m")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_eclx7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
-scale = Vector2(1.3749999, 1.3603234)
 sprite_frames = SubResource("SpriteFrames_v315g")
-animation = &"Idle"
-frame_progress = 0.4532282
+animation = &"Attack_Down"
 offset = Vector2(0, -25.695)
 
 [node name="DragModule" type="Node2D" parent="."]
-script = ExtResource("4_xidqv")
+script = ExtResource("3_dx17m")
 
 [node name="Dragging" type="Button" parent="DragModule"]
-visibility_layer = 0
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -22.0
-offset_right = 24.0
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
+modulate = Color(1, 1, 1, 0)
+offset_left = -16.0
+offset_top = -26.0
+offset_right = 17.0
+offset_bottom = 10.0
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_dx17m")
+
+[node name="AttackModule" type="Node2D" parent="."]
+script = ExtResource("5_lfyry")
+projectile_scene = ExtResource("2_xidqv")
+
+[node name="AttackTimer" type="Timer" parent="AttackModule"]
