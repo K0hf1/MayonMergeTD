@@ -6,7 +6,7 @@ var enemies_to_spawn: int = 0
 var spawning: bool = false
 
 # The enemy scene to instantiate
-var follower_scene = preload("res://EnemyPath.tscn")  # Replace with your enemy scene path
+var follower_scene = preload("res://Enemies/EnemyPath.tscn")  # Replace with your enemy scene path
 
 # Reference to the Start Wave button (optional, set in the editor or via code)
 @onready var start_wave_button = get_node_or_null("/root/Main/UI/StartWaveButton")

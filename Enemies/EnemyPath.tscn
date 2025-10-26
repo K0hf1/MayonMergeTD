@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cb78y0kctovyd"]
 
-[ext_resource type="Script" uid="uid://c8ougp460ni5" path="res://path_follow_2d.gd" id="1_xel3x"]
-[ext_resource type="PackedScene" uid="uid://cyqblcc83l7d4" path="res://EnemyWarrior.tscn" id="2_pdkfn"]
+[ext_resource type="Script" uid="uid://c8ougp460ni5" path="res://Enemies/path_follow_2d.gd" id="1_xel3x"]
+[ext_resource type="PackedScene" uid="uid://cyqblcc83l7d4" path="res://Enemies/EnemyWarrior.tscn" id="2_pdkfn"]
 
 [node name="PathFollow2D" type="PathFollow2D"]
 rotates = false

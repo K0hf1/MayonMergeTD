@@ -1,30 +1,30 @@
 [gd_scene load_steps=11 format=3 uid="uid://cyqblcc83l7d4"]
 
-[ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://enemy.gd" id="1_cv2du"]
-[ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Warrior_Run.png" id="2_lw4m5"]
+[ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://Enemies/enemy.gd" id="1_xfevc"]
+[ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Warrior_Run.png" id="2_qyonl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s7bn3"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(0, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2hac7"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(192, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e6d4v"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(384, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qp131"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(576, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6do27"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(768, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rvmyp"]
-atlas = ExtResource("2_lw4m5")
+atlas = ExtResource("2_qyonl")
 region = Rect2(960, 0, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2nxwx"]
@@ -53,24 +53,28 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
-radius = 22.0
-height = 58.75
+[sub_resource type="CircleShape2D" id="CircleShape2D_xfevc"]
+radius = 41.350822
 
 [node name="Warrior" type="Area2D" groups=["Enemy"]]
 z_index = 1
-script = ExtResource("1_cv2du")
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_xfevc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+visibility_layer = 5
 z_index = 1
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_2nxwx")
 animation = &"EnemyRun"
-frame = 2
-frame_progress = 0.3769967
+frame_progress = 0.5084346
 offset = Vector2(0, -35.535)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+light_mask = 2
+visibility_layer = 5
 z_index = 1
 position = Vector2(0, -31.375)
-shape = SubResource("CapsuleShape2D_tt7e2")
+shape = SubResource("CircleShape2D_xfevc")
