@@ -1,48 +1,44 @@
 extends Node2D
 
 # Tier of this defender
-@export var tier: int = 1
+@export var tier: int = 2
 
-# List of enemies currently in range (detected by DetectionArea)
-# The nodes in this array are the enemy's root Area2D nodes
+# Projectile stats - now managed here!
+@export var damage: int = 1
+@export var projectile_speed: float = 400.0
+
+# List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []
 
-# Variable to hold the current nearest enemy node
+# Current nearest enemy node
 var target_enemy: Node2D = null
 
 const ENEMY_GROUP_NAME: String = "Enemy"
 
 func _ready() -> void:
-	# 1. Play the Idle animation at the start
 	$AnimatedSprite2D.play("Idle")
 	
-	# 2. Connect the Area2D signals for detection (Listening for AREA signals)
 	if has_node("DetectionArea"):
 		$DetectionArea.area_entered.connect(_on_detection_area_area_entered)
 		$DetectionArea.area_exited.connect(_on_detection_area_area_exited)
 	else:
 		push_error("Defender missing 'DetectionArea' child node.")
 
-# This method allows the AttackModule to retrieve the current target.
 func get_target() -> Node2D:
 	return target_enemy
-	
+
 func _process(delta: float) -> void:
-	# 1. Update the target by finding the closest enemy in range
 	_update_target_enemy()
 	
-	# 2. Track and face the enemy if one is found and is valid
 	if target_enemy and is_instance_valid(target_enemy):
 		_track_enemy()
 	else:
-		# If no enemy is targeted, return to Idle animation
 		if $AnimatedSprite2D.animation != "Idle":
 			$AnimatedSprite2D.play("Idle")
 
 # --- Targeting Logic ---
 
 func _update_target_enemy() -> void:
-	# Clean up the list by removing invalid nodes using a reverse loop.
 	for i in range(enemies_in_range.size() - 1, -1, -1):
 		if not is_instance_valid(enemies_in_range[i]):
 			enemies_in_range.remove_at(i)
@@ -54,7 +50,6 @@ func _update_target_enemy() -> void:
 	var closest_distance: float = INF
 	var potential_target: Node2D = null
 
-	# Iterate through all valid enemies to find the closest one.
 	for enemy in enemies_in_range:
 		var distance = global_position.distance_to(enemy.global_position)
 		if distance < closest_distance:
@@ -63,7 +58,6 @@ func _update_target_enemy() -> void:
 
 	target_enemy = potential_target
 
-# Calculates the direction to the enemy and plays the corresponding facing animation.
 func _track_enemy() -> void:
 	var direction_vector = target_enemy.global_position - global_position
 	
@@ -80,7 +74,7 @@ func _track_enemy() -> void:
 	if $AnimatedSprite2D.animation != animation_name:
 		$AnimatedSprite2D.play(animation_name)
 
-# --- Area2D Signal Handlers (UPDATED to listen for AREA) ---
+# --- Area2D Signal Handlers ---
 
 func _on_detection_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group(ENEMY_GROUP_NAME) and not enemies_in_range.has(area):
@@ -91,3 +85,12 @@ func _on_detection_area_area_exited(area: Area2D) -> void:
 		enemies_in_range.erase(area)
 		if area == target_enemy:
 			target_enemy = null
+
+# NEW: Called by AttackModule to spawn projectiles with proper stats
+func spawn_projectile(projectile_scene: PackedScene, direction: Vector2) -> Area2D:
+	var projectile = projectile_scene.instantiate() as Area2D
+	add_child(projectile)
+	projectile.global_position = global_position
+	projectile.set_direction(direction)
+	projectile.set_stats(damage, projectile_speed)  # Pass stats here!
+	return projectile

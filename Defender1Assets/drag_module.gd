@@ -45,7 +45,7 @@ func _create_tier_label() -> void:
 	tier_label.z_index = 100
 	
 	# Add to tower root
-	tower_root.add_child(tier_label)
+	tower_root.add_child.call_deferred(tier_label)
 	
 	# Update the label after a frame to ensure tier is set
 	call_deferred("_update_tier_label")

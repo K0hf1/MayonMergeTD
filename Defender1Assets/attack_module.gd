@@ -47,7 +47,7 @@ func _get_current_target() -> Node2D:
 	
 	return null
 
-# Spawns and initializes the projectile.
+# Spawns and initializes the projectile with defender's stats.
 func _shoot_projectile(target: Node2D) -> void:
 	if projectile_scene == null:
 		push_error("Projectile scene not set on AttackModule!")
@@ -66,5 +66,9 @@ func _shoot_projectile(target: Node2D) -> void:
 	if projectile.has_method("set_direction"):
 		projectile.set_direction(direction)
 	
-	# 5. Add the projectile to the main scene tree (or defender's parent)
+	# 5. NEW: Pass the defender's stats to the projectile
+	if projectile.has_method("set_stats"):
+		projectile.set_stats(defender_root.damage, defender_root.projectile_speed)
+	
+	# 6. Add the projectile to the main scene tree (or defender's parent)
 	defender_root.get_parent().add_child(projectile)

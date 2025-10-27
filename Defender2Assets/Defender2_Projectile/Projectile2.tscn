@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://dt8ljypgmeq85"]
 
-[ext_resource type="Script" uid="uid://bk8l246jbs7bm" path="res://Defender2Assets/Defender2_Projectile/projectile_2.gd" id="1_td40f"]
+[ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_td40f"]
 [ext_resource type="Texture2D" uid="uid://ul8ngqaa23ej" path="res://Defender2Assets/Defender2_Projectile/Darkness Orb.png" id="1_v0x7i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_td40f"]
@@ -58,8 +58,6 @@ radius = 13.0
 
 [node name="Projectile2" type="Area2D"]
 script = ExtResource("1_td40f")
-speed = 200.0
-damage = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-2.3841858e-07, -2.3841858e-07)

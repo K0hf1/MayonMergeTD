@@ -1,7 +1,7 @@
 extends Node2D
 
 # Tier of this defender
-@export var tier: int = 1
+@export var tier: int = 9
 
 # Projectile stats - now managed here!
 @export var damage: int = 1

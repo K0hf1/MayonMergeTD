@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bd4xjlry1j74x"]
 
 [ext_resource type="Texture2D" uid="uid://bvpv7wiyiaipd" path="res://Defender1Assets/Defender1_Projectile/Arcane Bolt.png" id="1_5u82v"]
-[ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_1.gd" id="1_bmq2d"]
+[ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_bmq2d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bmq2d"]
 atlas = ExtResource("1_5u82v")
@@ -58,8 +58,6 @@ radius = 16.03122
 
 [node name="Projectile1" type="Area2D"]
 script = ExtResource("1_bmq2d")
-speed = 200.0
-damage = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(4.7683716e-07, 0)
