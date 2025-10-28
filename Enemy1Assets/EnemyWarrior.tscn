@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://cyqblcc83l7d4"]
+[gd_scene load_steps=12 format=3 uid="uid://cyqblcc83l7d4"]
 
-[ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://enemy.gd" id="1_cv2du"]
-[ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Warrior_Run.png" id="2_lw4m5"]
+[ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://Enemy1Assets/enemy.gd" id="1_cv2du"]
+[ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Enemy1Assets/Warrior_Run.png" id="2_lw4m5"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_we068"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s7bn3"]
 atlas = ExtResource("2_lw4m5")
@@ -60,6 +61,7 @@ height = 54.0
 [node name="Warrior" type="Area2D" groups=["Enemy"]]
 z_index = 1
 script = ExtResource("1_cv2du")
+coin_scene = ExtResource("2_we068")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=49 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://cjht2v1hragfh" path="res://Crystal/crystal_area.gd" id="7_272bh"]
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
+[ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
+[ext_resource type="Texture2D" uid="uid://eu06ud75xf1d" path="res://Coin_Gems/png-clipart-pixel-art-mario-coin-text-rectangle-removebg-preview.png" id="11_efxa6"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1163,6 +1165,48 @@ offset_right = 160.0
 offset_bottom = 832.0
 text = "START
 WAVE"
+
+[node name="Canvas Layer" type="CanvasLayer" parent="UI"]
+
+[node name="CoinCounter" type="Control" parent="UI/Canvas Layer"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = 77.0
+grow_horizontal = 0
+script = ExtResource("11_dg77c")
+
+[node name="ColorRect" type="ColorRect" parent="UI/Canvas Layer/CoinCounter"]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 188.0
+offset_bottom = 43.0
+color = Color(0.21164447, 0.6592036, 0.80736494, 1)
+
+[node name="Container" type="HBoxContainer" parent="UI/Canvas Layer/CoinCounter"]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 182.0
+offset_bottom = 41.0
+theme_override_constants/separation = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/Canvas Layer/CoinCounter/Container"]
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("11_efxa6")
+expand_mode = 3
+
+[node name="CoinLabel" type="Label" parent="UI/Canvas Layer/CoinCounter/Container"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "COINS : 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters_behavior = 1
 
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
 [connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]

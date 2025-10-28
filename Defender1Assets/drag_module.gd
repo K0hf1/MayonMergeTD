@@ -27,41 +27,11 @@ func _ready() -> void:
 	drag_button.connect("button_down", Callable(self, "_on_drag_button_down"))
 	drag_button.connect("button_up", Callable(self, "_on_drag_button_up"))
 	
-	# Create tier tracker label
-	_create_tier_label()
-
-func _create_tier_label() -> void:
-	tier_label = Label.new()
-	tier_label.name = "TierLabel"
-	
-	# Style the label
-	tier_label.add_theme_font_size_override("font_size", 16)
-	tier_label.add_theme_color_override("font_color", Color.WHITE)
-	tier_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	tier_label.add_theme_constant_override("outline_size", 2)
-	
-	# Position above the defender
-	tier_label.position = Vector2(-20, -40)
-	tier_label.z_index = 100
-	
-	# Add to tower root
-	tower_root.add_child.call_deferred(tier_label)
-	
-	# Update the label after a frame to ensure tier is set
-	call_deferred("_update_tier_label")
-
-func _update_tier_label() -> void:
-	if tier_label and tower_root:
-		var tier = tower_root.tier if "tier" in tower_root else "?"
-		tier_label.text = "T%s" % tier
 
 func _process(delta: float) -> void:
 	if dragging:
 		tower_root.global_position = get_global_mouse_position() + offset
 	
-	# Continuously update tier label to catch any changes
-	if tier_label:
-		_update_tier_label()
 
 func _on_drag_button_down() -> void:
 	dragging = true
