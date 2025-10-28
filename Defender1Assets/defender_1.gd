@@ -3,7 +3,7 @@ extends Node2D
 # Tier of this defender
 @export var tier: int = 1
 
-# Projectile stats - now managed here!
+# Projectile stats
 @export var damage: int = 1
 @export var projectile_speed: float = 400.0
 
@@ -39,6 +39,7 @@ func _process(delta: float) -> void:
 # --- Targeting Logic ---
 
 func _update_target_enemy() -> void:
+	# Remove invalid enemies from list
 	for i in range(enemies_in_range.size() - 1, -1, -1):
 		if not is_instance_valid(enemies_in_range[i]):
 			enemies_in_range.remove_at(i)
@@ -47,6 +48,7 @@ func _update_target_enemy() -> void:
 		target_enemy = null
 		return
 
+	# Find closest enemy
 	var closest_distance: float = INF
 	var potential_target: Node2D = null
 
@@ -59,6 +61,9 @@ func _update_target_enemy() -> void:
 	target_enemy = potential_target
 
 func _track_enemy() -> void:
+	if not target_enemy or not is_instance_valid(target_enemy):
+		return
+	
 	var direction_vector = target_enemy.global_position - global_position
 	
 	var abs_x = abs(direction_vector.x)
@@ -85,12 +90,3 @@ func _on_detection_area_area_exited(area: Area2D) -> void:
 		enemies_in_range.erase(area)
 		if area == target_enemy:
 			target_enemy = null
-
-# NEW: Called by AttackModule to spawn projectiles with proper stats
-func spawn_projectile(projectile_scene: PackedScene, direction: Vector2) -> Area2D:
-	var projectile = projectile_scene.instantiate() as Area2D
-	add_child(projectile)
-	projectile.global_position = global_position
-	projectile.set_direction(direction)
-	projectile.set_stats(damage, projectile_speed)  # Pass stats here!
-	return projectile

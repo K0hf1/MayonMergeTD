@@ -2,20 +2,16 @@ extends Area2D
 
 signal crystal_destroyed
 
-var game_over_ui = null  # Store reference to UI
-@onready var animated_sprite = $AnimatedSprite2D # Cache the sprite node
+var game_over_ui = null
+@onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	animated_sprite.play("idleCrystal")
-	# REMOVED: area_entered.connect(_on_area_entered) (Assumed to be connected in editor)
-	
-	# Process even when paused
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _input(event):
 	# Listen for restart input
 	if get_tree().paused:
-		# KEY_SPACE is the correct constant for Godot 4
 		if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE:
 			restart_game()
 
@@ -23,7 +19,7 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Enemy"):
 		print("💔 HEART CRYSTAL DESTROYED! GAME OVER!")
 		
-		# Destroy enemy (Assumes Enemy root is a PathFollow2D or similar parent container)
+		# Destroy enemy
 		if area.get_parent() != null:
 			area.get_parent().queue_free()
 		else:
@@ -33,7 +29,7 @@ func _on_area_entered(area: Area2D) -> void:
 		game_over()
 
 func game_over():
-	# Play destruction animation (FIXED for Godot 4)
+	# Play destruction animation
 	if animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("destroyCrystal"):
 		animated_sprite.play("destroyCrystal")
 		await animated_sprite.animation_finished
@@ -43,7 +39,6 @@ func game_over():
 	get_tree().paused = true
 
 func show_game_over_screen():
-	# This function uses Control nodes, ensuring they work when paused (process_mode=ALWAYS)
 	var label = Label.new()
 	label.text = "GAME OVER\n\nPress SPACE to Restart"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -60,7 +55,6 @@ func show_game_over_screen():
 	get_tree().root.add_child(canvas_layer)
 	canvas_layer.add_child(label)
 	
-	# Store reference so we can delete it later
 	game_over_ui = canvas_layer
 
 func restart_game():
@@ -71,6 +65,44 @@ func restart_game():
 		game_over_ui.queue_free()
 		game_over_ui = null
 	
-	# Unpause and restart
+	# Unpause first
 	get_tree().paused = false
+	
+	# NEW: Clean up coins, enemies, and towers BEFORE reloading
+	_cleanup_before_restart()
+	
+	# Now reload the scene
 	get_tree().reload_current_scene()
+
+func _cleanup_before_restart() -> void:
+	"""Clean up all coins, enemies, and towers before restarting"""
+	print("🧹 Cleaning up before restart...")
+	
+	# Clean up coins from root
+	var coins = get_tree().get_nodes_in_group("Coin")
+	print("Removing %d coins..." % coins.size())
+	for coin in coins:
+		if is_instance_valid(coin):
+			coin.queue_free()
+	
+	# Clean up enemies
+	var enemies = get_tree().get_nodes_in_group("Enemy")
+	print("Removing %d enemies..." % enemies.size())
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			enemy.queue_free()
+	
+	# Clean up projectiles
+	var projectiles = get_tree().get_nodes_in_group("projectiles")
+	print("Removing %d projectiles..." % projectiles.size())
+	for projectile in projectiles:
+		if is_instance_valid(projectile):
+			projectile.queue_free()
+	
+	# Try to reset GameManager coins
+	var game_manager = get_tree().root.find_child("GameManager", true, false)
+	if game_manager and game_manager.has_method("reset_coins"):
+		game_manager.reset_coins()
+		print("✓ GameManager coins reset")
+	
+	print("✓ Cleanup complete")
