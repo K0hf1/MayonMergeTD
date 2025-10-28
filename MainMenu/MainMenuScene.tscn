@@ -1,44 +1,156 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0xk2v3dd3qub"]
+[gd_scene load_steps=18 format=3 uid="uid://d0xk2v3dd3qub"]
 
-[ext_resource type="Script" uid="uid://csd61rnwoyuv1" path="res://MainMenu/main_menu_scene.gd" id="1_8kutu"]
+[ext_resource type="Shader" uid="uid://cjfysilvaknyg" path="res://MainMenu/colorroll.gdshader" id="1_2l3d4"]
+[ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="2_xixxc"]
+[ext_resource type="Texture2D" uid="uid://dy7xcw0y8vjpv" path="res://MainMenu/MainMenuAssets/1.png" id="3_k4uic"]
+[ext_resource type="Shader" uid="uid://mq6nymbi22c5" path="res://MainMenu/roll.gdshader" id="4_5um84"]
+[ext_resource type="Texture2D" uid="uid://dcuvengg7jho7" path="res://MainMenu/MainMenuAssets/2.png" id="5_r3erp"]
+[ext_resource type="Shader" uid="uid://dvuxo1swltblx" path="res://MainMenu/volcanoroll.gdshader" id="6_ib7y0"]
+[ext_resource type="Texture2D" uid="uid://ihlb1nki5k5n" path="res://MainMenu/MainMenuAssets/3.png" id="7_aylwx"]
+[ext_resource type="Shader" uid="uid://qv31bq35hyku" path="res://MainMenu/rockroll.gdshader" id="8_7mjct"]
+[ext_resource type="Texture2D" uid="uid://doyxdfspoxkm3" path="res://MainMenu/MainMenuAssets/4.png" id="9_xdphn"]
+[ext_resource type="FontFile" uid="uid://x2vne50jx7ir" path="res://MainMenu/MainMenuAssets/Adventurer.ttf" id="10_xixxc"]
 
-[node name="MainMenuScene" type="Node2D"]
-script = ExtResource("1_8kutu")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ea22"]
+shader = ExtResource("1_2l3d4")
 
-[node name="Control" type="Control" parent="."]
+[sub_resource type="Gradient" id="Gradient_ef11d"]
+colors = PackedColorArray(0.32069913, 0.7522692, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wrjne"]
+gradient = SubResource("Gradient_ef11d")
+width = 154
+fill_from = Vector2(0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ns1bj"]
+shader = ExtResource("2_xixxc")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfs15"]
+shader = ExtResource("4_5um84")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gubr4"]
+shader = ExtResource("6_ib7y0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6tsye"]
+shader = ExtResource("8_7mjct")
+
+[node name="Control" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 69.0
-offset_top = 57.0
-offset_right = 355.0
-offset_bottom = 156.0
-
-[node name="Start" type="Button" parent="Control"]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 301.0
-offset_bottom = 64.0
-text = "Start"
-
-[node name="Settings" type="Button" parent="Control"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 195.0
-offset_right = 327.0
-offset_bottom = 263.0
-text = "Exit"
-
-[node name="Exit" type="Button" parent="Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.2980001
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -3.0
-offset_top = 104.0
-offset_right = -46.920013
-offset_bottom = 72.0
-text = "Settings"
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="pressed" from="Control/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Control/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Control/Exit" to="." method="_on_exit_pressed"]
+[node name="bg" type="TextureRect" parent="."]
+texture_repeat = 3
+material = SubResource("ShaderMaterial_2ea22")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -388.0
+offset_top = -1.0
+offset_right = 423.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_wrjne")
+
+[node name="background" type="TextureRect" parent="."]
+visible = false
+texture_repeat = 2
+material = SubResource("ShaderMaterial_ns1bj")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_k4uic")
+expand_mode = 1
+
+[node name="clouds" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_bfs15")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -253.0
+offset_top = 5.0
+offset_right = 378.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_r3erp")
+expand_mode = 1
+
+[node name="volcano" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_gubr4")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -189.0
+offset_top = 31.0
+offset_right = 308.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_aylwx")
+expand_mode = 1
+
+[node name="rocks" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_6tsye")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -391.0
+offset_top = 7.0
+offset_right = 448.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_xdphn")
+expand_mode = 1
+
+[node name="start" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 119.0
+offset_top = 458.0
+offset_right = 427.0
+offset_bottom = 731.0
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="option" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="exit" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 240.0
+offset_right = 610.0
+offset_bottom = 435.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/paragraph_spacing = 1
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/outline_size = 15
+theme_override_constants/shadow_outline_size = 22
+theme_override_fonts/font = ExtResource("10_xixxc")
+theme_override_font_sizes/font_size = 85
+text = "Mayon Merge 
+       TD"
