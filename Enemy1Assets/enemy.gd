@@ -1,17 +1,21 @@
 extends Area2D
 
 # Set a slightly higher default health (e.g., 100) for better testing with varying damage.
-@export var max_health: int = 100 
+@export var max_health: int = 10
 @export var damage_to_base: int = 10
+@export var coin_scene: PackedScene  # Drag your coin.tscn here in the editor
+@export var coin_spawn_offset: Vector2 = Vector2.ZERO
 
 var current_health: int
 var health_bar: ProgressBar
+var is_dead_flag: bool = false  # Track if enemy is dead
 
 # Cache the AnimatedSprite2D node for safer and faster access
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready() -> void:
 	current_health = max_health
+	is_dead_flag = false
 	
 	# Safety check before attempting to play animation (FIXED for Godot 4)
 	if is_instance_valid(animated_sprite) and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("EnemyRun"):
@@ -110,17 +114,46 @@ func flash_red():
 func die():
 	print("Enemy destroyed!")
 	
+	is_dead_flag = true  # Mark as dead
 	set_process(false)
 	set_physics_process(false)
 	monitoring = false
+	
+	# Drop coin before playing death animation
+	drop_coin()
 	
 	# Play death animation
 	if is_instance_valid(animated_sprite) and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("EnemyDeath"):
 		animated_sprite.play("EnemyDeath")
 		await animated_sprite.animation_finished 
 	
+	# Notify game manager that enemy died
+	if has_node("/root/GameManager"):
+		get_node("/root/GameManager").enemy_died(self)
+	
 	# Remove the enemy container node
 	if is_instance_valid(get_parent()):
 		get_parent().queue_free()
 	else:
 		queue_free()
+
+## NEW: Check if enemy is dead
+func is_dead() -> bool:
+	return is_dead_flag or current_health <= 0
+
+## -----------------------------------------------------------------------------
+## COIN DROP FUNCTION
+## -----------------------------------------------------------------------------
+
+func drop_coin() -> void:
+	# Drop a coin at the enemy's position
+	if coin_scene:
+		var coin = coin_scene.instantiate()
+		coin.global_position = global_position + coin_spawn_offset
+		coin.z_index = 100  # Make sure it's on top of everything
+		
+		# Add to the root of the scene, not the enemy parent
+		get_tree().get_root().add_child(coin)
+		print("Coin dropped at: ", coin.global_position, " with z_index: ", coin.z_index)
+	else:
+		print("WARNING: No coin scene assigned to enemy!")

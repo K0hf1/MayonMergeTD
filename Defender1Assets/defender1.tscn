@@ -143,7 +143,7 @@ animations = [{
 radius = 87.20665
 
 [node name="Node2D" type="Node2D" groups=["defender"]]
-z_index = 2
+z_index = 1
 script = ExtResource("1_7d1u4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
