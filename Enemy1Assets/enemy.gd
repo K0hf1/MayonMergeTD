@@ -1,39 +1,47 @@
 extends Area2D
 
-# Set a slightly higher default health (e.g., 100) for better testing with varying damage.
+# ===== ENEMY STATS =====
 @export var max_health: int = 10
 @export var damage_to_base: int = 10
-@export var coin_scene: PackedScene  # Drag your coin.tscn here in the editor
+@export var coin_value: int = 1
+
+# ===== COIN DROPPING =====
+@export var coin_scene: PackedScene
 @export var coin_spawn_offset: Vector2 = Vector2.ZERO
 
 var current_health: int
 var health_bar: ProgressBar
-var is_dead_flag: bool = false  # Track if enemy is dead
+var is_dead_flag: bool = false
+var game_manager: Node = null
 
-# Cache the AnimatedSprite2D node for safer and faster access
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready() -> void:
 	current_health = max_health
 	is_dead_flag = false
 	
-	# Safety check before attempting to play animation (FIXED for Godot 4)
+	_find_game_manager()
+	add_to_group("Enemy")
+	
 	if is_instance_valid(animated_sprite) and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("EnemyRun"):
 		animated_sprite.play("EnemyRun")
 	
-	# Connect collision for fireballs
 	var error = area_entered.connect(_on_area_entered)
 	if error != OK:
 		push_error("Failed to connect area_entered signal on enemy.")
 	
-	# Create health bar
 	create_health_bar()
-	
-	print("Warrior initialized with ", max_health, " health")
+	print("Enemy initialized with ", max_health, " health | Coin value: ", coin_value)
 
-## -----------------------------------------------------------------------------
-## HEALTH BAR FUNCTIONS
-## -----------------------------------------------------------------------------
+func _find_game_manager() -> void:
+	game_manager = get_node_or_null("/root/GameManager")
+	if not game_manager:
+		game_manager = get_node_or_null("/root/Main/GameManager")
+	if not game_manager:
+		game_manager = get_tree().root.find_child("GameManager", true, false)
+	
+	if game_manager:
+		print("✓ Enemy found GameManager")
 
 var health_bar_style_fill: StyleBoxFlat
 var health_bar_style_bg: StyleBoxFlat
@@ -43,7 +51,6 @@ func create_health_bar():
 	health_bar.max_value = max_health
 	health_bar.value = current_health
 	health_bar.show_percentage = false
-	
 	health_bar.custom_minimum_size = Vector2(40, 10)
 	health_bar.position = Vector2(-20, 10) 
 	
@@ -61,47 +68,33 @@ func create_health_bar():
 func update_health_bar():
 	if health_bar != null:
 		health_bar.value = current_health
-		
 		var health_percent = float(current_health) / float(max_health)
-		
 		var start_color = Color(1, 0, 0)
 		var end_color = Color(0, 1, 0)
-		
 		health_bar_style_fill.bg_color = start_color.lerp(end_color, health_percent)
 
-## -----------------------------------------------------------------------------
-## COMBAT & STATE FUNCTIONS
-## -----------------------------------------------------------------------------
-
 func _on_area_entered(area):
-	# Safety check: Ensure the projectile isn't already being freed
+	# ✅ IGNORE IF ENEMY IS DEAD
+	if is_dead_flag:
+		return
+	
 	if not is_instance_valid(area):
 		return
-		
-	# Hit by projectile
+	
 	if area.is_in_group("projectiles"):
 		var projectile_damage = 25
-		
-		# FIXED: Use has_method and get_damage() instead of the invalid area.has("damage")
 		if area.has_method("get_damage"):
 			projectile_damage = area.get_damage()
-		# NOTE: If get_damage() fails for some reason, projectile_damage defaults to 25.
-		
 		take_damage(projectile_damage)
-		
-		# Free the projectile immediately after damage is applied
 		area.queue_free()
 
 func take_damage(amount: int):
 	if current_health <= 0:
 		return
-		
 	current_health -= amount
 	print("Enemy took ", amount, " damage! Health: ", current_health, "/", max_health)
-	
 	update_health_bar()
 	flash_red()
-	
 	if current_health <= 0:
 		die()
 
@@ -112,48 +105,55 @@ func flash_red():
 		animated_sprite.modulate = Color.WHITE
 
 func die():
-	print("Enemy destroyed!")
-	
-	is_dead_flag = true  # Mark as dead
+	print("💀 Enemy destroyed!")
+	current_health = 0
+	is_dead_flag = true
 	set_process(false)
 	set_physics_process(false)
-	monitoring = false
+	monitoring = false  # ✅ DISABLE COLLISION DETECTION
 	
-	# Drop coin before playing death animation
 	drop_coin()
 	
-	# Play death animation
 	if is_instance_valid(animated_sprite) and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("EnemyDeath"):
 		animated_sprite.play("EnemyDeath")
 		await animated_sprite.animation_finished 
 	
-	# Notify game manager that enemy died
-	if has_node("/root/GameManager"):
-		get_node("/root/GameManager").enemy_died(self)
+	if game_manager and game_manager.has_method("enemy_died"):
+		game_manager.enemy_died(self)
+		print("✓ Called enemy_died() on GameManager")
 	
-	# Remove the enemy container node
-	if is_instance_valid(get_parent()):
-		get_parent().queue_free()
-	else:
-		queue_free()
+	# Mark as dead
+	is_dead_flag = true
+	remove_from_group("Enemy")
+	print("✓ Removed from 'Enemy' group")
+	
+	# Directly notify GameManager
+	call_deferred("_notify_game_manager_wave_complete")
+	
+	# Remove the node
+	queue_free()
 
-## NEW: Check if enemy is dead
 func is_dead() -> bool:
 	return is_dead_flag or current_health <= 0
 
-## -----------------------------------------------------------------------------
-## COIN DROP FUNCTION
-## -----------------------------------------------------------------------------
-
 func drop_coin() -> void:
-	# Drop a coin at the enemy's position
 	if coin_scene:
 		var coin = coin_scene.instantiate()
 		coin.global_position = global_position + coin_spawn_offset
-		coin.z_index = 100  # Make sure it's on top of everything
-		
-		# Add to the root of the scene, not the enemy parent
+		coin.z_index = 100
 		get_tree().get_root().add_child(coin)
-		print("Coin dropped at: ", coin.global_position, " with z_index: ", coin.z_index)
-	else:
-		print("WARNING: No coin scene assigned to enemy!")
+		
+		if coin.has_method("set_coin_value"):
+			coin.set_coin_value(coin_value)
+			print("💰 Coin dropped with value: ", coin_value)
+		print("Coin dropped at: ", coin.global_position)
+
+func _notify_game_manager_wave_complete() -> void:
+	"""Check active_enemies counter instead of group"""
+	if game_manager and game_manager.has_method("check_all_waves_complete"):
+		print("✅ WAVE CHECK: active_enemies = ", game_manager.active_enemies)
+		if game_manager.active_enemies == 0:
+			print("✅ CALLING check_all_waves_complete()!")
+			game_manager.check_all_waves_complete()
+		else:
+			print("⏳ Still ", game_manager.active_enemies, " active enemies")

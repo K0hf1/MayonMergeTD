@@ -2,8 +2,9 @@ extends Node2D
 
 @export var projectile_scene: PackedScene
 @export var attack_cooldown: float = 1.0
-@export var projectile_speed: float = 400.0  # INCREASED from 400
-@export var projectile_steer_force: float = 40.0  # INCREASED from 30
+@export var projectile_speed: float = 400.0
+@export var projectile_steer_force: float = 40.0
+@export var projectile_fade_time: float = 0.1  # Fade duration after hit
 
 const TIMER_PATH = "AttackTimer" 
 var defender_root: Node2D = null
@@ -65,3 +66,6 @@ func _shoot_projectile(target: Node2D) -> void:
 		print("✓ Fired at: ", target.name)
 	
 	defender_root.get_parent().add_child(projectile)
+	
+	# Connect to projectile hit signal (if you have one)
+	# Or just let projectile call queue_free() when hitting
