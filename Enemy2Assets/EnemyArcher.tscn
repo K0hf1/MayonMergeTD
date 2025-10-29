@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxvxqaac3o34t"]
+[gd_scene load_steps=10 format=3 uid="uid://cxvxqaac3o34t"]
 
 [ext_resource type="Texture2D" uid="uid://bhm5e5sbpqe2p" path="res://Enemy2Assets/Archer_Run.png" id="1_2leit"]
+[ext_resource type="Script" uid="uid://cyssd27lnecrs" path="res://Enemy2Assets/enemy_archer.gd" id="1_6ftnp"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_ud8cu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ftnp"]
 atlas = ExtResource("1_2leit")
@@ -44,6 +46,8 @@ height = 36.0
 
 [node name="Archer" type="Area2D" groups=["Enemy"]]
 z_index = 1
+script = ExtResource("1_6ftnp")
+coin_scene = ExtResource("2_ud8cu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
