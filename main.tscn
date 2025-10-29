@@ -1179,13 +1179,6 @@ offset_bottom = 77.0
 grow_horizontal = 0
 script = ExtResource("11_dg77c")
 
-[node name="ColorRect" type="ColorRect" parent="UI/Canvas Layer/CoinCounter"]
-layout_mode = 0
-offset_left = 6.0
-offset_right = 188.0
-offset_bottom = 43.0
-color = Color(0.21164447, 0.6592036, 0.80736494, 1)
-
 [node name="Container" type="HBoxContainer" parent="UI/Canvas Layer/CoinCounter"]
 layout_mode = 0
 offset_left = 6.0

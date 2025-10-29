@@ -18,28 +18,36 @@ var current_slot: MarkerSlot = null
 # Tier tracking label
 var tier_label: Label = null
 
+# ✅ NEW: GameManager reference
+var game_manager: Node = null
+
 func _ready() -> void:
 	tower_root = get_parent() as Node2D
 	original_position = tower_root.global_position
+
+	# ✅ NEW: Find GameManager
+	game_manager = get_tree().root.find_child("GameManager", true, false)
+	if not game_manager:
+		game_manager = get_node_or_null("/root/main/GameManager")
+	
+	if game_manager:
+		print("✓ DragModule: GameManager found")
+	else:
+		print("❌ DragModule: GameManager NOT FOUND!")
 
 	# Connect button signals (assumes button is named "Dragging")
 	var drag_button = $Dragging
 	drag_button.connect("button_down", Callable(self, "_on_drag_button_down"))
 	drag_button.connect("button_up", Callable(self, "_on_drag_button_up"))
-	
 
 func _process(delta: float) -> void:
 	if dragging:
 		tower_root.global_position = get_global_mouse_position() + offset
-	
 
 func _on_drag_button_down() -> void:
 	dragging = true
 	original_position = tower_root.global_position
 	offset = tower_root.global_position - get_global_mouse_position()
-	
-	# Don't free the slot when starting to drag - keep it reserved
-	# We'll handle slot changes in _snap_to_nearest_slot()
 	
 	# Print debug info
 	print("Dragging defender - Tier: %s" % tower_root.tier)
@@ -57,9 +65,9 @@ func _on_drag_button_up() -> void:
 		# Debug print
 		print("Collision detected - My tier: %s, Other tier: %s" % [my_tier, other_tier])
 		
-		# Only merge if SAME tier AND both are mergeable
-		if my_tier == other_tier and _can_merge(my_tier):
-			print("Merging defenders of tier %s" % my_tier)
+		# ✅ UPDATED: Check wave-based merging
+		if my_tier == other_tier and _can_merge_tier(my_tier):
+			print("✅ Merging defenders of tier %s" % my_tier)
 			_merge_defenders(collided_defender)
 			return
 		else:
@@ -83,13 +91,53 @@ func _get_collided_defender() -> Node2D:
 			return defender
 	return null
 
-func _can_merge(tier: int) -> bool:
-	# Define your max tier here (e.g., tier 3 is max, so only tier 1 and 2 can merge)
-	# Adjust this based on your game design
+## ✅ FIXED: Check if merging tier is allowed based on wave progression
+func _can_merge_tier(tier: int) -> bool:
+	"""
+	Merging rules:
+	- Between waves: Can merge based on NEXT wave (completed waves + 1)
+	- During waves: Can merge based on CURRENT wave
+	
+	Examples:
+	- After Wave 1 completes (before Wave 2 starts): Can merge up to Tier 2
+	- During Wave 2: Can merge up to Tier 2
+	- After Wave 2 completes (before Wave 3 starts): Can merge up to Tier 3
+	- Wave 5+: Can merge all tiers up to max (14)
+	"""
+	
+	if not game_manager:
+		print("❌ Cannot check merge - GameManager not found!")
+		return false
+	
+	var current_wave = game_manager.current_wave
+	var wave_in_progress = game_manager.wave_in_progress
 	const MAX_TIER = 14
-	var can_merge = tier < MAX_TIER
-	print("Can tier %s merge? %s (MAX_TIER: %s)" % [tier, can_merge, MAX_TIER])
-	return can_merge
+	
+	# Determine max mergeable tier based on wave state
+	var max_mergeable_tier: int
+	
+	if wave_in_progress:
+		# During wave: use current wave
+		max_mergeable_tier = current_wave
+	else:
+		# Between waves: use next wave (current_wave + 1)
+		max_mergeable_tier = current_wave + 1
+	
+	# Cap at maximum tier
+	if max_mergeable_tier > MAX_TIER:
+		max_mergeable_tier = MAX_TIER
+	
+	# Check if this tier can be merged (tier must be less than max)
+	var can_merge_tier = tier < max_mergeable_tier
+	
+	if can_merge_tier:
+		var wave_state = "Between waves" if not wave_in_progress else "During Wave %d" % current_wave
+		print("✅ Tier %d can merge (%s - Max tier for merge: %d)" % [tier, wave_state, max_mergeable_tier])
+		return true
+	else:
+		var wave_state = "Between waves" if not wave_in_progress else "During Wave %d" % current_wave
+		print("❌ Tier %d cannot merge (%s - Max tier for merge: %d)" % [tier, wave_state, max_mergeable_tier])
+		return false
 
 func _merge_defenders(other_defender: Node2D) -> void:
 	# Clear slot occupancy for both defenders
@@ -205,7 +253,6 @@ func on_spawn() -> void:
 	# Called when a defender is instantiated programmatically
 	call_deferred("_snap_to_nearest_slot")
 	call_deferred("_update_tier_label")
-	
 	
 func _update_tier_label() -> void:
 	if not tier_label:

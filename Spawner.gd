@@ -1,8 +1,9 @@
 extends Path2D
 
 @export var spawn_time: float = 1.0
+@export var spawn_time_wave_5_plus: float = 0.1  # Minimum delay for wave 5+
 var timer: float = 0.0
-var enemies_to_spawn: Array = []  # Array to track enemy types
+var enemies_to_spawn: Array = []
 var spawning: bool = false
 var current_wave: int = 0
 
@@ -41,7 +42,10 @@ func _process(delta: float) -> void:
 
 	timer += delta
 	
-	if timer >= spawn_time:
+	# ✅ Determine spawn delay based on wave
+	var current_spawn_time = spawn_time if current_wave <= 4 else spawn_time_wave_5_plus
+	
+	if timer >= current_spawn_time:
 		spawn_enemy()
 		timer = 0.0
 		

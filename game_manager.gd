@@ -15,21 +15,9 @@ signal wave_ended(wave_number: int)
 signal all_waves_complete
 
 # ===== WAVE CONFIGURATION =====
-@export var max_waves: int = 10
-@export var enemies_per_wave: int = 10
+@export var max_waves: int = 999999  # ✅ Infinite waves
 @export var wave_delay: float = 2.0
-
-# ===== RANDOMIZATION FOR WAVES 5+ =====
-@export var min_enemies_wave_5_plus: int = 8
-@export var max_enemies_wave_5_plus: int = 15
-
-# ===== WAVE ENEMY CONFIGURATION =====
-@export var wave_enemy_config: Dictionary = {
-	1: {"enemies": [{"type": "Warrior", "count": 1}]},
-	2: {"enemies": [{"type": "Archer", "count": 1}]},
-	3: {"enemies": [{"type": "Lancer", "count": 1}]},
-	4: {"enemies": [{"type": "Monk", "count": 1}]},
-}
+@export var auto_start_next_wave: bool = false  # ✅ Toggle for auto-start
 
 # ===== VARIABLES =====
 var coins_collected: int = 0
@@ -47,7 +35,6 @@ func _ready() -> void:
 	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
 	
 	# Update the UI label to show the highest wave
-	var record_label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
 	if record_label:
 		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
 	
@@ -86,8 +73,6 @@ func _ready() -> void:
 			start_wave_button.pressed.connect(cb)
 	else:
 		print("❌ Start Wave button NOT found!")
-
-
 
 func _gather_slots_recursive(node: Node) -> void:
 	"""Recursively search for MarkerSlot nodes"""
@@ -186,7 +171,6 @@ func on_coin_collected(coin_amount: int = 1) -> void:
 	
 	coin_collected.emit(coin_amount)
 	_update_coin_ui()
-	
 
 func _update_coin_ui() -> void:
 	var coin_counter = get_tree().root.find_child("CoinCounter", true, false)
@@ -230,25 +214,91 @@ func _on_start_wave_button_pressed():
 	if spawner:
 		spawner.start_wave(current_wave + 1)
 
-func get_wave_enemy_config(wave_number: int) -> Dictionary:
-	if wave_number in wave_enemy_config:
-		return wave_enemy_config[wave_number]
+## ✅ Calculate enemy count based on wave number
+func _calculate_wave_enemy_count(wave_number: int) -> int:
+	"""
+	Enemy count scaling logic:
+	- Wave 1: 1 Warrior
+	- Wave 2: 5 Archers
+	- Wave 3: 5 Lancers
+	- Wave 4: 5 Monks
+	- Wave 5: 10 enemies (randomized mix)
+	- Wave 6+: +3 per wave (13, 16, 19, 22...)
+	"""
+	
+	if wave_number <= 4:
+		return 5
+	elif wave_number == 5:
+		return 10
 	else:
-		var random_warriors = randi_range(3, 6)
-		var random_archers = randi_range(4, 8)
-		var random_mages = randi_range(2, 5)
-		return {"enemies": [
-			{"type": "Warrior", "count": random_warriors},
-			{"type": "Archer", "count": random_archers},
-			{"type": "Mage", "count": random_mages}
-		]}
+		# Wave 6+: starts at 13 and increments by 3
+		return 10 + 3 + (wave_number - 6) * 3
+
+## ✅ Generate enemy composition for a wave
+func _generate_wave_enemies(wave_number: int) -> Array:
+	"""
+	Wave progression:
+	- Wave 1: All Warrior (1)
+	- Wave 2: All Archer (5)
+	- Wave 3: All Lancer (5)
+	- Wave 4: All Monk (5)
+	- Wave 5+: Randomized mix of all enemy types
+	"""
+	
+	var total_enemies = _calculate_wave_enemy_count(wave_number)
+	var enemy_composition = []
+	
+	if wave_number == 1:
+		# Wave 1: 1 Warrior
+		enemy_composition.append({"type": "Warrior", "count": total_enemies})
+		print("🎯 Wave 1: All Warrior (%d enemy)" % total_enemies)
+	
+	elif wave_number == 2:
+		# Wave 2: 5 Archers
+		enemy_composition.append({"type": "Archer", "count": total_enemies})
+		print("🎯 Wave 2: All Archer (%d enemies)" % total_enemies)
+	
+	elif wave_number == 3:
+		# Wave 3: 5 Lancers
+		enemy_composition.append({"type": "Lancer", "count": total_enemies})
+		print("🎯 Wave 3: All Lancer (%d enemies)" % total_enemies)
+	
+	elif wave_number == 4:
+		# Wave 4: 5 Monks
+		enemy_composition.append({"type": "Monk", "count": total_enemies})
+		print("🎯 Wave 4: All Monk (%d enemies)" % total_enemies)
+	
+	else:
+		# Wave 5+: Randomized mix of all enemy types
+		var warriors = randi_range(int(total_enemies * 0.2), int(total_enemies * 0.4))
+		var archers = randi_range(int(total_enemies * 0.2), int(total_enemies * 0.35))
+		var lancers = randi_range(int(total_enemies * 0.15), int(total_enemies * 0.3))
+		var monks = total_enemies - warriors - archers - lancers
+		
+		# Ensure no negative values
+		if monks < 0:
+			monks = 0
+		
+		enemy_composition.append({"type": "Warrior", "count": warriors})
+		enemy_composition.append({"type": "Archer", "count": archers})
+		enemy_composition.append({"type": "Lancer", "count": lancers})
+		enemy_composition.append({"type": "Monk", "count": monks})
+		
+		print("🎯 Wave %d: Randomized mix - Warriors: %d, Archers: %d, Lancers: %d, Monks: %d (Total: %d)" % [wave_number, warriors, archers, lancers, monks, total_enemies])
+	
+	return enemy_composition
+
+func get_wave_enemy_config(wave_number: int) -> Dictionary:
+	"""Get enemy configuration for any wave (infinite support)"""
+	var enemies = _generate_wave_enemies(wave_number)
+	return {"enemies": enemies}
 
 func get_enemies_for_wave(wave_number: int) -> int:
 	var config = get_wave_enemy_config(wave_number)
 	var total = 0
 	for enemy_data in config["enemies"]:
 		total += enemy_data["count"]
-	print("📊 Wave %d breakdown: %s | Total: %d" % [wave_number, config["enemies"], total])
+	print("📊 Wave %d breakdown: Total: %d" % [wave_number, total])
 	return total
 
 func set_current_wave(wave_number: int) -> void:
@@ -273,23 +323,22 @@ func check_all_waves_complete() -> void:
 	
 	_reset_start_wave_button()
 	
-	if current_wave >= max_waves:
-		print("🎉 ALL WAVES COMPLETE!")
-		all_waves_complete.emit()
-		_enable_restart_button()
-		return
+	# ✅ Update player record
+	PlayerRecord.update_wave_record(current_wave)
+	_update_record_label()
 	
+	# ✅ No max waves check - infinite waves!
 	print("⏳ Ready for next wave!")
 	var next_wave = current_wave + 1
 	print("🔘 START WAVE button is now ACTIVE - Click to start wave ", next_wave)
-	print("   (Or wave will auto-start in ", int(wave_delay), " seconds)")
 	
-	await get_tree().create_timer(wave_delay).timeout
-	_start_next_wave_auto()
-	
-	# Update player record
-	PlayerRecord.update_wave_record(current_wave)
-	_update_record_label()  # Refresh the UI
+	# ✅ ONLY auto-start if enabled
+	if auto_start_next_wave:
+		print("   (Auto-starting in ", int(wave_delay), " seconds)")
+		await get_tree().create_timer(wave_delay).timeout
+		_start_next_wave_auto()
+	else:
+		print("   (Click button to start next wave)")
 
 func _reset_start_wave_button() -> void:
 	if not is_instance_valid(start_wave_button):
@@ -373,9 +422,7 @@ func _cleanup_enemies() -> void:
 			enemy.queue_free()
 	print("✓ Cleaned up %d enemies" % enemies.size())
 
-
-
-# --- Update the highest wave UI label ---
+# ===== Update the highest wave UI label =====
 func _update_record_label() -> void:
 	if record_label:
 		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
