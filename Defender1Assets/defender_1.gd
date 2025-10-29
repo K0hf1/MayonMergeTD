@@ -39,9 +39,25 @@ func _process(delta: float) -> void:
 # --- Targeting Logic ---
 
 func _update_target_enemy() -> void:
-	# Remove invalid enemies from list
+	# Remove invalid or dead enemies from list
 	for i in range(enemies_in_range.size() - 1, -1, -1):
-		if not is_instance_valid(enemies_in_range[i]):
+		var enemy = enemies_in_range[i]
+		
+		# Check if enemy node is valid
+		if not is_instance_valid(enemy):
+			print("🗑️  Removing invalid enemy from defender tracking")
+			enemies_in_range.remove_at(i)
+			continue
+		
+		# Check if enemy is dead (has method is_dead)
+		if enemy.has_method("is_dead") and enemy.is_dead():
+			print("🗑️  Removing dead enemy from defender tracking: ", enemy.name)
+			enemies_in_range.remove_at(i)
+			continue
+		
+		# Check if enemy is still in Enemy group
+		if not enemy.is_in_group(ENEMY_GROUP_NAME):
+			print("🗑️  Removing removed enemy from defender tracking: ", enemy.name)
 			enemies_in_range.remove_at(i)
 	
 	if enemies_in_range.is_empty():
@@ -84,9 +100,11 @@ func _track_enemy() -> void:
 func _on_detection_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group(ENEMY_GROUP_NAME) and not enemies_in_range.has(area):
 		enemies_in_range.append(area)
+		print("✓ Enemy entered defender range: ", area.name)
 
 func _on_detection_area_area_exited(area: Area2D) -> void:
 	if area.is_in_group(ENEMY_GROUP_NAME):
 		enemies_in_range.erase(area)
 		if area == target_enemy:
 			target_enemy = null
+		print("✓ Enemy exited defender range: ", area.name)
