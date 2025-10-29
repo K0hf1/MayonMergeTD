@@ -4,6 +4,8 @@ extends Node2D
 @export var tower_slots_parent_path: NodePath
 @onready var spawner = $"../Path2D"
 @onready var start_wave_button = get_node("../UI/StartWaveButton")
+@onready var record_label: Label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
+
 @export var defender_base_path: String = "res://DefenderXAssets/defender"
 
 # ===== SIGNALS =====
@@ -13,30 +15,11 @@ signal wave_ended(wave_number: int)
 signal all_waves_complete
 
 # ===== WAVE CONFIGURATION =====
-@export var max_waves: int = 10
-@export var enemies_per_wave: int = 10
+@export var max_waves: int = 999999  # ✅ Infinite waves
 @export var wave_delay: float = 2.0
+@export var auto_start_next_wave: bool = false  # ✅ Toggle for auto-start
 
-# ===== RANDOMIZATION FOR WAVES 5+ =====
-@export var min_enemies_wave_5_plus: int = 8
-@export var max_enemies_wave_5_plus: int = 15
-
-# ===== WAVE ENEMY CONFIGURATION =====
-# Define which enemy types spawn in each wave
-@export var wave_enemy_config: Dictionary = {
-	1: {"enemies": [{"type": "Warrior", "count": 10}]},
-	2: {"enemies": [{"type": "Warrior", "count": 5}, {"type": "Archer", "count": 5}]},
-	3: {"enemies": [{"type": "Warrior", "count": 6}, {"type": "Archer", "count": 6}]},
-	4: {"enemies": [{"type": "Warrior", "count": 4}, {"type": "Archer", "count": 4}, {"type": "Mage", "count": 2}]},
-	5: {"enemies": [{"type": "Warrior", "count": 5}, {"type": "Archer", "count": 5}, {"type": "Mage", "count": 3}]},
-	6: {"enemies": [{"type": "Archer", "count": 8}, {"type": "Mage", "count": 5}]},
-	7: {"enemies": [{"type": "Warrior", "count": 4}, {"type": "Mage", "count": 8}]},
-	8: {"enemies": [{"type": "Warrior", "count": 3}, {"type": "Archer", "count": 3}, {"type": "Mage", "count": 6}]},
-	9: {"enemies": [{"type": "Archer", "count": 10}, {"type": "Mage", "count": 10}]},
-	10: {"enemies": [{"type": "Warrior", "count": 5}, {"type": "Archer", "count": 5}, {"type": "Mage", "count": 10}]},
-}
-
-# Coin tracking
+# ===== VARIABLES =====
 var coins_collected: int = 0
 var current_wave: int = 0
 var active_enemies: int = 0
@@ -45,11 +28,20 @@ var wave_in_progress: bool = false
 var tower_slots: Array[MarkerSlot] = []
 var tower_slots_parent: Node2D = null
 
+# ===== READY / INITIALIZATION =====
 func _ready() -> void:
+	# --- Load player record ---
+	PlayerRecord.load()
+	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
+	
+	# Update the UI label to show the highest wave
+	if record_label:
+		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
+	
 	# Get tower_slots_parent from the path
 	if tower_slots_parent_path:
 		tower_slots_parent = get_node(tower_slots_parent_path)
-	
+
 	# If still not set, try common locations
 	if not tower_slots_parent:
 		print("Searching for tower slots parent...")
@@ -59,25 +51,26 @@ func _ready() -> void:
 				tower_slots_parent = child
 				print("Found potential slots parent: %s" % child.name)
 				break
-		
+
 		if not tower_slots_parent:
 			tower_slots_parent = parent
 			print("Using parent as slots parent: %s" % parent.name)
-	
+
 	# Gather all MarkerSlot children
 	print("=== Gathering tower slots from: %s ===" % tower_slots_parent.name)
 	_gather_slots_recursive(tower_slots_parent)
-	
+
 	print("Total slots found: %d" % tower_slots.size())
-	
+
 	if tower_slots.is_empty():
 		print("ERROR: No MarkerSlots found!")
-	
-	# Verify start_wave_button is found
+
+	# Verify start_wave_button is found and connect signal safely
 	if start_wave_button:
 		print("✓ Start Wave button found: ", start_wave_button.name)
-		# Connect button pressed signal
-		start_wave_button.pressed.connect(_on_start_wave_button_pressed)
+		var cb: Callable = Callable(self, "_on_start_wave_button_pressed")
+		if not start_wave_button.is_connected("pressed", cb):
+			start_wave_button.pressed.connect(cb)
 	else:
 		print("❌ Start Wave button NOT found!")
 
@@ -90,6 +83,7 @@ func _gather_slots_recursive(node: Node) -> void:
 		else:
 			_gather_slots_recursive(child)
 
+# ===== TOWER / DEFENDER MANAGEMENT =====
 func _on_buy_tower_button_pressed() -> void:
 	var available_slots = []
 	print("=== Checking slot availability ===")
@@ -128,29 +122,6 @@ func _on_buy_tower_button_pressed() -> void:
 	print("Tier 1 Tower spawned at:", chosen_slot.global_position)
 	print("Available slots remaining: %d" % _count_available_slots())
 
-func _count_available_slots() -> int:
-	var count = 0
-	for slot in tower_slots:
-		if not slot.is_occupied:
-			count += 1
-	return count
-
-func _on_start_wave_button_pressed():
-	"""Called when Start Wave button is pressed"""
-	if wave_in_progress:
-		print("⚠️  Wave already in progress!")
-		return
-	
-	print("\n▶️  START WAVE BUTTON PRESSED!")
-	
-	if start_wave_button:
-		start_wave_button.disabled = true
-	
-	wave_in_progress = true
-	
-	if spawner:
-		spawner.start_wave(current_wave + 1)
-
 func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	var new_tier: int = defender1.tier + 1
 	
@@ -185,21 +156,23 @@ func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	print("Merged defender created at tier ", new_tier)
 	print("Available slots after merge: %d" % _count_available_slots())
 
-# ===== COIN MANAGEMENT =====
+func _count_available_slots() -> int:
+	var count = 0
+	for slot in tower_slots:
+		if not slot.is_occupied:
+			count += 1
+	return count
 
-## Collect a coin with specified amount
+# ===== COIN MANAGEMENT =====
 func on_coin_collected(coin_amount: int = 1) -> void:
 	coins_collected += coin_amount
 	print("=== COIN COLLECTED ===")
 	print("Amount: +%d | Total coins: %d" % [coin_amount, coins_collected])
 	
-	# Emit signal for UI to update
 	coin_collected.emit(coin_amount)
-	
 	_update_coin_ui()
 
 func _update_coin_ui() -> void:
-	"""Update the coin counter UI"""
 	var coin_counter = get_tree().root.find_child("CoinCounter", true, false)
 	
 	if not coin_counter:
@@ -213,35 +186,127 @@ func _update_coin_ui() -> void:
 func get_coins_collected() -> int:
 	return coins_collected
 
-# ===== WAVE & ENEMY TRACKING =====
+func reset_coins() -> void:
+	coins_collected = 0
+	_cleanup_dropped_coins()
+	_update_coin_ui()
+	print("✓ Coins reset to 0")
 
-## Get the wave enemy configuration
-func get_wave_enemy_config(wave_number: int) -> Dictionary:
-	"""Get enemy types and counts for a wave"""
-	if wave_number in wave_enemy_config:
-		return wave_enemy_config[wave_number]
+func _cleanup_dropped_coins() -> void:
+	print("🧹 Cleaning up dropped coins...")
+	var coins = get_tree().get_nodes_in_group("Coin")
+	for coin in coins:
+		if is_instance_valid(coin):
+			coin.queue_free()
+	print("✓ Cleaned up %d coins from map" % coins.size())
+
+# ===== WAVE & ENEMY MANAGEMENT =====
+func _on_start_wave_button_pressed():
+	if wave_in_progress:
+		print("⚠️  Wave already in progress!")
+		return
+	
+	print("\n▶️  START WAVE BUTTON PRESSED!")
+	if start_wave_button:
+		start_wave_button.disabled = true
+	
+	wave_in_progress = true
+	if spawner:
+		spawner.start_wave(current_wave + 1)
+
+## ✅ Calculate enemy count based on wave number
+func _calculate_wave_enemy_count(wave_number: int) -> int:
+	"""
+	Enemy count scaling logic:
+	- Wave 1: 1 Warrior
+	- Wave 2: 5 Archers
+	- Wave 3: 5 Lancers
+	- Wave 4: 5 Monks
+	- Wave 5: 10 enemies (randomized mix)
+	- Wave 6+: +3 per wave (13, 16, 19, 22...)
+	"""
+	
+	if wave_number == 1:
+		return 5
+	elif wave_number == 2:
+		return 5
+	elif wave_number == 3:
+		return 5
+	elif wave_number == 4:
+		return 5
+	elif wave_number == 5:
+		return 10
 	else:
-		# Default for waves beyond 10: random mix
-		var random_warriors = randi_range(3, 6)
-		var random_archers = randi_range(4, 8)
-		var random_mages = randi_range(2, 5)
-		return {"enemies": [
-			{"type": "Warrior", "count": random_warriors},
-			{"type": "Archer", "count": random_archers},
-			{"type": "Mage", "count": random_mages}
-		]}
+		# Wave 6+: starts at 13 and increments by 3
+		return 10 + 3 + (wave_number - 6) * 3
 
-## Get the enemy count for a specific wave
+## ✅ Generate enemy composition for a wave
+func _generate_wave_enemies(wave_number: int) -> Array:
+	"""
+	Wave progression:
+	- Wave 1: All Warrior (1)
+	- Wave 2: All Archer (5)
+	- Wave 3: All Lancer (5)
+	- Wave 4: All Monk (5)
+	- Wave 5+: Randomized mix of all enemy types
+	"""
+	
+	var total_enemies = _calculate_wave_enemy_count(wave_number)
+	var enemy_composition = []
+	
+	if wave_number == 1:
+		# Wave 1: 1 Warrior
+		enemy_composition.append({"type": "Warrior", "count": total_enemies})
+		print("🎯 Wave 1: All Warrior (%d enemy)" % total_enemies)
+	
+	elif wave_number == 2:
+		# Wave 2: 5 Archers
+		enemy_composition.append({"type": "Archer", "count": total_enemies})
+		print("🎯 Wave 2: All Archer (%d enemies)" % total_enemies)
+	
+	elif wave_number == 3:
+		# Wave 3: 5 Lancers
+		enemy_composition.append({"type": "Lancer", "count": total_enemies})
+		print("🎯 Wave 3: All Lancer (%d enemies)" % total_enemies)
+	
+	elif wave_number == 4:
+		# Wave 4: 5 Monks
+		enemy_composition.append({"type": "Monk", "count": total_enemies})
+		print("🎯 Wave 4: All Monk (%d enemies)" % total_enemies)
+	
+	else:
+		# Wave 5+: Randomized mix of all enemy types
+		var warriors = randi_range(int(total_enemies * 0.2), int(total_enemies * 0.4))
+		var archers = randi_range(int(total_enemies * 0.2), int(total_enemies * 0.35))
+		var lancers = randi_range(int(total_enemies * 0.15), int(total_enemies * 0.3))
+		var monks = total_enemies - warriors - archers - lancers
+		
+		# Ensure no negative values
+		if monks < 0:
+			monks = 0
+		
+		enemy_composition.append({"type": "Warrior", "count": warriors})
+		enemy_composition.append({"type": "Archer", "count": archers})
+		enemy_composition.append({"type": "Lancer", "count": lancers})
+		enemy_composition.append({"type": "Monk", "count": monks})
+		
+		print("🎯 Wave %d: Randomized mix - Warriors: %d, Archers: %d, Lancers: %d, Monks: %d (Total: %d)" % [wave_number, warriors, archers, lancers, monks, total_enemies])
+	
+	return enemy_composition
+
+func get_wave_enemy_config(wave_number: int) -> Dictionary:
+	"""Get enemy configuration for any wave (infinite support)"""
+	var enemies = _generate_wave_enemies(wave_number)
+	return {"enemies": enemies}
+
 func get_enemies_for_wave(wave_number: int) -> int:
-	"""Get total enemy count for a wave"""
 	var config = get_wave_enemy_config(wave_number)
 	var total = 0
 	for enemy_data in config["enemies"]:
 		total += enemy_data["count"]
-	print("📊 Wave %d breakdown: %s | Total: %d" % [wave_number, config["enemies"], total])
+	print("📊 Wave %d breakdown: Total: %d" % [wave_number, total])
 	return total
 
-## Set the current wave
 func set_current_wave(wave_number: int) -> void:
 	current_wave = wave_number
 	var enemy_count = get_enemies_for_wave(wave_number)
@@ -249,75 +314,55 @@ func set_current_wave(wave_number: int) -> void:
 	print("👹 Enemies for this wave: ", enemy_count)
 	wave_started.emit(wave_number)
 
-## Called when an enemy is spawned
 func enemy_spawned() -> void:
 	active_enemies += 1
 	print("👹 Enemy spawned! Active enemies: ", active_enemies)
 
-## Called when an enemy dies
 func enemy_died(enemy: Node) -> void:
 	active_enemies -= 1
 	print("💀 Enemy died! Active enemies: ", active_enemies)
 
-## Check if all waves are complete
 func check_all_waves_complete() -> void:
-	"""Called by enemy when all enemies in wave are dead"""
-	
 	print("✅ WAVE %d COMPLETE! All enemies defeated!" % current_wave)
-	
 	wave_ended.emit(current_wave)
 	wave_in_progress = false
 	
-	# Release the start wave button (unpress it)
 	_reset_start_wave_button()
 	
-	# Check if all waves are complete
-	if current_wave >= max_waves:
-		print("🎉 ALL WAVES COMPLETE!")
-		all_waves_complete.emit()
-		_enable_restart_button()
-		return
+	# ✅ Update player record
+	PlayerRecord.update_wave_record(current_wave)
+	_update_record_label()
 	
-	# Ready for next wave
+	# ✅ No max waves check - infinite waves!
 	print("⏳ Ready for next wave!")
 	var next_wave = current_wave + 1
 	print("🔘 START WAVE button is now ACTIVE - Click to start wave ", next_wave)
-	print("   (Or wave will auto-start in ", int(wave_delay), " seconds)")
 	
-	# Optional: Auto-start next wave after delay
-	await get_tree().create_timer(wave_delay).timeout
-	_start_next_wave_auto()
+	# ✅ ONLY auto-start if enabled
+	if auto_start_next_wave:
+		print("   (Auto-starting in ", int(wave_delay), " seconds)")
+		await get_tree().create_timer(wave_delay).timeout
+		_start_next_wave_auto()
+	else:
+		print("   (Click button to start next wave)")
 
-## Reset start wave button to unpressed and enabled state
 func _reset_start_wave_button() -> void:
-	"""Un-press and enable the start wave button"""
 	if not is_instance_valid(start_wave_button):
 		print("❌ Button is invalid!")
 		return
 	
 	print("\n🔘 RESETTING BUTTON:")
 	print("   Before: pressed=%s | disabled=%s" % [start_wave_button.button_pressed, start_wave_button.disabled])
-	
-	# Release focus first
 	start_wave_button.release_focus()
-	
-	# Wait a frame for focus to be released
 	await get_tree().process_frame
-	
-	# Now set states
 	start_wave_button.button_pressed = false
 	start_wave_button.disabled = false
 	start_wave_button.modulate = Color.WHITE
-	
 	print("   After:  pressed=%s | disabled=%s" % [start_wave_button.button_pressed, start_wave_button.disabled])
 	print("   ✅ Button ready!\n")
 
-## Start the next wave automatically (optional auto-start)
 func _start_next_wave_auto() -> void:
-	"""Auto-start next wave if player hasn't started it manually"""
 	var all_enemies = get_tree().get_nodes_in_group("Enemy")
-	
-	# Only auto-start if no enemies are currently active and button wasn't pressed
 	if all_enemies.size() == 0 and not wave_in_progress:
 		if spawner and spawner.has_method("start_wave"):
 			var next_wave = current_wave + 1
@@ -327,7 +372,6 @@ func _start_next_wave_auto() -> void:
 			if start_wave_button:
 				start_wave_button.disabled = true
 
-## Enable restart button when all waves complete
 func _enable_restart_button() -> void:
 	if start_wave_button:
 		start_wave_button.text = "Restart Level"
@@ -336,26 +380,8 @@ func _enable_restart_button() -> void:
 		start_wave_button.modulate = Color.WHITE
 		print("✓ Restart button enabled")
 
-func reset_coins() -> void:
-	"""Reset coins and clean up coin drops on map"""
-	coins_collected = 0
-	_cleanup_dropped_coins()
-	_update_coin_ui()
-	print("✓ Coins reset to 0")
-
-func _cleanup_dropped_coins() -> void:
-	"""Remove all dropped coin pickups from the map"""
-	print("🧹 Cleaning up dropped coins...")
-	
-	var coins = get_tree().get_nodes_in_group("Coin")
-	for coin in coins:
-		if is_instance_valid(coin):
-			coin.queue_free()
-	
-	print("✓ Cleaned up %d coins from map" % coins.size())
-
+# ===== LEVEL RESET & CLEANUP =====
 func restart_level() -> void:
-	"""Restart the level completely"""
 	print("\n========== RESTARTING LEVEL ==========")
 	
 	_cleanup_dropped_coins()
@@ -384,27 +410,25 @@ func restart_level() -> void:
 	wave_in_progress = false
 	
 	wave_ended.emit(0)
-	
 	print("✓ Level restarted successfully\n")
 
 func _cleanup_towers() -> void:
-	"""Remove all towers from the map"""
 	print("🧹 Cleaning up towers...")
-	
 	var towers = get_tree().get_nodes_in_group("Defender")
 	for tower in towers:
 		if is_instance_valid(tower):
 			tower.queue_free()
-	
 	print("✓ Cleaned up %d towers" % towers.size())
 
 func _cleanup_enemies() -> void:
-	"""Remove all enemies from the map"""
 	print("🧹 Cleaning up enemies...")
-	
 	var enemies = get_tree().get_nodes_in_group("Enemy")
 	for enemy in enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
-	
 	print("✓ Cleaned up %d enemies" % enemies.size())
+
+# ===== Update the highest wave UI label =====
+func _update_record_label() -> void:
+	if record_label:
+		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave

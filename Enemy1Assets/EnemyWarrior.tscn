@@ -1,30 +1,30 @@
 [gd_scene load_steps=12 format=3 uid="uid://cyqblcc83l7d4"]
 
 [ext_resource type="Script" uid="uid://cdb0ovo5ahykf" path="res://Enemy1Assets/enemy.gd" id="1_cv2du"]
-[ext_resource type="Texture2D" uid="uid://botf6rnf5kmro" path="res://Enemy1Assets/Warrior_Run.png" id="2_lw4m5"]
+[ext_resource type="Texture2D" uid="uid://7y8lnqcc4gnd" path="res://Enemy1Assets/Warrior_Run.png" id="2_lw4m5"]
 [ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_we068"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s7bn3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2leit"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2hac7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ftnp"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(192, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e6d4v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ud8cu"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(384, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qp131"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxelb"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(576, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6do27"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bs6cp"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(768, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rvmyp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_kl6vn"]
 atlas = ExtResource("2_lw4m5")
 region = Rect2(960, 0, 192, 192)
 
@@ -32,22 +32,22 @@ region = Rect2(960, 0, 192, 192)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_s7bn3")
+"texture": SubResource("AtlasTexture_2leit")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_2hac7")
+"texture": SubResource("AtlasTexture_6ftnp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e6d4v")
+"texture": SubResource("AtlasTexture_ud8cu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qp131")
+"texture": SubResource("AtlasTexture_bxelb")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_6do27")
+"texture": SubResource("AtlasTexture_bs6cp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_rvmyp")
+"texture": SubResource("AtlasTexture_kl6vn")
 }],
 "loop": true,
 "name": &"EnemyRun",
@@ -55,8 +55,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
-radius = 19.0
-height = 54.0
+radius = 15.0
+height = 36.0
 
 [node name="Warrior" type="Area2D" groups=["Enemy"]]
 z_index = 1
@@ -68,7 +68,6 @@ z_index = 1
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_2nxwx")
 animation = &"EnemyRun"
-frame = 2
 frame_progress = 0.3769967
 offset = Vector2(0, -25)
 
