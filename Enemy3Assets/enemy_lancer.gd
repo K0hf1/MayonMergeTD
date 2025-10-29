@@ -142,15 +142,18 @@ func is_dead() -> bool:
 
 func drop_coin() -> void:
 	if coin_scene:
-		var coin = coin_scene.instantiate()
-		coin.global_position = global_position + coin_spawn_offset
-		coin.z_index = 100
-		get_tree().get_root().add_child(coin)
-		
-		if coin.has_method("set_coin_value"):
-			coin.set_coin_value(coin_value)
-			print("💰 Coin dropped with value: ", coin_value)
-		print("Coin dropped at: ", coin.global_position)
+		call_deferred("_spawn_coin")
+
+func _spawn_coin() -> void:
+	var coin = coin_scene.instantiate()
+	coin.global_position = global_position + coin_spawn_offset
+	coin.z_index = 100
+	get_tree().get_root().add_child(coin)
+
+	if coin.has_method("set_coin_value"):
+		coin.set_coin_value(coin_value)
+		print("💰 Coin dropped with value: ", coin_value)
+	print("Coin dropped at: ", coin.global_position)
 
 func _notify_game_manager_wave_complete() -> void:
 	"""Check active_enemies counter instead of group"""

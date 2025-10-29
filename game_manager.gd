@@ -4,6 +4,8 @@ extends Node2D
 @export var tower_slots_parent_path: NodePath
 @onready var spawner = $"../Path2D"
 @onready var start_wave_button = get_node("../UI/StartWaveButton")
+@onready var record_label: Label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
+
 @export var defender_base_path: String = "res://DefenderXAssets/defender"
 
 # ===== SIGNALS =====
@@ -40,6 +42,15 @@ var tower_slots_parent: Node2D = null
 
 # ===== READY / INITIALIZATION =====
 func _ready() -> void:
+	# --- Load player record ---
+	PlayerRecord.load()
+	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
+	
+	# Update the UI label to show the highest wave
+	var record_label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
+	if record_label:
+		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
+	
 	# Get tower_slots_parent from the path
 	if tower_slots_parent_path:
 		tower_slots_parent = get_node(tower_slots_parent_path)
@@ -175,6 +186,7 @@ func on_coin_collected(coin_amount: int = 1) -> void:
 	
 	coin_collected.emit(coin_amount)
 	_update_coin_ui()
+	
 
 func _update_coin_ui() -> void:
 	var coin_counter = get_tree().root.find_child("CoinCounter", true, false)
@@ -274,6 +286,10 @@ func check_all_waves_complete() -> void:
 	
 	await get_tree().create_timer(wave_delay).timeout
 	_start_next_wave_auto()
+	
+	# Update player record
+	PlayerRecord.update_wave_record(current_wave)
+	_update_record_label()  # Refresh the UI
 
 func _reset_start_wave_button() -> void:
 	if not is_instance_valid(start_wave_button):
@@ -356,3 +372,10 @@ func _cleanup_enemies() -> void:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
 	print("✓ Cleaned up %d enemies" % enemies.size())
+
+
+
+# --- Update the highest wave UI label ---
+func _update_record_label() -> void:
+	if record_label:
+		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
