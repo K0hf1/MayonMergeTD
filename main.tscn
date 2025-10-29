@@ -1167,7 +1167,6 @@ WAVE"
 [node name="Canvas Layer" type="CanvasLayer" parent="UI"]
 
 [node name="CoinCounter" type="Control" parent="UI/Canvas Layer"]
-visible = false
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0

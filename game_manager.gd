@@ -24,15 +24,9 @@ signal all_waves_complete
 # ===== WAVE ENEMY CONFIGURATION =====
 @export var wave_enemy_config: Dictionary = {
 	1: {"enemies": [{"type": "Warrior", "count": 1}]},
-	2: {"enemies": [{"type": "Warrior", "count": 0}, {"type": "Archer", "count": 1}]},
-	3: {"enemies": [{"type": "Warrior", "count": 6}, {"type": "Archer", "count": 6}]},
-	4: {"enemies": [{"type": "Warrior", "count": 4}, {"type": "Archer", "count": 4}, {"type": "Mage", "count": 2}]},
-	5: {"enemies": [{"type": "Warrior", "count": 5}, {"type": "Archer", "count": 5}, {"type": "Mage", "count": 3}]},
-	6: {"enemies": [{"type": "Archer", "count": 8}, {"type": "Mage", "count": 5}]},
-	7: {"enemies": [{"type": "Warrior", "count": 4}, {"type": "Mage", "count": 8}]},
-	8: {"enemies": [{"type": "Warrior", "count": 3}, {"type": "Archer", "count": 3}, {"type": "Mage", "count": 6}]},
-	9: {"enemies": [{"type": "Archer", "count": 10}, {"type": "Mage", "count": 10}]},
-	10: {"enemies": [{"type": "Warrior", "count": 5}, {"type": "Archer", "count": 5}, {"type": "Mage", "count": 10}]},
+	2: {"enemies": [{"type": "Archer", "count": 1}]},
+	3: {"enemies": [{"type": "Lancer", "count": 1}]},
+	4: {"enemies": [{"type": "Monk", "count": 1}]},
 }
 
 # ===== VARIABLES =====

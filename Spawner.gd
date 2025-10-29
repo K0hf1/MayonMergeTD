@@ -15,6 +15,8 @@ var game_manager: Node = null
 var enemy_scenes: Dictionary = {
 	"Warrior": "res://Enemy1Assets/EnemyWarrior.tscn",
 	"Archer": "res://Enemy2Assets/EnemyArcher.tscn",
+	"Lancer": "res://Enemy3Assets/EnemyLancer.tscn",
+	"Monk": "res://Enemy4Assets/EnemyMonk.tscn",
 }
 
 
