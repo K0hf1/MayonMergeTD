@@ -1,9 +1,9 @@
 extends PathFollow2D
 
-@export var run_speed: float = 200.0
 var previous_x: float
 var warrior_node: Node = null
 var animated_sprite: AnimatedSprite2D = null
+var run_speed: float = 0.0
 
 func _ready() -> void:
 	previous_x = global_position.x
@@ -23,6 +23,11 @@ func _ready() -> void:
 				print("✓ Found Sprite2D instead")
 	else:
 		print("❌ No child nodes found!")
+		
+	if warrior_node and warrior_node.has_method("get"):
+		run_speed = warrior_node.get("run_speed")  # ✅ Fetch from enemy.gd
+		print("✓ run_speed set from Enemy: ", run_speed)
+
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(animated_sprite):
