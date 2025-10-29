@@ -205,3 +205,11 @@ func on_spawn() -> void:
 	# Called when a defender is instantiated programmatically
 	call_deferred("_snap_to_nearest_slot")
 	call_deferred("_update_tier_label")
+	
+	
+func _update_tier_label() -> void:
+	if not tier_label:
+		tier_label = tower_root.get_node_or_null("TierLabel")
+	if tier_label and tower_root.has_method("tier"):
+		tier_label.text = "Tier %d" % tower_root.tier
+		print("Tier label updated to:", tier_label.text)

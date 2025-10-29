@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://cxvxqaac3o34t"]
+
+[ext_resource type="Texture2D" uid="uid://bhm5e5sbpqe2p" path="res://Enemy2Assets/Archer_Run.png" id="1_2leit"]
+[ext_resource type="Script" uid="uid://cyssd27lnecrs" path="res://Enemy2Assets/enemy_archer.gd" id="1_6ftnp"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_ud8cu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ftnp"]
+atlas = ExtResource("1_2leit")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ud8cu"]
+atlas = ExtResource("1_2leit")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxelb"]
+atlas = ExtResource("1_2leit")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bs6cp"]
+atlas = ExtResource("1_2leit")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2nxwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ftnp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ud8cu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bxelb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bs6cp")
+}],
+"loop": true,
+"name": &"EnemyRun",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
+radius = 15.0
+height = 36.0
+
+[node name="Archer" type="Area2D" groups=["Enemy"]]
+z_index = 1
+script = ExtResource("1_6ftnp")
+coin_scene = ExtResource("2_ud8cu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_2nxwx")
+animation = &"EnemyRun"
+frame_progress = 0.70403355
+offset = Vector2(0, -25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(0, -13)
+shape = SubResource("CapsuleShape2D_tt7e2")

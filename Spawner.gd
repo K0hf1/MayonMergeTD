@@ -11,12 +11,14 @@ var follower_scene = preload("res://EnemyPath.tscn")
 @onready var start_wave_button = get_node_or_null("/root/Main/UI/StartWaveButton")
 var game_manager: Node = null
 
-# Enemy scene paths - UPDATE THESE WITH YOUR ACTUAL PATHS
+# Enemy scene paths
 var enemy_scenes: Dictionary = {
-	"Warrior": "res://EnemyWarrior.tscn",
-	"Archer": "res://EnemyArcher.tscn",
-	"Mage": "res://EnemyMage.tscn",
+	"Warrior": "res://Enemy1Assets/EnemyWarrior.tscn",
+	"Archer": "res://Enemy2Assets/EnemyArcher.tscn",
+	"Lancer": "res://Enemy3Assets/EnemyLancer.tscn",
+	"Monk": "res://Enemy4Assets/EnemyMonk.tscn",
 }
+
 
 func _ready() -> void:
 	# Find GameManager
@@ -59,6 +61,14 @@ func spawn_enemy():
 	# Create wrapper node (PathFollow2D)
 	var new_follower = follower_scene.instantiate()
 	add_child(new_follower)
+	
+	if enemy_scenes.has(enemy_type):
+		var enemy_scene = load(enemy_scenes[enemy_type])
+		var enemy_instance = enemy_scene.instantiate()
+		new_follower.add_child(enemy_instance)
+	else:
+		push_warning("⚠️ Unknown enemy type: " + str(enemy_type))
+
 	
 	# Notify GameManager that enemy was spawned
 	if game_manager and game_manager.has_method("enemy_spawned"):
