@@ -1,7 +1,7 @@
 extends Path2D
 
 @export var spawn_time: float = 1.0
-@export var spawn_time_wave_5_plus: float = 0.0  # ✅ No delay for wave 5+
+@export var spawn_time_wave_5_plus: float = 0.1  # Minimum delay for wave 5+
 var timer: float = 0.0
 var enemies_to_spawn: Array = []
 var spawning: bool = false
