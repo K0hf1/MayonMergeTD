@@ -20,6 +20,7 @@ var enemy_scenes: Dictionary = {
 	"Monk": "res://Enemy4Assets/EnemyMonk.tscn",
 }
 
+
 func _ready() -> void:
 	# Find GameManager
 	game_manager = get_node_or_null("../GameManager")
