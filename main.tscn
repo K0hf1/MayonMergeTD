@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=49 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
 [ext_resource type="Texture2D" uid="uid://eu06ud75xf1d" path="res://Coin_Gems/png-clipart-pixel-art-mario-coin-text-rectangle-removebg-preview.png" id="11_efxa6"]
+[ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="12_dg77c"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1205,6 +1206,24 @@ text = "COINS : 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 1
+
+[node name="WaveRecord" type="Control" parent="UI/Canvas Layer"]
+z_index = 4
+layout_mode = 3
+anchors_preset = 0
+offset_left = 168.0
+offset_top = 1.0
+offset_right = 377.0
+offset_bottom = 98.0
+script = ExtResource("12_dg77c")
+
+[node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
+layout_mode = 0
+offset_left = -168.0
+offset_right = 375.0
+offset_bottom = 93.0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PlayerRecord" type="Node" parent="."]
 
