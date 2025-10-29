@@ -226,13 +226,7 @@ func _calculate_wave_enemy_count(wave_number: int) -> int:
 	- Wave 6+: +3 per wave (13, 16, 19, 22...)
 	"""
 	
-	if wave_number == 1:
-		return 5
-	elif wave_number == 2:
-		return 5
-	elif wave_number == 3:
-		return 5
-	elif wave_number == 4:
+	if wave_number <= 4:
 		return 5
 	elif wave_number == 5:
 		return 10
