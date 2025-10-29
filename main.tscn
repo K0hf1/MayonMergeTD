@@ -1206,6 +1206,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 1
 
+[node name="PlayerRecord" type="Node" parent="."]
+
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
 [connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]
 [connection signal="pressed" from="UI/StartWaveButton" to="GameManager" method="_on_start_wave_button_pressed"]
