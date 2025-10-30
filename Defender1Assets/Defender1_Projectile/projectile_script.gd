@@ -21,6 +21,9 @@ var lifetime_timer: float = 0.0
 # Debug
 var creation_time: float = 0.0
 
+# ✅ NEW: SFX Manager
+var button_sfx_manager: Node = null
+
 @onready var sprite = $AnimatedSprite2D
 
 func _ready():
@@ -106,8 +109,17 @@ func set_homing_speed(speed: float):
 func set_max_lifetime(lifetime: float):
 	max_lifetime = clamp(lifetime, 5.0, 30.0)
 
+## ✅ NEW: Set SFX Manager
+func set_sfx_manager(sfx_manager: Node) -> void:
+	button_sfx_manager = sfx_manager
+
 func _hit_target():
 	has_hit = true
+	
+	# ✅ NEW: Play hit sound
+	if button_sfx_manager and button_sfx_manager.has_method("play_projectile_hit"):
+		button_sfx_manager.play_projectile_hit()
+		print("🔊 Projectile hit sound played")
 	
 	if target and target.has_method("take_damage"):
 		print("💥 HIT! Damage: ", damage)

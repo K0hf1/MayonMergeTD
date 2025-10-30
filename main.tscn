@@ -11,6 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
+[ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="12_dg77c"]
+[ext_resource type="Script" uid="uid://diegkhnb8qyrs" path="res://MusicManager.gd" id="14_vivmo"]
+[ext_resource type="Script" uid="uid://cvhgmd3w30ftu" path="res://ButtonSFXManager.gd" id="14_w48qg"]
 [ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
@@ -1267,6 +1270,12 @@ offset_right = 375.0
 offset_bottom = 93.0
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ButtonSFXManager" type="Node2D" parent="."]
+script = ExtResource("14_w48qg")
+
+[node name="MusicManager" type="Node2D" parent="."]
+script = ExtResource("14_vivmo")
 
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
 [connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]

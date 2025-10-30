@@ -8,6 +8,7 @@ extends Node2D
 
 const TIMER_PATH = "AttackTimer" 
 var defender_root: Node2D = null
+var button_sfx_manager: Node = null  # ✅ NEW
 
 func _ready() -> void:
 	defender_root = get_parent()
@@ -15,7 +16,10 @@ func _ready() -> void:
 	if not defender_root:
 		push_error("AttackModule must be a child of the defender root node.")
 		return
-		
+	
+	# ✅ NEW: Find ButtonSFXManager
+	_find_button_sfx_manager()
+	
 	if has_node(TIMER_PATH):
 		var attack_timer = get_node(TIMER_PATH)
 		attack_timer.wait_time = attack_cooldown
@@ -24,6 +28,18 @@ func _ready() -> void:
 		print("✓ AttackTimer started: ", attack_cooldown, "s")
 	else:
 		push_error("AttackModule missing 'AttackTimer'")
+
+## ✅ NEW: Find ButtonSFXManager
+func _find_button_sfx_manager() -> void:
+	button_sfx_manager = get_node_or_null("/root/Main/ButtonSFXManager")
+	
+	if not button_sfx_manager:
+		button_sfx_manager = get_tree().root.find_child("ButtonSFXManager", true, false)
+	
+	if button_sfx_manager:
+		print("✓ AttackModule: ButtonSFXManager found")
+	else:
+		print("⚠️  AttackModule: ButtonSFXManager NOT found!")
 
 func _on_attack_timer_timeout() -> void:
 	var target = _get_current_target()
@@ -40,6 +56,10 @@ func _shoot_projectile(target: Node2D) -> void:
 	if projectile_scene == null:
 		push_error("Projectile scene not set!")
 		return
+	
+	# ✅ NEW: Play fire sound
+	if button_sfx_manager and button_sfx_manager.has_method("play_projectile_fire"):
+		button_sfx_manager.play_projectile_fire()
 	
 	var projectile = projectile_scene.instantiate()
 	var direction = (target.global_position - defender_root.global_position).normalized()
@@ -65,7 +85,8 @@ func _shoot_projectile(target: Node2D) -> void:
 		projectile.set_target(target)
 		print("✓ Fired at: ", target.name)
 	
-	defender_root.get_parent().add_child(projectile)
+	# ✅ NEW: Pass SFX manager to projectile
+	if projectile.has_method("set_sfx_manager"):
+		projectile.set_sfx_manager(button_sfx_manager)
 	
-	# Connect to projectile hit signal (if you have one)
-	# Or just let projectile call queue_free() when hitting
+	defender_root.get_parent().add_child(projectile)

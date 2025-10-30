@@ -17,9 +17,9 @@ signal wave_ended(wave_number: int)
 signal all_waves_complete
 
 # ===== WAVE CONFIGURATION =====
-@export var max_waves: int = 999999  # ✅ Infinite waves
+@export var max_waves: int = 999999
 @export var wave_delay: float = 2.0
-@export var auto_start_next_wave: bool = false  # ✅ Toggle for auto-start
+@export var auto_start_next_wave: bool = false
 
 # ===== VARIABLES =====
 var coins_collected: int = 20
@@ -29,6 +29,10 @@ var wave_in_progress: bool = false
 
 var tower_slots: Array[MarkerSlot] = []
 var tower_slots_parent: Node2D = null
+
+# ✅ Manager References
+var button_sfx_manager: Node = null
+var music_manager: Node = null
 
 # ===== TOWER COST SETTINGS =====
 var base_tower_cost: int = 5
@@ -50,7 +54,6 @@ func _ready() -> void:
 	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
 	print("✓ PlayerRecord loaded: Highest TIer =", PlayerRecord.highest_tier)
 	
-	# Update the UI label to show the highest wave
 	if record_label:
 		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
 	
@@ -81,6 +84,10 @@ func _ready() -> void:
 	if tower_slots.is_empty():
 		print("ERROR: No MarkerSlots found!")
 
+	# ✅ Find Managers
+	_find_button_sfx_manager()
+	_find_music_manager()
+
 	# Verify start_wave_button is found and connect signal safely
 	if start_wave_button:
 		print("✓ Start Wave button found: ", start_wave_button.name)
@@ -106,6 +113,38 @@ func _gather_slots_recursive(node: Node) -> void:
 		else:
 			_gather_slots_recursive(child)
 
+## Find Button SFX Manager
+func _find_button_sfx_manager() -> void:
+	button_sfx_manager = get_node_or_null("/root/Main/ButtonSFXManager")
+	
+	if not button_sfx_manager:
+		button_sfx_manager = get_tree().root.find_child("ButtonSFXManager", true, false)
+	
+	if button_sfx_manager:
+		print("✓ GameManager found ButtonSFXManager")
+	else:
+		print("⚠️  GameManager WARNING: ButtonSFXManager NOT found!")
+
+## Find Music Manager
+func _find_music_manager() -> void:
+	print("🔍 DEBUG: Searching for MusicManager...")
+	
+	# Try lowercase path first (correct path)
+	music_manager = get_node_or_null("/root/main/MusicManager")
+	if music_manager:
+		print("✓ Found at /root/main/MusicManager")
+	else:
+		# Try tree search
+		music_manager = get_tree().root.find_child("MusicManager", true, false)
+		if music_manager:
+			print("✓ Found via tree search at: ", music_manager.get_path())
+	
+	if music_manager:
+		print("✓ GameManager found MusicManager")
+		# ✅ CHANGED: Don't auto-play music here, wait for Start Wave button
+	else:
+		print("⚠️  GameManager WARNING: MusicManager NOT found!")
+		
 # ===== TOWER / DEFENDER MANAGEMENT =====
 
 func calculate_tower_cost(wave_number: int) -> int:
@@ -120,6 +159,10 @@ func update_buy_button_label() -> void:
 
 
 func _on_buy_tower_button_pressed() -> void:
+	# ✅ Play button click sound
+	if button_sfx_manager and button_sfx_manager.has_method("play_button_click"):
+		button_sfx_manager.play_button_click()
+	
 	# --- Check if player has enough coins ---
 	if not try_deduct_coins(current_tower_cost):
 		print("❌ Tower purchase failed. Not enough gold.")
@@ -287,6 +330,10 @@ func _cleanup_dropped_coins() -> void:
 
 # ===== WAVE & ENEMY MANAGEMENT =====
 func _on_start_wave_button_pressed():
+	# ✅ Play button click sound
+	if button_sfx_manager and button_sfx_manager.has_method("play_button_click"):
+		button_sfx_manager.play_button_click()
+	
 	if wave_in_progress:
 		print("⚠️  Wave already in progress!")
 		return
@@ -296,10 +343,18 @@ func _on_start_wave_button_pressed():
 		start_wave_button.disabled = true
 	
 	wave_in_progress = true
+	
+	# ✅ CHANGED: Lower gameplay music volume even more
+	if music_manager and music_manager.has_method("play_gameplay_music"):
+		print("🎵 Playing gameplay music at 30% volume...")
+		music_manager.play_gameplay_music()
+		if music_manager.has_method("set_music_volume"):
+			music_manager.set_music_volume(0.3)  # ✅ Changed from 0.5 to 0.3 (30%)
+	
 	if spawner:
 		spawner.start_wave(current_wave + 1)
 
-## ✅ Calculate enemy count based on wave number
+## Calculate enemy count based on wave number
 func _calculate_wave_enemy_count(wave_number: int) -> int:
 	"""
 	Enemy count scaling logic:
@@ -316,10 +371,9 @@ func _calculate_wave_enemy_count(wave_number: int) -> int:
 	elif wave_number == 5:
 		return 10
 	else:
-		# Wave 6+: starts at 13 and increments by 3
 		return 10 + 3 + (wave_number - 6) * 3
 
-## ✅ Generate enemy composition for a wave
+## Generate enemy composition for a wave
 func _generate_wave_enemies(wave_number: int) -> Array:
 	"""
 	Wave progression:
@@ -334,22 +388,18 @@ func _generate_wave_enemies(wave_number: int) -> Array:
 	var enemy_composition = []
 	
 	if wave_number == 1:
-		# Wave 1: 1 Warrior
 		enemy_composition.append({"type": "Warrior", "count": total_enemies})
 		print("🎯 Wave 1: All Warrior (%d enemy)" % total_enemies)
 	
 	elif wave_number == 2:
-		# Wave 2: 5 Archers
 		enemy_composition.append({"type": "Archer", "count": total_enemies})
 		print("🎯 Wave 2: All Archer (%d enemies)" % total_enemies)
 	
 	elif wave_number == 3:
-		# Wave 3: 5 Lancers
 		enemy_composition.append({"type": "Lancer", "count": total_enemies})
 		print("🎯 Wave 3: All Lancer (%d enemies)" % total_enemies)
 	
 	elif wave_number == 4:
-		# Wave 4: 5 Monks
 		enemy_composition.append({"type": "Monk", "count": total_enemies})
 		print("🎯 Wave 4: All Monk (%d enemies)" % total_enemies)
 	
@@ -360,7 +410,6 @@ func _generate_wave_enemies(wave_number: int) -> Array:
 		var lancers = randi_range(int(total_enemies * 0.15), int(total_enemies * 0.3))
 		var monks = total_enemies - warriors - archers - lancers
 		
-		# Ensure no negative values
 		if monks < 0:
 			monks = 0
 		
@@ -406,13 +455,21 @@ func check_all_waves_complete() -> void:
 	wave_ended.emit(current_wave)
 	wave_in_progress = false
 	
+	# ✅ Restore music volume after wave
+	if music_manager and music_manager.has_method("set_music_volume"):
+		print("🎵 Restoring music volume to 100%...")
+		music_manager.set_music_volume(1.0)  # 100% volume
+	
+	# ✅ Play wave complete music
+	if music_manager and music_manager.has_method("play_wave_complete_music"):
+		music_manager.play_wave_complete_music()
+	
 	_reset_start_wave_button()
 	
 	# ✅ Update player record
 	PlayerRecord.update_wave_record(current_wave)
 	_update_record_label()
 	
-	# ✅ No max waves check - infinite waves!
 	print("⏳ Ready for next wave!")
 	var next_wave = current_wave + 1
 	print("🔘 START WAVE button is now ACTIVE - Click to start wave ", next_wave)
@@ -451,6 +508,15 @@ func _start_next_wave_auto() -> void:
 			var next_wave = current_wave + 1
 			print("🌊 AUTO-STARTING wave %d..." % next_wave)
 			wave_in_progress = true
+			
+			# ✅ Reduce music volume for wave
+			if music_manager and music_manager.has_method("set_music_volume"):
+				music_manager.set_music_volume(0.3)  # ✅ Changed to 30%
+			
+			# ✅ Play gameplay music
+			if music_manager and music_manager.has_method("play_gameplay_music"):
+				music_manager.play_gameplay_music()
+			
 			spawner.start_wave(next_wave)
 			if start_wave_button:
 				start_wave_button.disabled = true
@@ -491,6 +557,10 @@ func restart_level() -> void:
 	current_wave = 0
 	active_enemies = 0
 	wave_in_progress = false
+	
+	# ✅ Stop music on restart
+	if music_manager and music_manager.has_method("stop_music"):
+		music_manager.stop_music()
 	
 	wave_ended.emit(0)
 	print("✓ Level restarted successfully\n")

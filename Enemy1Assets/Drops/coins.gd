@@ -3,6 +3,7 @@ extends Area2D
 var coin_value: int = 1  # Will be set by GameManager via set_coin_value()
 var is_collected: bool = false
 var game_manager: Node = null
+var button_sfx_manager: Node = null  # ✅ UPDATED: Changed from sfx_manager to button_sfx_manager
 
 func _ready() -> void:
 	add_to_group("Coin")
@@ -19,6 +20,9 @@ func _ready() -> void:
 	
 	# Find GameManager early
 	_find_game_manager()
+	
+	# ✅ UPDATED: Find ButtonSFXManager instead of CoinSFXManager
+	_find_button_sfx_manager()
 	
 	# Connect signals
 	mouse_entered.connect(_on_mouse_entered)
@@ -47,6 +51,11 @@ func _ready() -> void:
 			if "Idle" in anims:
 				sprite.play("Idle")
 				print("Playing Idle animation")
+	
+	# ✅ UPDATED: Play coin drop sound from ButtonSFXManager
+	if button_sfx_manager and button_sfx_manager.has_method("play_coin_drop"):
+		button_sfx_manager.play_coin_drop()
+		print("🔊 Coin drop sound played")
 
 ## Find GameManager
 func _find_game_manager() -> void:
@@ -65,6 +74,18 @@ func _find_game_manager() -> void:
 		print("✓ Coin found GameManager at: ", game_manager.get_path())
 	else:
 		print("❌ Coin ERROR: GameManager NOT found!")
+
+## ✅ UPDATED: Find ButtonSFXManager instead of CoinSFXManager
+func _find_button_sfx_manager() -> void:
+	button_sfx_manager = get_node_or_null("/root/Main/ButtonSFXManager")
+	
+	if not button_sfx_manager:
+		button_sfx_manager = get_tree().root.find_child("ButtonSFXManager", true, false)
+	
+	if button_sfx_manager:
+		print("✓ Coin found ButtonSFXManager")
+	else:
+		print("⚠️  Coin WARNING: ButtonSFXManager NOT found!")
 
 ## Set the coin value (MUST be called by GameManager via _setup_coin_for_wave)
 func set_coin_value(value: int) -> void:
@@ -88,9 +109,14 @@ func _on_mouse_exited() -> void:
 func collect_coin() -> void:
 	print("Coin being collected - value: ", coin_value, " - updating counter immediately!")
 	
+	# ✅ UPDATED: Play collect sound from ButtonSFXManager
+	if button_sfx_manager and button_sfx_manager.has_method("play_coin_collect"):
+		button_sfx_manager.play_coin_collect()
+		print("🔊 Coin collect sound played")
+	
 	# UPDATE COUNTER IMMEDIATELY (don't wait for animation)
 	if game_manager and game_manager.has_method("on_coin_collected"):
-		game_manager.on_coin_collected(coin_value)  # CHANGED: coin_collected → on_coin_collected
+		game_manager.on_coin_collected(coin_value)
 		print("✓ Counter updated with coin value: ", coin_value)
 	else:
 		print("❌ GameManager not found or method missing!")
