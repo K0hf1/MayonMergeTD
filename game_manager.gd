@@ -5,6 +5,8 @@ extends Node2D
 @onready var spawner = $"../Path2D"
 @onready var start_wave_button = get_node("../UI/StartWaveButton")
 @onready var record_label: Label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
+@onready var buy_button: Button = get_node("../UI/BuyTowerButton") as Button
+@onready var tower_randomizer = $TowerRandomizer
 
 @export var defender_base_path: String = "res://DefenderXAssets/defender"
 
@@ -20,7 +22,7 @@ signal all_waves_complete
 @export var auto_start_next_wave: bool = false
 
 # ===== VARIABLES =====
-var coins_collected: int = 0
+var coins_collected: int = 20
 var current_wave: int = 0
 var active_enemies: int = 0
 var wave_in_progress: bool = false
@@ -32,11 +34,25 @@ var tower_slots_parent: Node2D = null
 var button_sfx_manager: Node = null
 var music_manager: Node = null
 
+# ===== TOWER COST SETTINGS =====
+var base_tower_cost: int = 5
+var cost_growth_rate: float = 1.25  # adjust for how fast you want it to grow
+var current_tower_cost: int = base_tower_cost
+
+
 # ===== READY / INITIALIZATION =====
 func _ready() -> void:
+	#--- Button Path Checking ---
+	if not record_label:
+		print("⚠️ RecordLabel not found! Check your UI path.")
+	else:
+		print("✓ RecordLabel found: ", record_label.name)
+
+
 	# --- Load player record ---
 	PlayerRecord.load()
 	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
+	print("✓ PlayerRecord loaded: Highest TIer =", PlayerRecord.highest_tier)
 	
 	if record_label:
 		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
@@ -80,6 +96,13 @@ func _ready() -> void:
 			start_wave_button.pressed.connect(cb)
 	else:
 		print("❌ Start Wave button NOT found!")
+		
+		update_buy_button_label()
+		
+	# Initialize tower cost
+	current_tower_cost = calculate_tower_cost(current_wave)
+	update_buy_button_label()
+
 
 func _gather_slots_recursive(node: Node) -> void:
 	"""Recursively search for MarkerSlot nodes"""
@@ -123,53 +146,84 @@ func _find_music_manager() -> void:
 		print("⚠️  GameManager WARNING: MusicManager NOT found!")
 		
 # ===== TOWER / DEFENDER MANAGEMENT =====
+
+func calculate_tower_cost(wave_number: int) -> int:
+	# Nonlinear increase: cost grows faster with higher wave
+	var new_cost = int(base_tower_cost * pow(cost_growth_rate, wave_number))
+	return new_cost
+
+func update_buy_button_label() -> void:
+	var buy_button = get_node("../UI/BuyTowerButton") as Button
+	if buy_button:
+		buy_button.text = "Buy Tower\n(%d Gold)" % current_tower_cost
+
+
 func _on_buy_tower_button_pressed() -> void:
 	# ✅ Play button click sound
 	if button_sfx_manager and button_sfx_manager.has_method("play_button_click"):
 		button_sfx_manager.play_button_click()
 	
+	# --- Check if player has enough coins ---
+	if not try_deduct_coins(current_tower_cost):
+		print("❌ Tower purchase failed. Not enough gold.")
+		return
+
+	print("💰 Tower purchased successfully! Spawning tower...")
+
+	# --- Check available slots ---
 	var available_slots = []
-	print("=== Checking slot availability ===")
 	for slot in tower_slots:
-		print("Slot at %s - Occupied: %s" % [slot.global_position, slot.is_occupied])
 		if not slot.is_occupied:
 			available_slots.append(slot)
 	
-	print("Found %d available slots out of %d total" % [available_slots.size(), tower_slots.size()])
-	
 	if available_slots.is_empty():
-		print("No available tower slots left!")
+		print("🚫 No available tower slots left!")
 		return
-	
+
+	# --- Randomly choose an empty slot ---
 	var chosen_slot: MarkerSlot = available_slots[randi() % available_slots.size()]
-	
-	var folder_name = "Defender1Assets"
-	var scene_name = "defender1.tscn"
-	var scene_path = "res://%s/%s" % [folder_name, scene_name]
-	
-	if not ResourceLoader.exists(scene_path):
-		print("Tier 1 tower scene not found!")
+
+	# --- Get the tower randomizer node ---
+	var tower_randomizer = get_node("TowerRandomizer")
+	if not tower_randomizer:
+		push_warning("⚠️ TowerRandomizer node not found — spawning Tier 1 by default.")
 		return
-	
+
+	# --- Get randomized tower tier ---
+	var rolled_tier = tower_randomizer.get_random_tower_tier()
+	tower_randomizer.debug_print_probabilities()  # optional for debugging
+
+	# --- Construct the scene path based on the rolled tier ---
+	var folder_name = "Defender%dAssets" % rolled_tier
+	var scene_name = "defender%d.tscn" % rolled_tier
+	var scene_path = "res://%s/%s" % [folder_name, scene_name]
+
+	# --- Validate that the tower exists ---
+	if not ResourceLoader.exists(scene_path):
+		push_warning("❌ Tower scene not found for Tier %d at: %s" % [rolled_tier, scene_path])
+		return
+
+	# --- Spawn the new tower ---
 	var tower_scene = load(scene_path)
 	var new_tower: Node2D = tower_scene.instantiate()
 	get_parent().add_child(new_tower)
-	
 	new_tower.global_position = chosen_slot.global_position
-	
+
+	# --- Configure the tower’s drag module ---
 	var drag_module = new_tower.get_node("DragModule")
 	if drag_module:
 		drag_module.slots_parent = tower_slots_parent
 		drag_module.call_deferred("on_spawn")
-	
-	print("Tier 1 Tower spawned at:", chosen_slot.global_position)
-	print("Available slots remaining: %d" % _count_available_slots())
+
+	print("🎯 Spawned Tier %d Tower at slot: %s" % [rolled_tier, str(chosen_slot.name)])
+
+
 
 func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	var new_tier: int = defender1.tier + 1
 	
 	if new_tier > 14:
-		print("Maximum tier reached: ", new_tier)
+		print("⚠️ Maximum tier reached:", new_tier)
 		return
 	
 	var folder_name = "Defender%dAssets" % new_tier
@@ -177,18 +231,19 @@ func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	var scene_path = "res://%s/%s" % [folder_name, scene_name]
 	
 	if not ResourceLoader.exists(scene_path):
-		print("No scene found for tier ", new_tier, " at path: ", scene_path)
+		print("❌ No scene found for tier", new_tier, "at path:", scene_path)
 		return
 	
 	var merged_scene: PackedScene = load(scene_path)
 	var merged_defender: Node2D = merged_scene.instantiate()
 	
+	# Spawn new merged tower
 	merged_defender.global_position = (defender1.global_position + defender2.global_position) / 2
 	get_parent().add_child(merged_defender)
 	
 	if "tier" in merged_defender:
 		merged_defender.tier = new_tier
-		print("Set merged defender tier to: ", new_tier)
+		print("✅ Set merged defender tier to:", new_tier)
 	
 	var drag_module = merged_defender.get_node("DragModule")
 	if drag_module:
@@ -196,8 +251,19 @@ func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 		if drag_module.has_method("on_spawn"):
 			drag_module.on_spawn()
 	
-	print("Merged defender created at tier ", new_tier)
+	print("💠 Merged defender created at tier", new_tier)
 	print("Available slots after merge: %d" % _count_available_slots())
+	
+	# -------------------------------------------------------------
+	# 🏆 Track the new highest merged tier (lifetime)
+	# -------------------------------------------------------------
+	var player_record = PlayerRecord
+	
+	if player_record:
+		player_record.update_highest_tier(new_tier)
+	else:
+		push_warning("⚠️ PlayerRecord node not found — highest_tier not updated.")
+
 
 func _count_available_slots() -> int:
 	var count = 0
@@ -214,6 +280,25 @@ func on_coin_collected(coin_amount: int = 1) -> void:
 	
 	coin_collected.emit(coin_amount)
 	_update_coin_ui()
+	
+
+func try_deduct_coins(amount: int) -> bool:
+	"""
+	Try to deduct coins. Returns true if successful, false if insufficient funds.
+	Automatically updates UI and emits coin_collected signal.
+	"""
+	if coins_collected >= amount:
+		coins_collected -= amount
+		print("💸 Deducted %d gold. Remaining: %d" % [amount, coins_collected])
+		
+		# Emit signal for UI update
+		coin_collected.emit(-amount)
+		_update_coin_ui()
+		return true
+	else:
+		print("❌ Not enough gold! Needed %d, have %d" % [amount, coins_collected])
+		return false
+
 
 func _update_coin_ui() -> void:
 	var coin_counter = get_tree().root.find_child("CoinCounter", true, false)
@@ -396,6 +481,10 @@ func check_all_waves_complete() -> void:
 		_start_next_wave_auto()
 	else:
 		print("   (Click button to start next wave)")
+	
+	# Increase tower cost nonlinearly based on current wave
+	current_tower_cost = calculate_tower_cost(current_wave)
+	update_buy_button_label()
 
 func _reset_start_wave_button() -> void:
 	if not is_instance_valid(start_wave_button):

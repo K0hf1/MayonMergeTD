@@ -76,8 +76,8 @@ func _on_drag_button_up() -> void:
 		# Debug print
 		print("Collision detected - My tier: %s, Other tier: %s" % [my_tier, other_tier])
 		
-		# Check wave-based merging
-		if my_tier == other_tier and _can_merge_tier(my_tier):
+		# ✅ UPDATED: Check wave-based merging
+		if my_tier == other_tier:
 			print("✅ Merging defenders of tier %s" % my_tier)
 			_merge_defenders(collided_defender)
 			return
@@ -111,54 +111,6 @@ func _get_collided_defender() -> Node2D:
 		if distance < 32: # collision radius (tweak for your sprite size)
 			return defender
 	return null
-
-## Check if merging tier is allowed based on wave progression
-func _can_merge_tier(tier: int) -> bool:
-	"""
-	Merging rules:
-	- Between waves: Can merge based on NEXT wave (completed waves + 1)
-	- During waves: Can merge based on CURRENT wave
-	
-	Examples:
-	- After Wave 1 completes (before Wave 2 starts): Can merge up to Tier 2
-	- During Wave 2: Can merge up to Tier 2
-	- After Wave 2 completes (before Wave 3 starts): Can merge up to Tier 3
-	- Wave 5+: Can merge all tiers up to max (14)
-	"""
-	
-	if not game_manager:
-		print("❌ Cannot check merge - GameManager not found!")
-		return false
-	
-	var current_wave = game_manager.current_wave
-	var wave_in_progress = game_manager.wave_in_progress
-	const MAX_TIER = 14
-	
-	# Determine max mergeable tier based on wave state
-	var max_mergeable_tier: int
-	
-	if wave_in_progress:
-		# During wave: use current wave
-		max_mergeable_tier = current_wave
-	else:
-		# Between waves: use next wave (current_wave + 1)
-		max_mergeable_tier = current_wave + 1
-	
-	# Cap at maximum tier
-	if max_mergeable_tier > MAX_TIER:
-		max_mergeable_tier = MAX_TIER
-	
-	# Check if this tier can be merged (tier must be less than max)
-	var can_merge_tier = tier < max_mergeable_tier
-	
-	if can_merge_tier:
-		var wave_state = "Between waves" if not wave_in_progress else "During Wave %d" % current_wave
-		print("✅ Tier %d can merge (%s - Max tier for merge: %d)" % [tier, wave_state, max_mergeable_tier])
-		return true
-	else:
-		var wave_state = "Between waves" if not wave_in_progress else "During Wave %d" % current_wave
-		print("❌ Tier %d cannot merge (%s - Max tier for merge: %d)" % [tier, wave_state, max_mergeable_tier])
-		return false
 
 func _merge_defenders(other_defender: Node2D) -> void:
 	# Play merge sound
