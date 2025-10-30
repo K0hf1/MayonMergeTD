@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://fsqonf8cjf0a"]
+
+[ext_resource type="Script" uid="uid://diufqbhhyxpr" path="res://Enemy4Assets/enemy_monk.gd" id="1_difl6"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_xxsn2"]
+[ext_resource type="Texture2D" uid="uid://c7wmp2npaa0cp" path="res://Enemy4Assets/Run.png" id="3_nsjdu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxsn2"]
+atlas = ExtResource("3_nsjdu")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nv65t"]
+atlas = ExtResource("3_nsjdu")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t6er5"]
+atlas = ExtResource("3_nsjdu")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmxju"]
+atlas = ExtResource("3_nsjdu")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2nxwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxsn2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nv65t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t6er5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmxju")
+}],
+"loop": true,
+"name": &"EnemyRun",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
+radius = 20.0
+height = 40.0
+
+[node name="Monk" type="Area2D" groups=["Enemy"]]
+z_index = 1
+script = ExtResource("1_difl6")
+coin_scene = ExtResource("2_xxsn2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_2nxwx")
+animation = &"EnemyRun"
+frame_progress = 0.20973283
+offset = Vector2(0, -25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(0, -13)
+shape = SubResource("CapsuleShape2D_tt7e2")

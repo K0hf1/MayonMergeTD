@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://b8ijr82dil11s"]
+
+[ext_resource type="Texture2D" uid="uid://tlubdmyj00jk" path="res://Enemy3Assets/Lancer_Run.png" id="1_asevt"]
+[ext_resource type="Script" uid="uid://dc7eynrqm6fu5" path="res://Enemy3Assets/enemy_lancer.gd" id="1_hxvru"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_1eoe6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hxvru"]
+atlas = ExtResource("1_asevt")
+region = Rect2(0, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1eoe6"]
+atlas = ExtResource("1_asevt")
+region = Rect2(320, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tcqyl"]
+atlas = ExtResource("1_asevt")
+region = Rect2(640, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_srmfs"]
+atlas = ExtResource("1_asevt")
+region = Rect2(960, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxqdv"]
+atlas = ExtResource("1_asevt")
+region = Rect2(1280, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5l08n"]
+atlas = ExtResource("1_asevt")
+region = Rect2(1600, 0, 320, 320)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2nxwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hxvru")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1eoe6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tcqyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_srmfs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxqdv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5l08n")
+}],
+"loop": true,
+"name": &"EnemyRun",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
+radius = 15.0
+height = 37.870003
+
+[node name="Lancer" type="Area2D" groups=["Enemy"]]
+z_index = 1
+script = ExtResource("1_hxvru")
+coin_scene = ExtResource("2_1eoe6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_2nxwx")
+animation = &"EnemyRun"
+frame = 1
+frame_progress = 0.3295888
+offset = Vector2(0, -25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(0, -13)
+shape = SubResource("CapsuleShape2D_tt7e2")

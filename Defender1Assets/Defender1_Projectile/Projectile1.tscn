@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3 uid="uid://bd4xjlry1j74x"]
+
+[ext_resource type="Texture2D" uid="uid://bvpv7wiyiaipd" path="res://Defender1Assets/Defender1_Projectile/Arcane Bolt.png" id="1_5u82v"]
+[ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_bmq2d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bmq2d"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sdjvm"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8j7n"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dkgk"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbaj8"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd06n"]
+atlas = ExtResource("1_5u82v")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dc1tu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bmq2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sdjvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8j7n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5dkgk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbaj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yd06n")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 6.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5u82v"]
+radius = 16.03122
+
+[node name="Projectile1" type="Area2D"]
+script = ExtResource("1_bmq2d")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(4.7683716e-07, 0)
+scale = Vector2(1.75, 1.5)
+sprite_frames = SubResource("SpriteFrames_dc1tu")
+animation = &"fly"
+frame_progress = 0.7371932
+speed_scale = 0.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_5u82v")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(1, 3)
+rect = Rect2(-18, -20, 34, 34)
