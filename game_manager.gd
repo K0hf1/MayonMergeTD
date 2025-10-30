@@ -5,6 +5,7 @@ extends Node2D
 @onready var spawner = $"../Path2D"
 @onready var start_wave_button = get_node("../UI/StartWaveButton")
 @onready var record_label: Label = get_node("../UI/Canvas Layer/WaveRecord/RecordLabel") as Label
+@onready var buy_button: Button = get_node("../UI/BuyTowerButton") as Button
 
 @export var defender_base_path: String = "res://DefenderXAssets/defender"
 
@@ -20,7 +21,7 @@ signal all_waves_complete
 @export var auto_start_next_wave: bool = false  # ✅ Toggle for auto-start
 
 # ===== VARIABLES =====
-var coins_collected: int = 0
+var coins_collected: int = 20
 var current_wave: int = 0
 var active_enemies: int = 0
 var wave_in_progress: bool = false
@@ -28,8 +29,21 @@ var wave_in_progress: bool = false
 var tower_slots: Array[MarkerSlot] = []
 var tower_slots_parent: Node2D = null
 
+# ===== TOWER COST SETTINGS =====
+var base_tower_cost: int = 5
+var cost_growth_rate: float = 1.25  # adjust for how fast you want it to grow
+var current_tower_cost: int = base_tower_cost
+
+
 # ===== READY / INITIALIZATION =====
 func _ready() -> void:
+	#--- Button Path Checking ---
+	if not record_label:
+		print("⚠️ RecordLabel not found! Check your UI path.")
+	else:
+		print("✓ RecordLabel found: ", record_label.name)
+
+
 	# --- Load player record ---
 	PlayerRecord.load()
 	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
@@ -73,6 +87,13 @@ func _ready() -> void:
 			start_wave_button.pressed.connect(cb)
 	else:
 		print("❌ Start Wave button NOT found!")
+		
+		update_buy_button_label()
+		
+	# Initialize tower cost
+	current_tower_cost = calculate_tower_cost(current_wave)
+	update_buy_button_label()
+
 
 func _gather_slots_recursive(node: Node) -> void:
 	"""Recursively search for MarkerSlot nodes"""
@@ -84,22 +105,39 @@ func _gather_slots_recursive(node: Node) -> void:
 			_gather_slots_recursive(child)
 
 # ===== TOWER / DEFENDER MANAGEMENT =====
+
+func calculate_tower_cost(wave_number: int) -> int:
+	# Nonlinear increase: cost grows faster with higher wave
+	var new_cost = int(base_tower_cost * pow(cost_growth_rate, wave_number))
+	return new_cost
+
+func update_buy_button_label() -> void:
+	var buy_button = get_node("../UI/BuyTowerButton") as Button
+	if buy_button:
+		buy_button.text = "Buy Tower\n(%d Gold)" % current_tower_cost
+
+
 func _on_buy_tower_button_pressed() -> void:
+	# Check if player has enough coins
+	if not try_deduct_coins(current_tower_cost):
+		print("❌ Tower purchase failed. Not enough gold.")
+		return
+
+	# (🚫 REMOVE this line — it's double deduction)
+	# coins_collected -= current_tower_cost
+
+	# Spawn tower as usual...
 	var available_slots = []
 	print("=== Checking slot availability ===")
 	for slot in tower_slots:
-		print("Slot at %s - Occupied: %s" % [slot.global_position, slot.is_occupied])
 		if not slot.is_occupied:
 			available_slots.append(slot)
-	
-	print("Found %d available slots out of %d total" % [available_slots.size(), tower_slots.size()])
 	
 	if available_slots.is_empty():
 		print("No available tower slots left!")
 		return
 	
 	var chosen_slot: MarkerSlot = available_slots[randi() % available_slots.size()]
-	
 	var folder_name = "Defender1Assets"
 	var scene_name = "defender1.tscn"
 	var scene_path = "res://%s/%s" % [folder_name, scene_name]
@@ -111,7 +149,6 @@ func _on_buy_tower_button_pressed() -> void:
 	var tower_scene = load(scene_path)
 	var new_tower: Node2D = tower_scene.instantiate()
 	get_parent().add_child(new_tower)
-	
 	new_tower.global_position = chosen_slot.global_position
 	
 	var drag_module = new_tower.get_node("DragModule")
@@ -120,7 +157,7 @@ func _on_buy_tower_button_pressed() -> void:
 		drag_module.call_deferred("on_spawn")
 	
 	print("Tier 1 Tower spawned at:", chosen_slot.global_position)
-	print("Available slots remaining: %d" % _count_available_slots())
+
 
 func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	var new_tier: int = defender1.tier + 1
@@ -171,6 +208,25 @@ func on_coin_collected(coin_amount: int = 1) -> void:
 	
 	coin_collected.emit(coin_amount)
 	_update_coin_ui()
+	
+
+func try_deduct_coins(amount: int) -> bool:
+	"""
+	Try to deduct coins. Returns true if successful, false if insufficient funds.
+	Automatically updates UI and emits coin_collected signal.
+	"""
+	if coins_collected >= amount:
+		coins_collected -= amount
+		print("💸 Deducted %d gold. Remaining: %d" % [amount, coins_collected])
+		
+		# Emit signal for UI update
+		coin_collected.emit(-amount)
+		_update_coin_ui()
+		return true
+	else:
+		print("❌ Not enough gold! Needed %d, have %d" % [amount, coins_collected])
+		return false
+
 
 func _update_coin_ui() -> void:
 	var coin_counter = get_tree().root.find_child("CoinCounter", true, false)
@@ -339,6 +395,10 @@ func check_all_waves_complete() -> void:
 		_start_next_wave_auto()
 	else:
 		print("   (Click button to start next wave)")
+	
+	# Increase tower cost nonlinearly based on current wave
+	current_tower_cost = calculate_tower_cost(current_wave)
+	update_buy_button_label()
 
 func _reset_start_wave_button() -> void:
 	if not is_instance_valid(start_wave_button):
