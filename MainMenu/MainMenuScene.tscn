@@ -1,5 +1,6 @@
-[gd_scene load_steps=22 format=3 uid="uid://d0xk2v3dd3qub"]
+[gd_scene load_steps=24 format=3 uid="uid://d0xk2v3dd3qub"]
 
+[ext_resource type="Script" uid="uid://csd61rnwoyuv1" path="res://MainMenu/main_menu_scene.gd" id="1_r3erp"]
 [ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="2_xixxc"]
 [ext_resource type="Texture2D" uid="uid://b6nehj2ehws1r" path="res://MainMenu/MainMenuAssets/title2.png" id="3_k4uic"]
 [ext_resource type="Script" path="res://MainMenu/mainmenutitle.gd" id="4_5um84"]
@@ -9,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://b2fmrx334xvoi" path="res://MainMenu/MainMenuAssets/forest.png" id="11_xdphn"]
 [ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="12_2ea22"]
 [ext_resource type="Script" uid="uid://ddmv4whj8sw15" path="res://MainMenu/start.gd" id="13_aylwx"]
+[ext_resource type="Script" uid="uid://wvpr5eky731n" path="res://MainMenu/music_manager.gd" id="13_ib7y0"]
 [ext_resource type="Script" uid="uid://c38xfrtu3ilrg" path="res://MainMenu/option.gd" id="14_7mjct"]
 [ext_resource type="Script" uid="uid://cjebt6dcml8e8" path="res://MainMenu/exit.gd" id="15_xdphn"]
 
@@ -49,6 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_r3erp")
 
 [node name="bg" type="TextureRect" parent="."]
 texture_repeat = 3
@@ -84,7 +87,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="start" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="start" type="Button" parent="MarginContainer/VBoxContainer" node_paths=PackedStringArray("main_menu_music_node")]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
@@ -95,6 +98,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_aylwx")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5um84")
 text = "START"
 script = ExtResource("13_aylwx")
+main_menu_music_node = NodePath("../../../MusicManager")
 metadata/_edit_use_anchors_ = true
 
 [node name="option" type="Button" parent="MarginContainer/VBoxContainer"]
@@ -126,6 +130,9 @@ visible = false
 layout_mode = 1
 offset_right = 28.0
 offset_bottom = 8.0
+
+[node name="MusicManager" type="Node" parent="."]
+script = ExtResource("13_ib7y0")
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_focus_exited"]

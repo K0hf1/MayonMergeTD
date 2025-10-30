@@ -1,12 +1,4 @@
-extends Node2D
+extends Control
 
 
-func _on_start_pressed() -> void:
-	pass # Replace with function body.
-
-
-func _on_settings_pressed() -> void:
-	pass # Replace with function body.
-
-func _on_exit_pressed() -> void:
-	pass # Replace with function body.
+@export var menu_music: AudioStream = preload("res://Audio/Music/main_menu.mp3")
