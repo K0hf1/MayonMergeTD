@@ -1,106 +1,47 @@
-[gd_scene load_steps=32 format=3 uid="uid://d0xk2v3dd3qub"]
+[gd_scene load_steps=23 format=3 uid="uid://d0xk2v3dd3qub"]
 
-[ext_resource type="Shader" uid="uid://cjfysilvaknyg" path="res://MainMenu/colorroll.gdshader" id="1_2l3d4"]
 [ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="2_xixxc"]
-[ext_resource type="Texture2D" uid="uid://cyjuqea410e60" path="res://MainMenu/MainMenuAssets/1.png" id="3_k4uic"]
-[ext_resource type="Shader" uid="uid://mq6nymbi22c5" path="res://MainMenu/roll.gdshader" id="4_5um84"]
-[ext_resource type="Texture2D" uid="uid://df8fd8idjotbp" path="res://MainMenu/MainMenuAssets/2.png" id="5_r3erp"]
-[ext_resource type="Shader" uid="uid://dvuxo1swltblx" path="res://MainMenu/volcanoroll.gdshader" id="6_ib7y0"]
-[ext_resource type="Texture2D" uid="uid://df6p34u46s5wm" path="res://MainMenu/MainMenuAssets/3.png" id="7_aylwx"]
-[ext_resource type="Shader" uid="uid://qv31bq35hyku" path="res://MainMenu/rockroll.gdshader" id="8_7mjct"]
-[ext_resource type="Texture2D" uid="uid://b7aguqrdfbeqe" path="res://MainMenu/MainMenuAssets/4.png" id="9_xdphn"]
-[ext_resource type="Texture2D" uid="uid://bvte3cqb8nqu8" path="res://MainMenu/MainMenuAssets/panel-transparent-center-000.png" id="10_5um84"]
-[ext_resource type="FontFile" uid="uid://x2vne50jx7ir" path="res://MainMenu/MainMenuAssets/Adventurer.ttf" id="10_xixxc"]
-[ext_resource type="Texture2D" uid="uid://e0ai0n36jnxt" path="res://MainMenu/MainMenuAssets/panel-transparent-center-013.png" id="11_r3erp"]
+[ext_resource type="Texture2D" uid="uid://b6nehj2ehws1r" path="res://MainMenu/MainMenuAssets/title2.png" id="3_k4uic"]
+[ext_resource type="Script" uid="uid://dpbpqi0h5wo74" path="res://MainMenu/mainmenutitle.gd" id="4_5um84"]
+[ext_resource type="Texture2D" uid="uid://c1f1w70hdyypl" path="res://MainMenu/MainMenuAssets/button1.png" id="4_kqjsd"]
+[ext_resource type="Texture2D" uid="uid://7dc6cx3erbth" path="res://MainMenu/MainMenuAssets/button2.png" id="5_2l3d4"]
+[ext_resource type="Script" uid="uid://d053vohuxipos" path="res://MainMenu/tutorial.gd" id="9_5um84"]
+[ext_resource type="PackedScene" uid="uid://cdvrqwefobh21" path="res://Options/settings.tscn" id="11_r3erp"]
+[ext_resource type="Texture2D" uid="uid://b2fmrx334xvoi" path="res://MainMenu/MainMenuAssets/forest.png" id="11_xdphn"]
+[ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="12_2ea22"]
 [ext_resource type="Script" uid="uid://ddmv4whj8sw15" path="res://MainMenu/start.gd" id="13_aylwx"]
 [ext_resource type="Script" uid="uid://c38xfrtu3ilrg" path="res://MainMenu/option.gd" id="14_7mjct"]
 [ext_resource type="Script" uid="uid://cjebt6dcml8e8" path="res://MainMenu/exit.gd" id="15_xdphn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ea22"]
-shader = ExtResource("1_2l3d4")
-
-[sub_resource type="Gradient" id="Gradient_ef11d"]
-colors = PackedColorArray(0.32069913, 0.7522692, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_wrjne"]
-gradient = SubResource("Gradient_ef11d")
-width = 154
-fill_from = Vector2(0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ns1bj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wrjne"]
 shader = ExtResource("2_xixxc")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfs15"]
-shader = ExtResource("4_5um84")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gubr4"]
-shader = ExtResource("6_ib7y0")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6tsye"]
-shader = ExtResource("8_7mjct")
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ib7y0"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("4_kqjsd")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aylwx"]
-texture = ExtResource("11_r3erp")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("5_2l3d4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5um84"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3erp"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7mjct"]
-texture = ExtResource("11_r3erp")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xdphn"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("4_kqjsd")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ea22"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("4_kqjsd")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ef11d"]
-texture = ExtResource("11_r3erp")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("5_2l3d4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrjne"]
-texture = ExtResource("10_5um84")
-texture_margin_left = 41.0
-texture_margin_top = 16.0
-texture_margin_right = 41.0
-texture_margin_bottom = 5.0
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3erp"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7mjct"]
+texture = ExtResource("5_2l3d4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xdphn"]
+texture = ExtResource("4_kqjsd")
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -112,92 +53,43 @@ grow_vertical = 2
 
 [node name="bg" type="TextureRect" parent="."]
 texture_repeat = 3
-material = SubResource("ShaderMaterial_2ea22")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -388.0
-offset_top = -1.0
-offset_right = 423.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("GradientTexture2D_wrjne")
+material = SubResource("ShaderMaterial_wrjne")
+layout_mode = 0
+offset_left = -344.0
+offset_top = 1.0
+offset_right = 904.0
+offset_bottom = 968.0
+texture = ExtResource("11_xdphn")
 
-[node name="background" type="TextureRect" parent="."]
-visible = false
-texture_repeat = 2
-material = SubResource("ShaderMaterial_ns1bj")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="title" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 240.0
+offset_right = 536.0
+offset_bottom = 440.0
 texture = ExtResource("3_k4uic")
 expand_mode = 1
+script = ExtResource("4_5um84")
 
-[node name="clouds" type="TextureRect" parent="."]
-texture_repeat = 2
-material = SubResource("ShaderMaterial_bfs15")
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -253.0
-offset_top = 5.0
-offset_right = 378.0
-offset_bottom = -4.0
+offset_left = 88.0
+offset_top = 152.0
+offset_right = -92.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("5_r3erp")
-expand_mode = 1
 
-[node name="volcano" type="TextureRect" parent="."]
-texture_repeat = 2
-material = SubResource("ShaderMaterial_gubr4")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -189.0
-offset_top = 31.0
-offset_right = 308.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("7_aylwx")
-expand_mode = 1
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
 
-[node name="rocks" type="TextureRect" parent="."]
-texture_repeat = 2
-material = SubResource("ShaderMaterial_6tsye")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -391.0
-offset_top = 7.0
-offset_right = 448.0
-offset_bottom = 19.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_xdphn")
-expand_mode = 1
-
-[node name="start" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.014814815
-anchor_top = 0.008333334
-anchor_right = 0.0074074073
-anchor_bottom = 0.010416667
-offset_left = 137.0
-offset_top = 474.0
-offset_right = 426.0
-offset_bottom = 570.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_xixxc")
+[node name="start" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxTexture_ib7y0")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_aylwx")
@@ -206,16 +98,23 @@ text = "START"
 script = ExtResource("13_aylwx")
 metadata/_edit_use_anchors_ = true
 
-[node name="option" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_bottom = 0.042000003
-offset_left = 129.0
-offset_top = 589.0
-offset_right = 429.0
-offset_bottom = 649.68
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_xixxc")
+[node name="tutorial" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_2ea22")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ef11d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wrjne")
+text = "TUTORIAL"
+script = ExtResource("9_5um84")
+
+[node name="option" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.737193, 0.7371929, 0.7371929, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxTexture_r3erp")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_7mjct")
@@ -223,17 +122,11 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_xdphn")
 text = "OPTIONS"
 script = ExtResource("14_7mjct")
 
-[node name="exit" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.037
-anchor_bottom = 0.021000002
-offset_left = 127.0
-offset_top = 702.0
-offset_right = 408.02
-offset_bottom = 772.84
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_xixxc")
+[node name="exit" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxTexture_2ea22")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_ef11d")
@@ -241,25 +134,14 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_wrjne")
 text = "EXIT"
 script = ExtResource("15_xdphn")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 22.0
-offset_top = 240.0
-offset_right = 610.0
-offset_bottom = 435.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = 0
-theme_override_constants/paragraph_spacing = 1
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/outline_size = 15
-theme_override_constants/shadow_outline_size = 22
-theme_override_fonts/font = ExtResource("10_xixxc")
-theme_override_font_sizes/font_size = 85
-text = "Mayon Merge 
-       TD"
+[node name="option" parent="." instance=ExtResource("11_r3erp")]
+visible = false
+layout_mode = 1
+offset_right = 28.0
+offset_bottom = 8.0
 
-[connection signal="pressed" from="start" to="start" method="_on_pressed"]
-[connection signal="pressed" from="option" to="option" method="_on_pressed"]
-[connection signal="pressed" from="exit" to="exit" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/tutorial" to="MarginContainer/VBoxContainer/tutorial" method="_on_pressed"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_focus_exited"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/exit" to="MarginContainer/VBoxContainer/exit" method="_on_pressed"]
