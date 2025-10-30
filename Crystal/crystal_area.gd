@@ -10,11 +10,11 @@ func _ready():
 	animated_sprite.play("idleCrystal")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	# ✅ NEW: Find MusicManager
+	# ✅ Find MusicManager
 	_find_music_manager()
 	
-	# ✅ NEW: Connect area_entered signal
-	area_entered.connect(_on_area_entered)
+	# ✅ REMOVED: This line was causing the duplicate connection error
+	# area_entered.connect(_on_area_entered)
 
 func _input(event):
 	# Listen for restart input
@@ -22,7 +22,7 @@ func _input(event):
 		if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE:
 			restart_game()
 
-## ✅ NEW: Find Music Manager
+## Find Music Manager
 func _find_music_manager() -> void:
 	music_manager = get_node_or_null("/root/main/MusicManager")
 	
@@ -44,17 +44,17 @@ func _on_area_entered(area: Area2D) -> void:
 		else:
 			area.queue_free()
 		
-		# ✅ CRITICAL: Set volume BEFORE pausing the game
+		# Set volume to 100%
 		if music_manager and music_manager.has_method("set_music_volume"):
 			print("🔊 Setting music volume to 100%...")
-			music_manager.set_music_volume(1.0)  # Full volume for game over
+			music_manager.set_music_volume(1.0)
 		
-		# ✅ CRITICAL: Play game over music BEFORE pausing
+		# Play game over music
 		if music_manager and music_manager.has_method("play_game_over_music"):
 			print("🎵 Playing game over music...")
 			music_manager.play_game_over_music()
 		
-		# ✅ CRITICAL: Wait for music to start BEFORE pausing
+		# Wait for music to start
 		await get_tree().process_frame
 		await get_tree().process_frame
 		
@@ -70,7 +70,7 @@ func game_over():
 	crystal_destroyed.emit()
 	show_game_over_screen()
 	
-	# ✅ CRITICAL: Pause AFTER everything is set up
+	# Pause after everything is set up
 	get_tree().paused = true
 
 func show_game_over_screen():
@@ -100,7 +100,7 @@ func restart_game():
 		game_over_ui.queue_free()
 		game_over_ui = null
 	
-	# ✅ NEW: Stop game over music before restarting
+	# Stop game over music
 	if music_manager and music_manager.has_method("stop_music"):
 		print("🎵 Stopping game over music...")
 		music_manager.stop_music()
