@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=57 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -11,10 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
-[ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="12_dg77c"]
+[ext_resource type="Texture2D" uid="uid://q1dnkucmudv0" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 [ext_resource type="Script" uid="uid://diegkhnb8qyrs" path="res://MusicManager.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://cvhgmd3w30ftu" path="res://ButtonSFXManager.gd" id="14_w48qg"]
-[ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1126,10 +1125,6 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="GDScript" id="GDScript_efxa6"]
-script/source = "extends Control
-"
-
 [node name="main" type="Node2D"]
 script = SubResource("GDScript_272bh")
 
@@ -1261,7 +1256,6 @@ offset_left = 168.0
 offset_top = 1.0
 offset_right = 377.0
 offset_bottom = 98.0
-script = SubResource("GDScript_efxa6")
 
 [node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
 layout_mode = 0
