@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MayonMergeTD"
-run/main_scene="uid://c465oi4ipgg4j"
+run/main_scene="uid://d0xk2v3dd3qub"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 

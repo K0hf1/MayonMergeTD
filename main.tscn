@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=58 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -11,7 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
-[ext_resource type="Texture2D" uid="uid://q1dnkucmudv0" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
+[ext_resource type="PackedScene" uid="uid://b100ash1g17x" path="res://GameOver/GameOver.tscn" id="11_vivmo"]
+[ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 [ext_resource type="Script" uid="uid://diegkhnb8qyrs" path="res://MusicManager.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://cvhgmd3w30ftu" path="res://ButtonSFXManager.gd" id="14_w48qg"]
 
@@ -1195,6 +1196,8 @@ frame_progress = 0.035286807
 z_index = 1
 position = Vector2(416, 640)
 shape = SubResource("CapsuleShape2D_seu75")
+
+[node name="GameOver" parent="CrystalArea" instance=ExtResource("11_vivmo")]
 
 [node name="UI" type="CanvasLayer" parent="."]
 
