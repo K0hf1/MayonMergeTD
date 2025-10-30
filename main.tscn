@@ -1199,19 +1199,27 @@ shape = SubResource("CapsuleShape2D_seu75")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="BuyTowerButton" type="Button" parent="UI"]
-offset_left = 209.0
+offset_left = 195.0
 offset_top = 768.0
-offset_right = 352.0
+offset_right = 338.0
 offset_bottom = 832.0
 text = "BUY TOWER"
 
 [node name="StartWaveButton" type="Button" parent="UI"]
-offset_left = 96.0
+offset_left = 101.0
 offset_top = 768.0
-offset_right = 160.0
+offset_right = 165.0
 offset_bottom = 832.0
 text = "START
 WAVE"
+
+[node name="SellTower" type="Button" parent="UI"]
+offset_left = 367.0
+offset_top = 768.0
+offset_right = 431.0
+offset_bottom = 832.0
+text = "SELL
+TOWER"
 
 [node name="Canvas Layer" type="CanvasLayer" parent="UI"]
 
@@ -1252,9 +1260,9 @@ visible_characters_behavior = 1
 z_index = 4
 layout_mode = 3
 anchors_preset = 0
-offset_left = 168.0
+offset_left = 162.0
 offset_top = 1.0
-offset_right = 377.0
+offset_right = 371.0
 offset_bottom = 98.0
 
 [node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
@@ -1270,6 +1278,20 @@ script = ExtResource("14_w48qg")
 
 [node name="MusicManager" type="Node2D" parent="."]
 script = ExtResource("14_vivmo")
+
+[node name="GizmosAlignment" type="Node" parent="."]
+
+[node name="CenterRight" type="Marker2D" parent="GizmosAlignment"]
+position = Vector2(399, 800)
+gizmo_extents = 349.5
+
+[node name="CenterLeft" type="Marker2D" parent="GizmosAlignment"]
+position = Vector2(133, 800)
+gizmo_extents = 349.5
+
+[node name="Center" type="Marker2D" parent="GizmosAlignment"]
+position = Vector2(266, 52)
+gizmo_extents = 349.5
 
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
 [connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]
