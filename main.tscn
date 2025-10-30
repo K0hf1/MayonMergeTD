@@ -1,7 +1,8 @@
-[gd_scene load_steps=49 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=56 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://u6q1sdnryouu" path="res://tower_randomizer.gd" id="2_dg77c"]
 [ext_resource type="Texture2D" uid="uid://cgs288ya075ox" path="res://Crystal/crystal_dark_64x64_24f_20d_normal.png" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://cwujm1lntowec" path="res://Tower.png" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
@@ -10,8 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
-[ext_resource type="Texture2D" uid="uid://eu06ud75xf1d" path="res://Coin_Gems/png-clipart-pixel-art-mario-coin-text-rectangle-removebg-preview.png" id="11_efxa6"]
-[ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="12_dg77c"]
+[ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1080,11 +1080,61 @@ animations = [{
 radius = 13.0
 height = 64.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kq58d"]
+atlas = ExtResource("11_ycdy4")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_seu75"]
+atlas = ExtResource("11_ycdy4")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htxhm"]
+atlas = ExtResource("11_ycdy4")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq2sk"]
+atlas = ExtResource("11_ycdy4")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k2k6"]
+atlas = ExtResource("11_ycdy4")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0rl1p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kq58d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_seu75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htxhm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq2sk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4k2k6")
+}],
+"loop": true,
+"name": &"Coin_spin",
+"speed": 6.0
+}]
+
+[sub_resource type="GDScript" id="GDScript_efxa6"]
+script/source = "extends Control
+"
+
 [node name="main" type="Node2D"]
 script = SubResource("GDScript_272bh")
 
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource("10_4c57u")
+
+[node name="TowerRandomizer" type="Node" parent="GameManager"]
+script = ExtResource("2_dg77c")
 
 [node name="MainMap" type="TileMap" parent="."]
 position = Vector2(0, 1)
@@ -1186,16 +1236,16 @@ offset_right = 182.0
 offset_bottom = 41.0
 theme_override_constants/separation = 1
 
-[node name="TextureRect" type="TextureRect" parent="UI/Canvas Layer/CoinCounter/Container"]
-clip_contents = true
-layout_mode = 2
-texture = ExtResource("11_efxa6")
-expand_mode = 3
+[node name="CoinSprite" type="AnimatedSprite2D" parent="UI/Canvas Layer/CoinCounter/Container"]
+position = Vector2(160, 20)
+sprite_frames = SubResource("SpriteFrames_0rl1p")
+animation = &"Coin_spin"
+frame_progress = 0.6608674
 
 [node name="CoinLabel" type="Label" parent="UI/Canvas Layer/CoinCounter/Container"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "COINS : 0"
+text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 1
@@ -1208,7 +1258,7 @@ offset_left = 168.0
 offset_top = 1.0
 offset_right = 377.0
 offset_bottom = 98.0
-script = ExtResource("12_dg77c")
+script = SubResource("GDScript_efxa6")
 
 [node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
 layout_mode = 0
@@ -1217,8 +1267,6 @@ offset_right = 375.0
 offset_bottom = 93.0
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="PlayerRecord" type="Node" parent="."]
 
 [connection signal="area_entered" from="CrystalArea" to="CrystalArea" method="_on_area_entered"]
 [connection signal="pressed" from="UI/BuyTowerButton" to="GameManager" method="_on_buy_tower_button_pressed"]

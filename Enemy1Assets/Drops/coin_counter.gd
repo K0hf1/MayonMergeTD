@@ -11,7 +11,7 @@ func _ready() -> void:
 	# Verify the label exists
 	if coin_label:
 		print("✓ CoinLabel found")
-		coin_label.text = "Coins: 0"
+		coin_label.text = "0"
 		
 		# Force visibility settings
 		coin_label.visible = true
@@ -23,9 +23,21 @@ func _ready() -> void:
 		print("  - Font Color: ", coin_label.get_theme_color("font_color"))
 	else:
 		print("✗ ERROR: CoinLabel NOT found!")
-	
+
+	# 🎬 NEW: Play coin spin animation
+	var coin_sprite = $Container/CoinSprite
+	if coin_sprite and coin_sprite is AnimatedSprite2D:
+		if "Coin_spin" in coin_sprite.sprite_frames.get_animation_names():
+			coin_sprite.play("Coin_spin")
+			print("🎞️ Coin spin animation started!")
+		else:
+			print("⚠️ Coin_spin animation not found in CoinSprite!")
+	else:
+		print("❌ CoinSprite not found or not AnimatedSprite2D!")
+
 	# Find and connect to GameManager
 	_find_game_manager()
+
 
 func _find_game_manager() -> void:
 	"""Find the GameManager from various possible locations"""
@@ -71,18 +83,20 @@ func update_coin_display(coin_count: int) -> void:
 	"""Update the coin label with new count"""
 	if coin_label:
 		var old_text = coin_label.text
-		coin_label.text = "Coins: %d" % coin_count
+		coin_label.text = "                 %d" % coin_count
 		print("💰 Label updated: ", old_text, " → ", coin_label.text)
 	else:
 		print("✗ ERROR: coin_label is null!")
 
 func _on_coin_collected(coin_amount: int) -> void:
 	"""Called when the coin_collected signal is emitted"""
-	print("📢 SIGNAL RECEIVED: coin_collected(%d)" % coin_amount)
-	
 	if game_manager and game_manager.has_method("get_coins_collected"):
 		var total_coins = game_manager.get_coins_collected()
 		update_coin_display(total_coins)
-		print("✓ Total coins now: ", total_coins)
+
+		if coin_amount > 0:
+			print("📈 Gained %d coins. Total: %d" % [coin_amount, total_coins])
+		else:
+			print("📉 Spent %d coins. Total: %d" % [-coin_amount, total_coins])
 	else:
 		print("❌ Cannot get coins from GameManager!")
