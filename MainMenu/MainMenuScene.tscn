@@ -1,11 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0xk2v3dd3qub"]
+[gd_scene load_steps=22 format=3 uid="uid://d0xk2v3dd3qub"]
 
 [ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="2_xixxc"]
 [ext_resource type="Texture2D" uid="uid://b6nehj2ehws1r" path="res://MainMenu/MainMenuAssets/title2.png" id="3_k4uic"]
-[ext_resource type="Script" uid="uid://dpbpqi0h5wo74" path="res://MainMenu/mainmenutitle.gd" id="4_5um84"]
+[ext_resource type="Script" path="res://MainMenu/mainmenutitle.gd" id="4_5um84"]
 [ext_resource type="Texture2D" uid="uid://c1f1w70hdyypl" path="res://MainMenu/MainMenuAssets/button1.png" id="4_kqjsd"]
 [ext_resource type="Texture2D" uid="uid://7dc6cx3erbth" path="res://MainMenu/MainMenuAssets/button2.png" id="5_2l3d4"]
-[ext_resource type="Script" uid="uid://d053vohuxipos" path="res://MainMenu/tutorial.gd" id="9_5um84"]
 [ext_resource type="PackedScene" uid="uid://cdvrqwefobh21" path="res://Options/settings.tscn" id="11_r3erp"]
 [ext_resource type="Texture2D" uid="uid://b2fmrx334xvoi" path="res://MainMenu/MainMenuAssets/forest.png" id="11_xdphn"]
 [ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="12_2ea22"]
@@ -25,15 +24,6 @@ texture = ExtResource("5_2l3d4")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5um84"]
 texture = ExtResource("4_kqjsd")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ea22"]
-texture = ExtResource("4_kqjsd")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ef11d"]
-texture = ExtResource("5_2l3d4")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrjne"]
-texture = ExtResource("4_kqjsd")
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3erp"]
 texture = ExtResource("4_kqjsd")
 
@@ -41,6 +31,15 @@ texture = ExtResource("4_kqjsd")
 texture = ExtResource("5_2l3d4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xdphn"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ea22"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ef11d"]
+texture = ExtResource("5_2l3d4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrjne"]
 texture = ExtResource("4_kqjsd")
 
 [node name="Control" type="Control"]
@@ -98,18 +97,6 @@ text = "START"
 script = ExtResource("13_aylwx")
 metadata/_edit_use_anchors_ = true
 
-[node name="tutorial" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("12_2ea22")
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxTexture_2ea22")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_ef11d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_wrjne")
-text = "TUTORIAL"
-script = ExtResource("9_5um84")
-
 [node name="option" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -141,7 +128,6 @@ offset_right = 28.0
 offset_bottom = 8.0
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/tutorial" to="MarginContainer/VBoxContainer/tutorial" method="_on_pressed"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_focus_exited"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/exit" to="MarginContainer/VBoxContainer/exit" method="_on_pressed"]

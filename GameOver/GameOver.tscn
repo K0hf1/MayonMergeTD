@@ -53,10 +53,9 @@ grow_vertical = 2
 texture_repeat = 3
 material = SubResource("ShaderMaterial_uah2d")
 layout_mode = 0
-offset_left = -344.0
-offset_top = 1.0
-offset_right = 904.0
-offset_bottom = 968.0
+offset_left = -376.0
+offset_right = 872.0
+offset_bottom = 960.0
 texture = ExtResource("2_h4g5q")
 
 [node name="lightBG" type="ColorRect" parent="."]

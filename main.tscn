@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=70 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -10,9 +10,12 @@
 [ext_resource type="Script" uid="uid://cjht2v1hragfh" path="res://Crystal/crystal_area.gd" id="7_272bh"]
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://tower_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
+[ext_resource type="Texture2D" uid="uid://4a3om8mx0s44" path="res://MainMenu/MainMenuAssets/unclicked-square.png" id="11_074og"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
-[ext_resource type="PackedScene" uid="uid://b100ash1g17x" path="res://GameOver/GameOver.tscn" id="11_vivmo"]
 [ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://dbta4wc23thm8" path="res://MainMenu/MainMenuAssets/clicked-square.png" id="12_cegan"]
+[ext_resource type="Texture2D" uid="uid://b1p8knopm1u2b" path="res://MainMenu/MainMenuAssets/unclicked pause.png" id="13_82xsv"]
+[ext_resource type="Texture2D" uid="uid://d0v3ncp6umd35" path="res://MainMenu/MainMenuAssets/clicked pause.png" id="14_getpj"]
 [ext_resource type="Script" uid="uid://diegkhnb8qyrs" path="res://MusicManager.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://cvhgmd3w30ftu" path="res://ButtonSFXManager.gd" id="14_w48qg"]
 
@@ -1083,6 +1086,33 @@ animations = [{
 radius = 13.0
 height = 64.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ryguw"]
+texture = ExtResource("11_074og")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d13ii"]
+texture = ExtResource("12_cegan")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1u8w0"]
+texture = ExtResource("11_074og")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0odxb"]
+texture = ExtResource("12_cegan")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lswn8"]
+texture = ExtResource("11_074og")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a6jrf"]
+texture = ExtResource("12_cegan")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xuqvo"]
+texture = ExtResource("13_82xsv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qsp4k"]
+texture = ExtResource("14_getpj")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kq58d"]
+texture = ExtResource("13_82xsv")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_kq58d"]
 atlas = ExtResource("11_ycdy4")
 region = Rect2(0, 0, 48, 48)
@@ -1197,8 +1227,6 @@ z_index = 1
 position = Vector2(416, 640)
 shape = SubResource("CapsuleShape2D_seu75")
 
-[node name="GameOver" parent="CrystalArea" instance=ExtResource("11_vivmo")]
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="BuyTowerButton" type="Button" parent="UI"]
@@ -1206,13 +1234,17 @@ offset_left = 195.0
 offset_top = 768.0
 offset_right = 338.0
 offset_bottom = 832.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_ryguw")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_d13ii")
 text = "BUY TOWER"
 
 [node name="StartWaveButton" type="Button" parent="UI"]
 offset_left = 101.0
 offset_top = 768.0
-offset_right = 165.0
+offset_right = 167.0
 offset_bottom = 832.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_1u8w0")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0odxb")
 text = "START
 WAVE"
 
@@ -1221,8 +1253,19 @@ offset_left = 367.0
 offset_top = 768.0
 offset_right = 431.0
 offset_bottom = 832.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_lswn8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_a6jrf")
 text = "SELL
 TOWER"
+
+[node name="Button" type="Button" parent="UI"]
+offset_left = 38.0
+offset_top = 29.0
+offset_right = 87.0
+offset_bottom = 75.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_xuqvo")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 
 [node name="Canvas Layer" type="CanvasLayer" parent="UI"]
 
@@ -1270,8 +1313,8 @@ offset_bottom = 98.0
 
 [node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
 layout_mode = 0
-offset_left = -168.0
-offset_right = 375.0
+offset_left = -162.0
+offset_right = 381.0
 offset_bottom = 93.0
 horizontal_alignment = 1
 vertical_alignment = 1
