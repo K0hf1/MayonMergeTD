@@ -3,17 +3,36 @@ extends Area2D
 signal crystal_destroyed
 
 var game_over_ui = null
+var music_manager = null
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	animated_sprite.play("idleCrystal")
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# ✅ Find MusicManager
+	_find_music_manager()
+	
+	# ✅ REMOVED: This line was causing the duplicate connection error
+	# area_entered.connect(_on_area_entered)
 
 func _input(event):
 	# Listen for restart input
 	if get_tree().paused:
 		if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE:
 			restart_game()
+
+## Find Music Manager
+func _find_music_manager() -> void:
+	music_manager = get_node_or_null("/root/main/MusicManager")
+	
+	if not music_manager:
+		music_manager = get_tree().root.find_child("MusicManager", true, false)
+	
+	if music_manager:
+		print("✓ Crystal found MusicManager")
+	else:
+		print("⚠️  Crystal WARNING: MusicManager NOT found!")
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Enemy"):
@@ -24,6 +43,20 @@ func _on_area_entered(area: Area2D) -> void:
 			area.get_parent().queue_free()
 		else:
 			area.queue_free()
+		
+		# Set volume to 100%
+		if music_manager and music_manager.has_method("set_music_volume"):
+			print("🔊 Setting music volume to 100%...")
+			music_manager.set_music_volume(1.0)
+		
+		# Play game over music
+		if music_manager and music_manager.has_method("play_game_over_music"):
+			print("🎵 Playing game over music...")
+			music_manager.play_game_over_music()
+		
+		# Wait for music to start
+		await get_tree().process_frame
+		await get_tree().process_frame
 		
 		# Game over
 		game_over()
@@ -36,6 +69,8 @@ func game_over():
 	
 	crystal_destroyed.emit()
 	show_game_over_screen()
+	
+	# Pause after everything is set up
 	get_tree().paused = true
 
 func show_game_over_screen():
@@ -65,10 +100,15 @@ func restart_game():
 		game_over_ui.queue_free()
 		game_over_ui = null
 	
+	# Stop game over music
+	if music_manager and music_manager.has_method("stop_music"):
+		print("🎵 Stopping game over music...")
+		music_manager.stop_music()
+	
 	# Unpause first
 	get_tree().paused = false
 	
-	# NEW: Clean up coins, enemies, and towers BEFORE reloading
+	# Clean up coins, enemies, and towers BEFORE reloading
 	_cleanup_before_restart()
 	
 	# Now reload the scene
