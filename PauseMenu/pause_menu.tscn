@@ -70,6 +70,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.5686275)
 
 [node name="setting_tab" type="TextureRect" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 32.0
 offset_top = 184.0
@@ -78,6 +79,7 @@ offset_bottom = 728.0
 texture = ExtResource("1_q2yj1")
 
 [node name="sfx_button" type="Button" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 104.0
 offset_top = 392.0
@@ -88,6 +90,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_fijrc")
 toggle_mode = true
 
 [node name="sound_button" type="Button" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 104.0
 offset_top = 320.0
@@ -98,6 +101,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_gxrhd")
 toggle_mode = true
 
 [node name="HSlider" type="HSlider" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 184.0
 offset_top = 288.0
@@ -107,6 +111,7 @@ tick_count = 10
 ticks_on_borders = true
 
 [node name="HSlider2" type="HSlider" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 184.0
 offset_top = 360.0
@@ -127,6 +132,7 @@ theme_override_font_sizes/font_size = 50
 text = "PAUSED"
 
 [node name="resume" type="Button" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 176.0
 offset_top = 456.0
@@ -142,6 +148,7 @@ text = "RESUME"
 script = ExtResource("9_oasv2")
 
 [node name="restart" type="Button" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 176.0
 offset_top = 520.0
@@ -157,6 +164,7 @@ text = "RESTART"
 script = ExtResource("10_a5bs5")
 
 [node name="mainmenu" type="Button" parent="."]
+process_mode = 2
 layout_mode = 0
 offset_left = 176.0
 offset_top = 584.0
