@@ -1,0 +1,132 @@
+[gd_scene load_steps=20 format=3 uid="uid://b100ash1g17x"]
+
+[ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="1_gf4tl"]
+[ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="1_pyvlu"]
+[ext_resource type="Texture2D" uid="uid://b2fmrx334xvoi" path="res://MainMenu/MainMenuAssets/forest.png" id="2_h4g5q"]
+[ext_resource type="Script" uid="uid://cnk5n2eli3die" path="res://GameOver/gameover_label.gd" id="2_yek8r"]
+[ext_resource type="Texture2D" uid="uid://4a3om8mx0s44" path="res://MainMenu/MainMenuAssets/unclicked-square.png" id="3_j0mwb"]
+[ext_resource type="Texture2D" uid="uid://dbta4wc23thm8" path="res://MainMenu/MainMenuAssets/clicked-square.png" id="4_8ctgv"]
+[ext_resource type="Script" uid="uid://fbqv5jbx8qqp" path="res://GameOver/restart.gd" id="5_j1mim"]
+[ext_resource type="Script" uid="uid://denqbo6khaabr" path="res://GameOver/main_menu_return.gd" id="6_novr7"]
+[ext_resource type="Script" uid="uid://djffx6gasgcsq" path="res://GameOver/quit.gd" id="7_gf4tl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uah2d"]
+shader = ExtResource("1_gf4tl")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cl02n"]
+texture = ExtResource("3_j0mwb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j1mim"]
+texture = ExtResource("4_8ctgv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_novr7"]
+texture = ExtResource("3_j0mwb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gf4tl"]
+texture = ExtResource("3_j0mwb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h4g5q"]
+texture = ExtResource("4_8ctgv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uah2d"]
+texture = ExtResource("3_j0mwb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tvv40"]
+texture = ExtResource("3_j0mwb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ek1av"]
+texture = ExtResource("4_8ctgv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ljyu"]
+texture = ExtResource("3_j0mwb")
+
+[node name="GameOver" type="Control"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg" type="TextureRect" parent="."]
+texture_repeat = 3
+material = SubResource("ShaderMaterial_uah2d")
+layout_mode = 0
+offset_left = -376.0
+offset_right = 872.0
+offset_bottom = 960.0
+texture = ExtResource("2_h4g5q")
+
+[node name="lightBG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.827451)
+
+[node name="gameover_label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = -60.0
+offset_right = 136.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_pyvlu")
+theme_override_font_sizes/font_size = 100
+text = "GAME OVER"
+script = ExtResource("2_yek8r")
+
+[node name="restart" type="Button" parent="."]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 560.0
+offset_right = 360.0
+offset_bottom = 616.0
+theme_override_fonts/font = ExtResource("1_pyvlu")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_cl02n")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_j1mim")
+theme_override_styles/hover = SubResource("StyleBoxTexture_novr7")
+text = "RESTART"
+script = ExtResource("5_j1mim")
+
+[node name="main_menu_return" type="Button" parent="."]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 629.0
+offset_right = 360.0
+offset_bottom = 685.0
+theme_override_fonts/font = ExtResource("1_pyvlu")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_gf4tl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_h4g5q")
+theme_override_styles/hover = SubResource("StyleBoxTexture_uah2d")
+text = "MAIN MENU"
+script = ExtResource("6_novr7")
+
+[node name="quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 696.0
+offset_right = 360.0
+offset_bottom = 752.0
+theme_override_fonts/font = ExtResource("1_pyvlu")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_tvv40")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ek1av")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6ljyu")
+text = "QUIT"
+script = ExtResource("7_gf4tl")
+
+[connection signal="pressed" from="restart" to="restart" method="_on_pressed"]
+[connection signal="pressed" from="main_menu_return" to="main_menu_return" method="_on_pressed"]
+[connection signal="pressed" from="quit" to="quit" method="_on_pressed"]

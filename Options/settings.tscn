@@ -1,0 +1,129 @@
+[gd_scene load_steps=20 format=3 uid="uid://cdvrqwefobh21"]
+
+[ext_resource type="Texture2D" uid="uid://doil24trwxunb" path="res://MainMenu/MainMenuAssets/bgcover.png" id="3_8ppif"]
+[ext_resource type="Texture2D" uid="uid://bq72mtc4bw3lx" path="res://MainMenu/MainMenuAssets/exis.png" id="4_leu1f"]
+[ext_resource type="Texture2D" uid="uid://le5esydr225x" path="res://MainMenu/MainMenuAssets/sfxbutton.png" id="5_cid4h"]
+[ext_resource type="Script" uid="uid://cgih63sa3t122" path="res://Options/exisbutton.gd" id="5_jxsub"]
+[ext_resource type="Texture2D" uid="uid://c7xx8rfmluiv3" path="res://MainMenu/MainMenuAssets/soundbutton.png" id="6_ait0l"]
+[ext_resource type="Texture2D" uid="uid://bfkio0437igd5" path="res://MainMenu/MainMenuAssets/sfxmutebutton.png" id="6_jxsub"]
+[ext_resource type="Texture2D" uid="uid://e7faylhj757q" path="res://MainMenu/MainMenuAssets/mutebutton.png" id="7_jxsub"]
+[ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="8_ait0l"]
+[ext_resource type="Script" uid="uid://b7323wqynvjoi" path="res://Options/music_slider.gd" id="8_jxsub"]
+[ext_resource type="Script" uid="uid://3pw32bd55ist" path="res://Options/sound_button.gd" id="8_os08c"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ait0l"]
+texture = ExtResource("4_leu1f")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rlych"]
+texture = ExtResource("4_leu1f")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c2tv5"]
+texture = ExtResource("4_leu1f")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_os08c"]
+texture = ExtResource("5_cid4h")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6wneh"]
+texture = ExtResource("6_jxsub")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x8epn"]
+texture = ExtResource("5_cid4h")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xxolt"]
+texture = ExtResource("6_ait0l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gbxea"]
+texture = ExtResource("7_jxsub")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uyc8t"]
+texture = ExtResource("6_ait0l")
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="setting_tab" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 232.0
+offset_right = 504.0
+offset_bottom = 704.0
+texture = ExtResource("3_8ppif")
+
+[node name="close_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 464.0
+offset_top = 248.0
+offset_right = 488.0
+offset_bottom = 272.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_ait0l")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_rlych")
+theme_override_styles/hover = SubResource("StyleBoxTexture_c2tv5")
+script = ExtResource("5_jxsub")
+
+[node name="sfx_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 504.0
+offset_right = 192.0
+offset_bottom = 576.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_os08c")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_6wneh")
+theme_override_styles/hover = SubResource("StyleBoxTexture_x8epn")
+toggle_mode = true
+
+[node name="sound_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 400.0
+offset_right = 192.0
+offset_bottom = 472.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_xxolt")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gbxea")
+theme_override_styles/hover = SubResource("StyleBoxTexture_uyc8t")
+toggle_mode = true
+script = ExtResource("8_os08c")
+
+[node name="musicSlider" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 384.0
+offset_right = 424.0
+offset_bottom = 496.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+tick_count = 10
+ticks_on_borders = true
+script = ExtResource("8_jxsub")
+
+[node name="sfxSlider" type="HSlider" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 200.0
+offset_top = 480.0
+offset_right = 424.0
+offset_bottom = 592.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 320.0
+offset_right = 352.0
+offset_bottom = 392.0
+theme_override_colors/font_color = Color(0.78190494, 0.62633985, 0.58174443, 1)
+theme_override_fonts/font = ExtResource("8_ait0l")
+theme_override_font_sizes/font_size = 50
+text = "OPTIONS"
+
+[connection signal="pressed" from="close_button" to="close_button" method="_on_pressed"]
+[connection signal="tree_exiting" from="close_button" to="close_button" method="_on_tree_exiting"]

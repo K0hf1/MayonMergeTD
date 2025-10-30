@@ -1,0 +1,184 @@
+[gd_scene load_steps=25 format=3 uid="uid://b8wcnc3ir6y2e"]
+
+[ext_resource type="Texture2D" uid="uid://doil24trwxunb" path="res://MainMenu/MainMenuAssets/bgcover.png" id="1_q2yj1"]
+[ext_resource type="Texture2D" uid="uid://le5esydr225x" path="res://MainMenu/MainMenuAssets/sfxbutton.png" id="2_a32ks"]
+[ext_resource type="Texture2D" uid="uid://bfkio0437igd5" path="res://MainMenu/MainMenuAssets/sfxmutebutton.png" id="3_g7dbl"]
+[ext_resource type="Texture2D" uid="uid://c7xx8rfmluiv3" path="res://MainMenu/MainMenuAssets/soundbutton.png" id="4_lv42l"]
+[ext_resource type="Texture2D" uid="uid://e7faylhj757q" path="res://MainMenu/MainMenuAssets/mutebutton.png" id="5_ub45p"]
+[ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="6_42xcf"]
+[ext_resource type="Texture2D" uid="uid://4a3om8mx0s44" path="res://MainMenu/MainMenuAssets/unclicked-square.png" id="7_1meuf"]
+[ext_resource type="Texture2D" uid="uid://dbta4wc23thm8" path="res://MainMenu/MainMenuAssets/clicked-square.png" id="8_0q2ao"]
+[ext_resource type="Script" uid="uid://c6ad5lliebn0d" path="res://PauseMenu/resume.gd" id="9_oasv2"]
+[ext_resource type="Script" uid="uid://cx2c2t0a7qbau" path="res://PauseMenu/restart.gd" id="10_a5bs5"]
+[ext_resource type="Script" uid="uid://l47wt4cldpvg" path="res://PauseMenu/exit.gd" id="11_ynw3s"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_udgxo"]
+texture = ExtResource("2_a32ks")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fijrc"]
+texture = ExtResource("3_g7dbl")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7qvy3"]
+texture = ExtResource("4_lv42l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxrhd"]
+texture = ExtResource("5_ub45p")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y0te6"]
+texture = ExtResource("7_1meuf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oawai"]
+texture = ExtResource("8_0q2ao")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wumbf"]
+texture = ExtResource("7_1meuf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_do3q5"]
+texture = ExtResource("7_1meuf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yx0aj"]
+texture = ExtResource("8_0q2ao")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cee4"]
+texture = ExtResource("7_1meuf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q77ma"]
+texture = ExtResource("7_1meuf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jpy7o"]
+texture = ExtResource("8_0q2ao")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dhsdr"]
+texture = ExtResource("7_1meuf")
+
+[node name="PauseMenu" type="Control"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5686275)
+
+[node name="setting_tab" type="TextureRect" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 32.0
+offset_top = 184.0
+offset_right = 504.0
+offset_bottom = 728.0
+texture = ExtResource("1_q2yj1")
+
+[node name="sfx_button" type="Button" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 104.0
+offset_top = 392.0
+offset_right = 160.0
+offset_bottom = 448.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_udgxo")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_fijrc")
+toggle_mode = true
+
+[node name="sound_button" type="Button" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 104.0
+offset_top = 320.0
+offset_right = 160.0
+offset_bottom = 376.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_7qvy3")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gxrhd")
+toggle_mode = true
+
+[node name="HSlider" type="HSlider" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 184.0
+offset_top = 288.0
+offset_right = 408.0
+offset_bottom = 400.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="HSlider2" type="HSlider" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 184.0
+offset_top = 360.0
+offset_right = 408.0
+offset_bottom = 472.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 264.0
+offset_right = 344.0
+offset_bottom = 336.0
+theme_override_colors/font_color = Color(0.78190494, 0.62633985, 0.58174443, 1)
+theme_override_fonts/font = ExtResource("6_42xcf")
+theme_override_font_sizes/font_size = 50
+text = "PAUSED"
+
+[node name="resume" type="Button" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 176.0
+offset_top = 456.0
+offset_right = 384.0
+offset_bottom = 512.0
+theme_override_colors/font_color = Color(0.875971, 0.7198783, 0.65606874, 1)
+theme_override_fonts/font = ExtResource("6_42xcf")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxTexture_y0te6")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_oawai")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wumbf")
+text = "RESUME"
+script = ExtResource("9_oasv2")
+
+[node name="restart" type="Button" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 176.0
+offset_top = 520.0
+offset_right = 384.0
+offset_bottom = 576.0
+theme_override_colors/font_color = Color(0.8745098, 0.72156864, 0.654902, 1)
+theme_override_fonts/font = ExtResource("6_42xcf")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxTexture_do3q5")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_yx0aj")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0cee4")
+text = "RESTART"
+script = ExtResource("10_a5bs5")
+
+[node name="mainmenu" type="Button" parent="."]
+process_mode = 2
+layout_mode = 0
+offset_left = 176.0
+offset_top = 584.0
+offset_right = 384.0
+offset_bottom = 640.0
+theme_override_colors/font_color = Color(0.8745098, 0.72156864, 0.654902, 1)
+theme_override_fonts/font = ExtResource("6_42xcf")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxTexture_q77ma")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_jpy7o")
+theme_override_styles/hover = SubResource("StyleBoxTexture_dhsdr")
+text = "MAIN MENU"
+script = ExtResource("11_ynw3s")
+
+[connection signal="pressed" from="resume" to="resume" method="_on_pressed"]
+[connection signal="pressed" from="restart" to="restart" method="_on_pressed"]
+[connection signal="pressed" from="mainmenu" to="mainmenu" method="_on_pressed"]

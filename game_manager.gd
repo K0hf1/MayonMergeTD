@@ -358,7 +358,7 @@ func _on_start_wave_button_pressed():
 func _calculate_wave_enemy_count(wave_number: int) -> int:
 	"""
 	Enemy count scaling logic:
-	- Wave 1: 1 Warrior
+	- Wave 1: 5 Warrior
 	- Wave 2: 5 Archers
 	- Wave 3: 5 Lancers
 	- Wave 4: 5 Monks
