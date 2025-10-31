@@ -1,9 +1,9 @@
 extends Area2D
 
 # ===== ENEMY STATS =====
-@export var max_health: int = 10
+@export var max_health: int = 30
 @export var damage_to_base: int = 10
-@export var coin_value: int = 5
+@export var coin_value: int = 3
 @export var run_speed: float = 30.0
 
 # ===== COIN DROPPING =====

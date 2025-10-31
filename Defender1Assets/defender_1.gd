@@ -4,7 +4,7 @@ extends Node2D
 @export var tier: int = 1
 
 # Projectile stats
-@export var damage: int = 1
+@export var damage: int = 6
 @export var projectile_speed: float = 400.0
 
 # List of enemies currently in range

@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var projectile_scene: PackedScene
-@export var attack_cooldown: float = 1.0
+@export var attack_cooldown: float = 1.33
 @export var projectile_speed: float = 400.0
 @export var projectile_steer_force: float = 40.0
 @export var projectile_fade_time: float = 0.1  # Fade duration after hit
