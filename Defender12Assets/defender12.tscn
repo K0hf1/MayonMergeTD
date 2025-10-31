@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b3sqql1g7w4oc" path="res://Defender1Assets/drag_module.gd" id="2_1mua7"]
 [ext_resource type="Texture2D" uid="uid://4ilnukh8f3oq" path="res://Defender12Assets/Witch.png" id="2_f6xfd"]
 [ext_resource type="Script" uid="uid://dbpdry03uuw58" path="res://Defender1Assets/attack_module.gd" id="3_f6xfd"]
-[ext_resource type="PackedScene" uid="uid://dt8ljypgmeq85" path="res://Defender2Assets/Defender2_Projectile/Projectile2.tscn" id="4_ljakx"]
+[ext_resource type="PackedScene" uid="uid://c2k2b8kkgc1dl" path="res://Defender12Assets/Defender12_Projectile/projectile_12.tscn" id="5_1mua7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ljakx"]
 atlas = ExtResource("2_f6xfd")
@@ -170,6 +170,6 @@ shape = SubResource("CircleShape2D_oovep")
 
 [node name="AttackModule" type="Node2D" parent="."]
 script = ExtResource("3_f6xfd")
-projectile_scene = ExtResource("4_ljakx")
+projectile_scene = ExtResource("5_1mua7")
 
 [node name="AttackTimer" type="Timer" parent="AttackModule"]

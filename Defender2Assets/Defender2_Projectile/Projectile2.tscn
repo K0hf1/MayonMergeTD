@@ -1,38 +1,35 @@
 [gd_scene load_steps=11 format=3 uid="uid://dt8ljypgmeq85"]
 
 [ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_td40f"]
-[ext_resource type="Texture2D" uid="uid://ul8ngqaa23ej" path="res://Defender2Assets/Defender2_Projectile/Darkness Orb.png" id="1_v0x7i"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_td40f"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(0, 0, 16, 16)
+[ext_resource type="Texture2D" uid="uid://bp32x2n8ni3q7" path="res://Defender2Assets/Defender2_Projectile/Tier_2_projectile.png" id="2_td40f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sin6t"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(16, 0, 16, 16)
+atlas = ExtResource("2_td40f")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tl2ue"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(32, 0, 16, 16)
+atlas = ExtResource("2_td40f")
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rth1k"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(48, 0, 16, 16)
+atlas = ExtResource("2_td40f")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tvv5v"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(64, 0, 16, 16)
+atlas = ExtResource("2_td40f")
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pir8y"]
-atlas = ExtResource("1_v0x7i")
-region = Rect2(80, 0, 16, 16)
+atlas = ExtResource("2_td40f")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yi8wf"]
+atlas = ExtResource("2_td40f")
+region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yi8wf"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_td40f")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sin6t")
 }, {
@@ -47,6 +44,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pir8y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yi8wf")
 }],
 "loop": true,
 "name": &"fly",
@@ -54,7 +54,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_td40f"]
-radius = 13.0
+radius = 17.117243
 
 [node name="Projectile2" type="Area2D"]
 script = ExtResource("1_td40f")
@@ -64,7 +64,7 @@ position = Vector2(-2.3841858e-07, -2.3841858e-07)
 scale = Vector2(1.4374998, 1.4375)
 sprite_frames = SubResource("SpriteFrames_yi8wf")
 animation = &"fly"
-frame_progress = 0.5216843
+frame_progress = 0.51910096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_td40f")

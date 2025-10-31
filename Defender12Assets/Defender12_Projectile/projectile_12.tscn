@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://c2k2b8kkgc1dl"]
+
+[ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_ofxes"]
+[ext_resource type="Texture2D" uid="uid://bkd62xs8tsgx3" path="res://Defender12Assets/Defender12_Projectile/Tier_12_projectile.png" id="2_ofxes"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_odul3"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t42sb"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wfa8r"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6b5wc"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8o4n"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vyid2"]
+atlas = ExtResource("2_ofxes")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yi8wf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_odul3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t42sb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wfa8r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6b5wc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m8o4n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyid2")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_td40f"]
+radius = 22.203604
+
+[node name="Projectile12" type="Area2D"]
+script = ExtResource("1_ofxes")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-2.3841858e-07, -2.3841858e-07)
+scale = Vector2(1.4374998, 1.4375)
+sprite_frames = SubResource("SpriteFrames_yi8wf")
+animation = &"fly"
+frame_progress = 0.22798495
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_td40f")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(4, -4)
+rect = Rect2(-17, -9, 26, 26)

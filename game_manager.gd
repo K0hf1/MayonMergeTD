@@ -55,7 +55,7 @@ func _ready() -> void:
 	print("✓ PlayerRecord loaded: Highest TIer =", PlayerRecord.highest_tier)
 	
 	if record_label:
-		record_label.text = "Highest Wave: %d" % PlayerRecord.highest_wave
+		record_label.text = "Best Wave: %d" % PlayerRecord.highest_wave
 	
 	# Get tower_slots_parent from the path
 	if tower_slots_parent_path:
