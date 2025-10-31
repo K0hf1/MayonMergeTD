@@ -4,7 +4,7 @@ extends Area2D
 @export var max_health: int = 10
 @export var damage_to_base: int = 10
 @export var coin_value: int = 5
-@export var run_speed: float = 30.0
+@export var run_speed: float = 300.0
 
 # ===== COIN DROPPING =====
 @export var coin_scene: PackedScene

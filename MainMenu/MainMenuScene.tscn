@@ -1,0 +1,140 @@
+[gd_scene load_steps=24 format=3 uid="uid://d0xk2v3dd3qub"]
+
+[ext_resource type="Script" uid="uid://csd61rnwoyuv1" path="res://MainMenu/main_menu_scene.gd" id="1_r3erp"]
+[ext_resource type="Shader" uid="uid://054qo3cjm5wt" path="res://MainMenu/bgroll.gdshader" id="2_xixxc"]
+[ext_resource type="Texture2D" uid="uid://b6nehj2ehws1r" path="res://MainMenu/MainMenuAssets/title2.png" id="3_k4uic"]
+[ext_resource type="Script" path="res://MainMenu/mainmenutitle.gd" id="4_5um84"]
+[ext_resource type="Texture2D" uid="uid://c1f1w70hdyypl" path="res://MainMenu/MainMenuAssets/button1.png" id="4_kqjsd"]
+[ext_resource type="Texture2D" uid="uid://7dc6cx3erbth" path="res://MainMenu/MainMenuAssets/button2.png" id="5_2l3d4"]
+[ext_resource type="PackedScene" uid="uid://cdvrqwefobh21" path="res://Options/settings.tscn" id="11_r3erp"]
+[ext_resource type="Texture2D" uid="uid://b2fmrx334xvoi" path="res://MainMenu/MainMenuAssets/forest.png" id="11_xdphn"]
+[ext_resource type="FontFile" uid="uid://b4cwwmxtiepxn" path="res://MainMenu/MainMenuAssets/Born2bSportyV2.ttf" id="12_2ea22"]
+[ext_resource type="Script" uid="uid://ddmv4whj8sw15" path="res://MainMenu/start.gd" id="13_aylwx"]
+[ext_resource type="Script" uid="uid://wvpr5eky731n" path="res://MainMenu/music_manager.gd" id="13_ib7y0"]
+[ext_resource type="Script" uid="uid://c38xfrtu3ilrg" path="res://MainMenu/option.gd" id="14_7mjct"]
+[ext_resource type="Script" uid="uid://cjebt6dcml8e8" path="res://MainMenu/exit.gd" id="15_xdphn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wrjne"]
+shader = ExtResource("2_xixxc")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ib7y0"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aylwx"]
+texture = ExtResource("5_2l3d4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5um84"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3erp"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7mjct"]
+texture = ExtResource("5_2l3d4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xdphn"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ea22"]
+texture = ExtResource("4_kqjsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ef11d"]
+texture = ExtResource("5_2l3d4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrjne"]
+texture = ExtResource("4_kqjsd")
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r3erp")
+
+[node name="bg" type="TextureRect" parent="."]
+texture_repeat = 3
+material = SubResource("ShaderMaterial_wrjne")
+layout_mode = 0
+offset_left = -344.0
+offset_top = 1.0
+offset_right = 904.0
+offset_bottom = 968.0
+texture = ExtResource("11_xdphn")
+
+[node name="title" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 240.0
+offset_right = 536.0
+offset_bottom = 440.0
+texture = ExtResource("3_k4uic")
+expand_mode = 1
+script = ExtResource("4_5um84")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 88.0
+offset_top = 152.0
+offset_right = -92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="start" type="Button" parent="MarginContainer/VBoxContainer" node_paths=PackedStringArray("main_menu_music_node")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_ib7y0")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_aylwx")
+theme_override_styles/hover = SubResource("StyleBoxTexture_5um84")
+text = "START"
+script = ExtResource("13_aylwx")
+main_menu_music_node = NodePath("../../../MusicManager")
+metadata/_edit_use_anchors_ = true
+
+[node name="option" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.737193, 0.7371929, 0.7371929, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_r3erp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_7mjct")
+theme_override_styles/hover = SubResource("StyleBoxTexture_xdphn")
+text = "OPTIONS"
+script = ExtResource("14_7mjct")
+
+[node name="exit" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_2ea22")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_2ea22")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ef11d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wrjne")
+text = "EXIT"
+script = ExtResource("15_xdphn")
+
+[node name="option" parent="." instance=ExtResource("11_r3erp")]
+visible = false
+layout_mode = 1
+offset_right = 28.0
+offset_bottom = 8.0
+
+[node name="MusicManager" type="Node" parent="."]
+script = ExtResource("13_ib7y0")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_focus_exited"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/option" to="MarginContainer/VBoxContainer/option" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/exit" to="MarginContainer/VBoxContainer/exit" method="_on_pressed"]
