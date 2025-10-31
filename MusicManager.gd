@@ -26,7 +26,7 @@ var current_state: String = ""
 
 func _ready() -> void:
 	# Set process mode to always run, even when paused
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	process_mode = Node.PROCESS_MODE_INHERIT
 	
 	# Create audio player
 	music_player = AudioStreamPlayer.new()

@@ -21,7 +21,7 @@ func _ready() -> void:
 	# Create pool of audio players
 	for i in range(max_simultaneous_sounds):
 		var player = AudioStreamPlayer.new()
-		player.bus = "SFX"  # Make sure you have an SFX bus
+		player.bus = "sfx"  # Make sure you have an SFX bus
 		add_child(player)
 		audio_players.append(player)
 	

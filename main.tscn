@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://game_manager.gd" id="10_4c57u"]
 [ext_resource type="Texture2D" uid="uid://4a3om8mx0s44" path="res://MainMenu/MainMenuAssets/unclicked-square.png" id="11_074og"]
 [ext_resource type="Script" uid="uid://iofvbpo2pifb" path="res://Enemy1Assets/Drops/coin_counter.gd" id="11_dg77c"]
-[ext_resource type="Texture2D" uid="uid://dn0g6eyhni0ge" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://q1dnkucmudv0" path="res://Coin_Gems/MonedaD.png" id="11_ycdy4"]
 [ext_resource type="Texture2D" uid="uid://dbta4wc23thm8" path="res://MainMenu/MainMenuAssets/clicked-square.png" id="12_cegan"]
 [ext_resource type="Texture2D" uid="uid://b1p8knopm1u2b" path="res://MainMenu/MainMenuAssets/unclicked pause.png" id="13_82xsv"]
 [ext_resource type="Texture2D" uid="uid://d0v3ncp6umd35" path="res://MainMenu/MainMenuAssets/clicked pause.png" id="14_getpj"]
@@ -1251,6 +1251,7 @@ text = "START
 WAVE"
 
 [node name="SellTower" type="Button" parent="UI"]
+visible = false
 offset_left = 367.0
 offset_top = 768.0
 offset_right = 431.0
