@@ -42,7 +42,7 @@ func _ready() -> void:
 		sprite.scale = Vector2(1, 1)
 		sprite.offset = Vector2(0, 0)
 		sprite.position = Vector2(0, 0)
-		sprite.z_index = 100
+		sprite.z_index = 1
 		
 		print("Coin settings - Z-Index: ", z_index, " Sprite Z-Index: ", sprite.z_index)
 		

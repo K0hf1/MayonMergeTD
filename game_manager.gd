@@ -14,7 +14,6 @@ extends Node2D
 signal coin_collected(amount: int)
 signal wave_started(wave_number: int)
 signal wave_ended(wave_number: int)
-signal all_waves_complete
 
 # ===== WAVE CONFIGURATION =====
 @export var max_waves: int = 999999
@@ -36,8 +35,9 @@ var music_manager: Node = null
 
 # ===== TOWER COST SETTINGS =====
 var base_tower_cost: int = 5
-var cost_growth_rate: float = 1.25  # adjust for how fast you want it to grow
+var cost_growth_rate: float = 1.25
 var current_tower_cost: int = base_tower_cost
+
 
 
 # ===== READY / INITIALIZATION =====
@@ -48,11 +48,10 @@ func _ready() -> void:
 	else:
 		print("✓ RecordLabel found: ", record_label.name)
 
-
 	# --- Load player record ---
 	PlayerRecord.load()
 	print("✓ PlayerRecord loaded: Highest Wave =", PlayerRecord.highest_wave)
-	print("✓ PlayerRecord loaded: Highest TIer =", PlayerRecord.highest_tier)
+	print("✓ PlayerRecord loaded: Highest Tier =", PlayerRecord.highest_tier)
 	
 	if record_label:
 		record_label.text = "Best Wave: %d" % PlayerRecord.highest_wave
@@ -97,8 +96,8 @@ func _ready() -> void:
 	else:
 		print("❌ Start Wave button NOT found!")
 		
-		update_buy_button_label()
-		
+	update_buy_button_label()
+	
 	# Initialize tower cost
 	current_tower_cost = calculate_tower_cost(current_wave)
 	update_buy_button_label()
@@ -141,7 +140,6 @@ func _find_music_manager() -> void:
 	
 	if music_manager:
 		print("✓ GameManager found MusicManager")
-		# ✅ CHANGED: Don't auto-play music here, wait for Start Wave button
 	else:
 		print("⚠️  GameManager WARNING: MusicManager NOT found!")
 		
@@ -153,7 +151,7 @@ func calculate_tower_cost(wave_number: int) -> int:
 	return new_cost
 
 func update_buy_button_label() -> void:
-	var buy_button = get_node("../UI/BuyTowerButton") as Button
+	# ✅ FIXED: Use the member variable buy_button, don't create a local one
 	if buy_button:
 		buy_button.text = "Buy Tower\n(%d Gold)" % current_tower_cost
 
@@ -183,15 +181,14 @@ func _on_buy_tower_button_pressed() -> void:
 	# --- Randomly choose an empty slot ---
 	var chosen_slot: MarkerSlot = available_slots[randi() % available_slots.size()]
 
-	# --- Get the tower randomizer node ---
-	var tower_randomizer = get_node("TowerRandomizer")
+	# ✅ FIXED: Use the member variable tower_randomizer, don't create a local one
 	if not tower_randomizer:
 		push_warning("⚠️ TowerRandomizer node not found — spawning Tier 1 by default.")
 		return
 
 	# --- Get randomized tower tier ---
 	var rolled_tier = tower_randomizer.get_random_tower_tier()
-	tower_randomizer.debug_print_probabilities()  # optional for debugging
+	tower_randomizer.debug_print_probabilities()
 
 	# --- Construct the scene path based on the rolled tier ---
 	var folder_name = "Defender%dAssets" % rolled_tier
@@ -209,7 +206,7 @@ func _on_buy_tower_button_pressed() -> void:
 	get_parent().add_child(new_tower)
 	new_tower.global_position = chosen_slot.global_position
 
-	# --- Configure the tower’s drag module ---
+	# --- Configure the tower's drag module ---
 	var drag_module = new_tower.get_node("DragModule")
 	if drag_module:
 		drag_module.slots_parent = tower_slots_parent
@@ -254,9 +251,7 @@ func request_merge(defender1: Node2D, defender2: Node2D) -> void:
 	print("💠 Merged defender created at tier", new_tier)
 	print("Available slots after merge: %d" % _count_available_slots())
 	
-	# -------------------------------------------------------------
-	# 🏆 Track the new highest merged tier (lifetime)
-	# -------------------------------------------------------------
+	# Track the new highest merged tier (lifetime)
 	var player_record = PlayerRecord
 	
 	if player_record:
@@ -344,12 +339,12 @@ func _on_start_wave_button_pressed():
 	
 	wave_in_progress = true
 	
-	# ✅ CHANGED: Lower gameplay music volume even more
+	# ✅ Play gameplay music at 30% volume
 	if music_manager and music_manager.has_method("play_gameplay_music"):
 		print("🎵 Playing gameplay music at 30% volume...")
 		music_manager.play_gameplay_music()
 		if music_manager.has_method("set_music_volume"):
-			music_manager.set_music_volume(0.3)  # ✅ Changed from 0.5 to 0.3 (30%)
+			music_manager.set_music_volume(0.3)
 	
 	if spawner:
 		spawner.start_wave(current_wave + 1)
@@ -458,7 +453,7 @@ func check_all_waves_complete() -> void:
 	# ✅ Restore music volume after wave
 	if music_manager and music_manager.has_method("set_music_volume"):
 		print("🎵 Restoring music volume to 100%...")
-		music_manager.set_music_volume(1.0)  # 100% volume
+		music_manager.set_music_volume(1.0)
 	
 	# ✅ Play wave complete music
 	if music_manager and music_manager.has_method("play_wave_complete_music"):
@@ -511,7 +506,7 @@ func _start_next_wave_auto() -> void:
 			
 			# ✅ Reduce music volume for wave
 			if music_manager and music_manager.has_method("set_music_volume"):
-				music_manager.set_music_volume(0.3)  # ✅ Changed to 30%
+				music_manager.set_music_volume(0.3)
 			
 			# ✅ Play gameplay music
 			if music_manager and music_manager.has_method("play_gameplay_music"):
@@ -522,6 +517,10 @@ func _start_next_wave_auto() -> void:
 				start_wave_button.disabled = true
 
 func _enable_restart_button() -> void:
+	# ✅ ADDED: Clean up unpicked coins before enabling restart
+	print("\n🧹 Cleaning up unpicked coins...")
+	_cleanup_dropped_coins()
+	
 	if start_wave_button:
 		start_wave_button.text = "Restart Level"
 		start_wave_button.button_pressed = false
@@ -533,7 +532,10 @@ func _enable_restart_button() -> void:
 func restart_level() -> void:
 	print("\n========== RESTARTING LEVEL ==========")
 	
+	# ✅ ADDED: Clean up unpicked coins FIRST
+	print("🧹 Cleaning up unpicked coins before restart...")
 	_cleanup_dropped_coins()
+	
 	reset_coins()
 	_cleanup_enemies()
 	_cleanup_towers()
