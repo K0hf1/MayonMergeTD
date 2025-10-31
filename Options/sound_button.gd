@@ -8,14 +8,14 @@ func _ready():
 	
 	# 2. Set this button's starting state (pressed if volume is 0)
 	# This works because the button is in "Toggle Mode"
-	var pressed = (VolumeManager.get_music_volume() == 0.0)
+	button_pressed = (VolumeManager.get_music_volume() == 0.0)
 	
 	# 3. Connect this button's own "toggled" signal to its function
-	connect("toggled", _on_toggled)
+	connect("toggled", Callable(self, "_on_toggled"))
 
 
 # This runs when THIS button is clicked by the user
-func _on_toggled(is_pressed: bool):
+func _on_toggled(_is_pressed: bool):
 	# Tell the VolumeManager to toggle the mute state
 	VolumeManager.toggle_music_mute()
 
@@ -25,5 +25,5 @@ func _on_VolumeManager_music_volume_changed(linear_value: float):
 	# Update this button's visual pressed state
 	# We block signals to prevent an infinite loop (toggling -> changing value -> toggling)
 	set_block_signals(true)
-	var pressed = (linear_value == 0.0)
+	button_pressed = (linear_value == 0.0)
 	set_block_signals(false)

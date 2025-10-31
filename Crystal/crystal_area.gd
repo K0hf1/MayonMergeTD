@@ -2,15 +2,29 @@ extends Area2D
 
 signal crystal_destroyed
 
-var game_over_ui = null
+var game_manager = null
 var music_manager = null
 @onready var animated_sprite = $AnimatedSprite2D
+
 
 func _ready():
 	animated_sprite.play("idleCrystal")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	_find_music_manager()
+	_find_game_manager()
+
+## Find Game Manager
+func _find_game_manager() -> void:
+	game_manager = get_node_or_null("../GameManager")
+	
+	if not game_manager:
+		game_manager = get_tree().root.find_child("GameManager", true, false)
+	
+	if game_manager:
+		print("✓ Crystal found GameManager")
+	else:
+		print("⚠️  Crystal WARNING: GameManager NOT found!")
 
 ## Find Music Manager
 func _find_music_manager() -> void:
@@ -34,31 +48,31 @@ func _on_area_entered(area: Area2D) -> void:
 		else:
 			area.queue_free()
 		
-		# Set volume to 100%
-		if music_manager and music_manager.has_method("set_music_volume"):
-			print("🔊 Setting music volume to 100%...")
-			music_manager.set_music_volume(1.0)
+		# ✅ Call cleanup on GameManager BEFORE changing scene
+		if game_manager and game_manager.has_method("restart_level"):
+			print("✓ Calling GameManager.restart_level()...")
+			game_manager.restart_level()
 		
-		# Play game over music
-		if music_manager and music_manager.has_method("play_game_over_music"):
-			print("🎵 Playing game over music...")
-			music_manager.play_game_over_music()
-		
-		# Wait for music to start
-		await get_tree().process_frame
-		await get_tree().process_frame
+		# ✅ Stop current music
+		if music_manager and music_manager.has_method("stop_music"):
+			print("⏹️  Stopping current music...")
+			music_manager.stop_music()
 		
 		# Game over
 		game_over()
 
 func game_over():
-	# Play destruction animation
+	# ✅ Play destruction animation
 	if animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("destroyCrystal"):
 		animated_sprite.play("destroyCrystal")
 		await animated_sprite.animation_finished
 	
 	crystal_destroyed.emit()
 	
-	# Pause after everything is set up
+	# ✅ Pause game
+	print("⏸️  Pausing game...")
 	get_tree().paused = true
+	
+	# ✅ Change to GameOver scene
+	print("🔄 Changing to GameOver scene...")
 	get_tree().change_scene_to_file("res://GameOver/GameOver.tscn")

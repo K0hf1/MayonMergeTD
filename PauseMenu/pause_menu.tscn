@@ -37,6 +37,7 @@ texture = ExtResource("7_1meuf")
 
 [node name="PauseMenu" type="Control"]
 process_mode = 2
+z_index = 5
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ColorRect" type="ColorRect" parent="."]
+z_index = 5
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -55,6 +57,7 @@ color = Color(0, 0, 0, 0.5686275)
 
 [node name="setting_tab" type="TextureRect" parent="."]
 process_mode = 2
+z_index = 5
 layout_mode = 0
 offset_left = 93.0
 offset_top = 264.0
@@ -63,6 +66,7 @@ offset_bottom = 638.0
 texture = ExtResource("1_q2yj1")
 
 [node name="Label" type="Label" parent="."]
+z_index = 5
 layout_mode = 0
 offset_left = 197.0
 offset_top = 320.0
@@ -75,6 +79,7 @@ text = "PAUSED"
 
 [node name="resume" type="Button" parent="."]
 process_mode = 2
+z_index = 5
 layout_mode = 0
 offset_left = 163.0
 offset_top = 399.0
@@ -91,6 +96,7 @@ script = ExtResource("9_oasv2")
 
 [node name="restart" type="Button" parent="."]
 process_mode = 2
+z_index = 5
 layout_mode = 0
 offset_left = 163.0
 offset_top = 463.0
@@ -107,6 +113,7 @@ script = ExtResource("10_a5bs5")
 
 [node name="mainmenu" type="Button" parent="."]
 process_mode = 2
+z_index = 5
 layout_mode = 0
 offset_left = 163.0
 offset_top = 527.0

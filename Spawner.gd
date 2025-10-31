@@ -20,6 +20,10 @@ var enemy_scenes: Dictionary = {
 	"Monk": "res://Enemy4Assets/EnemyMonk.tscn",
 }
 
+# ===== METADATA =====
+var last_updated: String = "2025-10-31 17:45:08"  # ✅ Current UTC timestamp
+var last_updated_by: String = "john-omargirado"   # ✅ Current user
+
 
 func _ready() -> void:
 	# Find GameManager
