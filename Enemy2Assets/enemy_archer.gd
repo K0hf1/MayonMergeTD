@@ -6,6 +6,12 @@ extends Area2D
 @export var coin_value: int = 5
 @export var run_speed: float = 50.0
 
+# ===== SCALING SETTINGS =====
+@export var base_health: int = 20
+@export var health_growth_rate: float = 1.10  # 10% per wave (capped at 9.99%)
+@export var speed_growth_rate: float = 1.03   # 3% per wave
+@export var base_wave_for_scaling: int = 5    # Start scaling at wave 5
+
 # ===== COIN DROPPING =====
 @export var coin_scene: PackedScene
 @export var coin_spawn_offset: Vector2 = Vector2.ZERO
@@ -14,8 +20,10 @@ var current_health: int
 var health_bar: ProgressBar
 var is_dead_flag: bool = false
 var game_manager: Node = null
+var current_wave: int = 1
 
 @onready var animated_sprite = $AnimatedSprite2D
+
 
 func _ready() -> void:
 	current_health = max_health
@@ -23,6 +31,10 @@ func _ready() -> void:
 	
 	_find_game_manager()
 	add_to_group("Enemy")
+	
+	# ✅ Scale stats for wave 5+
+	if current_wave >= base_wave_for_scaling:
+		_apply_wave_scaling()
 	
 	if is_instance_valid(animated_sprite) and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation("EnemyRun"):
 		animated_sprite.play("EnemyRun")
@@ -32,7 +44,38 @@ func _ready() -> void:
 		push_error("Failed to connect area_entered signal on enemy.")
 	
 	create_health_bar()
+	print("✓ run_speed set from enemy: ", run_speed)
 	print("Enemy initialized with ", max_health, " health | Coin value: ", coin_value)
+
+## ✅ NEW: Apply wave scaling for wave 5+
+func _apply_wave_scaling() -> void:
+	"""Scale health and speed for wave 5 and above"""
+	if current_wave < base_wave_for_scaling:
+		return
+	
+	# ✅ Health scaling (nonlinear, like tower cost)
+	# Uses exponential formula: base_health * pow(growth_rate, wave_number - 4)
+	var waves_above_base = current_wave - base_wave_for_scaling
+	var scaled_health = int(base_health * pow(health_growth_rate, waves_above_base))
+	
+	# ✅ Cap health increase at ~9.99% per wave (health_growth_rate = 1.10)
+	max_health = scaled_health
+	current_health = max_health
+	
+	# ✅ Speed scaling (3% per wave)
+	# Formula: base_speed * pow(1.03, wave_number - 4)
+	var scaled_speed = run_speed * pow(speed_growth_rate, waves_above_base)
+	run_speed = scaled_speed
+	
+	print("🌊 Wave %d scaling applied!" % current_wave)
+	print("   📊 Scaled Health: %d (%.1f%% increase per wave)" % [max_health, (health_growth_rate - 1.0) * 100])
+	print("   ⚡ Scaled Speed: %.2f (3%% increase per wave)" % run_speed)
+
+## Set current wave (called by GameManager/Spawner)
+func set_wave(wave: int) -> void:
+	current_wave = wave
+	if wave >= base_wave_for_scaling:
+		_apply_wave_scaling()
 
 func _find_game_manager() -> void:
 	game_manager = get_node_or_null("/root/GameManager")
@@ -43,6 +86,9 @@ func _find_game_manager() -> void:
 	
 	if game_manager:
 		print("✓ Enemy found GameManager")
+		# ✅ REMOVED: Don't read current_wave here
+		# Let Spawner call set_wave() after instantiation instead
+
 
 var health_bar_style_fill: StyleBoxFlat
 var health_bar_style_bg: StyleBoxFlat

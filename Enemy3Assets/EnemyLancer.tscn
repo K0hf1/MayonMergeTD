@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://b8ijr82dil11s"]
 
-[ext_resource type="Texture2D" uid="uid://tlubdmyj00jk" path="res://Enemy3Assets/Lancer_Run.png" id="1_asevt"]
+[ext_resource type="Texture2D" uid="uid://c4d2m121pllka" path="res://Enemy3Assets/Lancer_Run.png" id="1_asevt"]
 [ext_resource type="Script" uid="uid://dc7eynrqm6fu5" path="res://Enemy3Assets/enemy_lancer.gd" id="1_hxvru"]
 [ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_1eoe6"]
 

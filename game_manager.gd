@@ -446,6 +446,11 @@ func enemy_died(enemy: Node) -> void:
 	print("💀 Enemy died! Active enemies: ", active_enemies)
 
 func check_all_waves_complete() -> void:
+	# ✅ FIXED: Add guard to prevent premature triggering
+	if wave_in_progress and (active_enemies > 0 or spawner.spawning):
+		print("⏳ Wave still in progress! active_enemies=%d, spawner.spawning=%s" % [active_enemies, spawner.spawning])
+		return
+	
 	print("✅ WAVE %d COMPLETE! All enemies defeated!" % current_wave)
 	wave_ended.emit(current_wave)
 	wave_in_progress = false

@@ -20,9 +20,6 @@ var enemy_scenes: Dictionary = {
 	"Monk": "res://Enemy4Assets/EnemyMonk.tscn",
 }
 
-# ===== METADATA =====
-var last_updated: String = "2025-10-31 17:45:08"  # ✅ Current UTC timestamp
-var last_updated_by: String = "john-omargirado"   # ✅ Current user
 
 
 func _ready() -> void:
@@ -74,6 +71,11 @@ func spawn_enemy():
 		var enemy_scene = load(enemy_scenes[enemy_type])
 		var enemy_instance = enemy_scene.instantiate()
 		new_follower.add_child(enemy_instance)
+		
+		# ✅ FIXED: Set wave on enemy IMMEDIATELY after spawn
+		if enemy_instance.has_method("set_wave"):
+			enemy_instance.set_wave(current_wave)
+			print("   ✓ Set enemy wave to: ", current_wave)
 	else:
 		push_warning("⚠️ Unknown enemy type: " + str(enemy_type))
 
@@ -81,6 +83,7 @@ func spawn_enemy():
 	# Notify GameManager that enemy was spawned
 	if game_manager and game_manager.has_method("enemy_spawned"):
 		game_manager.enemy_spawned()
+		print("   ✓ Notified GameManager (active_enemies now: %d)" % game_manager.active_enemies)
 
 func start_wave(wave_number: int):
 	if spawning:
