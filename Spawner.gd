@@ -54,6 +54,9 @@ func spawn_wave(enemy_data: Array, wave_number: int) -> void:
 	print("🎬 Spawning Wave %d | Total Enemies: %d" % [wave_number, spawn_queue.size()])
 	_spawn_next_enemy()
 
+# ---------------------------
+# Spawn logic using await
+# ---------------------------
 func _spawn_next_enemy() -> void:
 	if spawn_queue.is_empty():
 		is_spawning = false
@@ -64,8 +67,12 @@ func _spawn_next_enemy() -> void:
 	_spawn_enemy(enemy_type)
 
 	var delay = spawn_interval_wave_1_4 if current_wave <= 4 else spawn_interval_wave_5_plus
-	get_tree().create_timer(delay).timeout.connect(_spawn_next_enemy)
+	await get_tree().create_timer(delay).timeout
+	_spawn_next_enemy()
 
+# ---------------------------
+# Instantiate Enemy
+# ---------------------------
 func _spawn_enemy(enemy_type: String) -> void:
 	if not enemy_scenes.has(enemy_type):
 		push_warning("⚠️ Unknown enemy type: %s" % enemy_type)

@@ -57,6 +57,7 @@ animations = [{
 radius = 16.03122
 
 [node name="Projectile1" type="Area2D"]
+z_index = 5
 script = ExtResource("1_bmq2d")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

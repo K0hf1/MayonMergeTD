@@ -32,7 +32,7 @@ func _on_wave_completed(wave_number):
 
 	# ✅ Update TowerManager with new wave (so tower cost refreshes)
 	if tower_manager and tower_manager.has_method("set_current_wave"):
-		tower_manager.set_current_wave(wave_number + 1)  # Next wave number
+		tower_manager.set_current_wave(wave_number)
 
 
 func _on_coin_changed(new_amount):
@@ -40,7 +40,7 @@ func _on_coin_changed(new_amount):
 
 
 func _on_start_wave_button_pressed():
-	var wave_manager = $WaveManager
+	wave_manager = $WaveManager
 	if wave_manager and wave_manager.has_method("start_next_wave"):
 		wave_manager.start_next_wave()
 	else:

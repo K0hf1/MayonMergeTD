@@ -7,6 +7,7 @@ class_name WaveManager
 var current_wave := 0
 var enemy_spawner: Node
 var active_enemies := 0  # Tracks alive enemies
+var is_wave_active := false
 
 signal wave_started(wave_number)
 signal wave_completed(wave_number)
@@ -21,9 +22,13 @@ func _ready():
 # ---------------------------
 # Wave Control
 # ---------------------------
-
 func start_next_wave():
+	if is_wave_active:
+		push_warning("⚠️ Wave already active")
+		return
+
 	current_wave += 1
+	is_wave_active = true
 	print("🌊 Starting Wave %d" % current_wave)
 	emit_signal("wave_started", current_wave)
 
@@ -43,14 +48,16 @@ func register_enemy():
 func enemy_died(enemy: Node):
 	active_enemies -= 1
 	print("☠️ Enemy died | Remaining:", active_enemies)
+
 	if active_enemies <= 0:
 		print("✅ Wave %d complete!" % current_wave)
+		is_wave_active = false   # ✅ Reset active wave flag
 		emit_signal("wave_completed", current_wave)
+
 
 # ---------------------------
 # Wave Enemy Generation Logic
 # ---------------------------
-
 func _calculate_wave_enemy_count(wave_number: int) -> int:
 	if wave_number <= 4:
 		return 5

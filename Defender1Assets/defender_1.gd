@@ -5,7 +5,7 @@ extends Node2D
 
 # Projectile stats
 @export var damage: int = 6
-@export var projectile_speed: float = 400.0
+@export var projectile_speed: float = 1000.0
 
 # List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []

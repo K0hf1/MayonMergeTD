@@ -4,7 +4,7 @@ extends Area2D
 @export var max_health: int = 30
 @export var damage_to_base: int = 10
 @export var coin_value: int = 3
-@export var run_speed: float = 30.0
+@export var run_speed: float = 50.0
 
 # ===== SCALING SETTINGS =====
 @export var base_health: int = 30
