@@ -910,7 +910,7 @@ sources/0 = SubResource("TileSetAtlasSource_1bvp3")
 
 [sub_resource type="Curve2D" id="Curve2D_272bh"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 74, 167, 0, 0, 0, 0, 471, 165, 0, 0, 0, 0, 468, 276, 0, 0, 0, 0, 57, 281, 0, 0, 0, 0, 54, 424, 0, 0, 0, 0, 469, 430, 0, 0, 0, 0, 466, 533, 0, 0, 0, 0, 61, 538, 0, 0, 0, 0, 54, 673, 0, 0, 0, 0, 415, 674, 0, 0, 0, 0, 951, 672)
+"points": PackedVector2Array(0, 0, 0, 0, 74, 167, 0, 0, 0, 0, 471, 165, 0, 0, 0, 0, 468, 276, 0, 0, 0, 0, 57, 281, 0, 0, 0, 0, 54, 424, 0, 0, 0, 0, 469, 430, 0, 0, 0, 0, 466, 533, 0, 0, 0, 0, 61, 538, 0, 0, 0, 0, 54, 673, 0, 0, 0, 0, 415, 674, 0, 0, 0, 0, 415, 675)
 }
 point_count = 11
 
@@ -1174,7 +1174,8 @@ script = ExtResource("10_4c57u")
 script = ExtResource("2_ryguw")
 tower_randomizer = NodePath("TowerRandomizer")
 tower_slots_parent_path = NodePath("TowerSlots")
-cost_growth_rate = 1.067
+buy_tower_button_path = NodePath("../../UI/BuyTowerButton")
+cost_growth_rate = 2.0
 
 [node name="TowerRandomizer" type="Node" parent="GameManager/TowerManager"]
 script = ExtResource("2_dg77c")
@@ -1238,7 +1239,7 @@ curve = SubResource("Curve2D_272bh")
 script = ExtResource("6_5vw27")
 
 [node name="EnemyPath" parent="SpawnerPath" instance=ExtResource("7_5vw27")]
-position = Vector2(951, 671.99994)
+position = Vector2(415, 675)
 progress = 3017.4124
 script = null
 

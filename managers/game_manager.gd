@@ -30,6 +30,11 @@ func _on_wave_completed(wave_number):
 	PlayerRecord.update_wave_record(wave_number)
 	wave_ended.emit(wave_number)
 
+	# ✅ Update TowerManager with new wave (so tower cost refreshes)
+	if tower_manager and tower_manager.has_method("set_current_wave"):
+		tower_manager.set_current_wave(wave_number + 1)  # Next wave number
+
+
 func _on_coin_changed(new_amount):
 	print("💰 Coins updated:", new_amount)
 

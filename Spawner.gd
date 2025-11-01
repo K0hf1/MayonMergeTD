@@ -9,7 +9,6 @@ var spawn_queue: Array = []
 var is_spawning: bool = false
 
 var follower_scene: PackedScene = preload("res://EnemyPath.tscn")
-
 var wave_manager: Node = null
 var game_manager: Node = null
 
@@ -20,10 +19,6 @@ var enemy_scenes: Dictionary = {
 	"Monk": preload("res://Enemy4Assets/EnemyMonk.tscn"),
 }
 
-# ===============================
-# 🚀 INITIALIZATION
-# ===============================
-
 func _ready() -> void:
 	wave_manager = get_tree().root.find_child("WaveManager", true, false)
 	game_manager = get_tree().root.find_child("GameManager", true, false)
@@ -33,17 +28,21 @@ func _ready() -> void:
 	else:
 		push_warning("⚠️ No WaveManager found in scene tree!")
 
-	print("EnemySpawner initialized. Enemy types:", enemy_scenes.keys())
+# ---------------------------
+# Public: Prepare wave data
+# ---------------------------
+func prepare_wave(wave_number: int) -> Array:
+	if wave_manager:
+		return wave_manager._generate_wave_enemies(wave_number)
+	return []
 
-# ===============================
-# 🎬 WAVE SPAWNING ENTRY POINT
-# ===============================
-
+# ---------------------------
+# Spawn Wave
+# ---------------------------
 func spawn_wave(enemy_data: Array, wave_number: int) -> void:
 	current_wave = wave_number
 	spawn_queue.clear()
 
-	# Flatten wave data into a simple spawn list
 	for enemy_set in enemy_data:
 		for i in range(enemy_set["count"]):
 			spawn_queue.append(enemy_set["type"])
@@ -52,21 +51,13 @@ func spawn_wave(enemy_data: Array, wave_number: int) -> void:
 		push_warning("⚠️ No enemies to spawn for Wave %d" % wave_number)
 		return
 
-	is_spawning = true
-	print("🎬 Starting Wave %d spawn sequence (%d enemies)" % [wave_number, spawn_queue.size()])
+	print("🎬 Spawning Wave %d | Total Enemies: %d" % [wave_number, spawn_queue.size()])
 	_spawn_next_enemy()
-
-# ===============================
-# 🧠 SPAWN LOGIC
-# ===============================
 
 func _spawn_next_enemy() -> void:
 	if spawn_queue.is_empty():
 		is_spawning = false
 		print("✅ All enemies spawned for Wave %d" % current_wave)
-
-		if wave_manager and wave_manager.has_method("end_wave"):
-			wave_manager.end_wave()
 		return
 
 	var enemy_type = spawn_queue.pop_front()
@@ -76,29 +67,21 @@ func _spawn_next_enemy() -> void:
 	get_tree().create_timer(delay).timeout.connect(_spawn_next_enemy)
 
 func _spawn_enemy(enemy_type: String) -> void:
-	if not follower_scene:
-		push_error("❌ Follower scene not loaded! Check res://EnemyPath.tscn")
-		return
-
-	var follower = follower_scene.instantiate()
-	add_child(follower)
-
 	if not enemy_scenes.has(enemy_type):
 		push_warning("⚠️ Unknown enemy type: %s" % enemy_type)
 		return
 
-	var enemy_scene = enemy_scenes[enemy_type]
-	var enemy_instance = enemy_scene.instantiate()
+	# Spawn follower
+	var follower = follower_scene.instantiate()
+	add_child(follower)
+
+	# Spawn enemy instance
+	var enemy_instance = enemy_scenes[enemy_type].instantiate()
 	follower.add_child(enemy_instance)
 
-	print("🧩 Spawned", enemy_type, "at follower:", follower)
-
-	# Set properties if available
 	if enemy_instance.has_method("set_wave"):
 		enemy_instance.set_wave(current_wave)
 
-	# Notify managers
-	if game_manager and game_manager.has_method("enemy_spawned"):
-		game_manager.enemy_spawned()
-	if wave_manager and wave_manager.has_method("enemy_spawned"):
-		wave_manager.enemy_spawned()
+	# Notify WaveManager that a new enemy exists
+	if wave_manager and wave_manager.has_method("register_enemy"):
+		wave_manager.register_enemy()
