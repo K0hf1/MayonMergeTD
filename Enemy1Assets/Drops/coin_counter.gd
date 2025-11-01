@@ -1,7 +1,7 @@
 extends Control
 
-@onready var coin_label = $Container/CoinLabel
-@onready var coin_sprite = $Container/CoinSprite
+@onready var coin_label = $HBoxContainer/CoinLabel
+@onready var coin_sprite = $HBoxContainer/CoinSprite
 
 var coin_manager: Node = null
 
@@ -61,7 +61,7 @@ func _on_coin_changed(new_amount: int) -> void:
 
 func update_coin_display(coin_count: int) -> void:
 	if coin_label:
-		coin_label.text = "                 %d" % coin_count
+		coin_label.text = "%d" % coin_count
 		print("💰 CoinLabel updated to:", coin_label.text)
 	else:
 		print("✗ ERROR: coin_label is null!")

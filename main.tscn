@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=78 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cwujm1lntowec" path="res://Tower.png" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://b3hf6t03u6xf4" path="res://managers/wave_manager.gd" id="4_d13ii"]
 [ext_resource type="Script" uid="uid://cu1qtvh7fsvgi" path="res://managers/coin_manager.gd" id="5_1u8w0"]
+[ext_resource type="Script" uid="uid://1ykehtyae66o" path="res://merge_handler.gd" id="5_lswn8"]
 [ext_resource type="Script" uid="uid://dhft3xlwoedyw" path="res://audio_linker.gd" id="6_0odxb"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cb78y0kctovyd" path="res://EnemyPath.tscn" id="7_5vw27"]
@@ -1180,6 +1181,9 @@ script = ExtResource("2_dg77c")
 
 [node name="TowerSlots" parent="GameManager/TowerManager" instance=ExtResource("9_4c57u")]
 
+[node name="MergeHandler" type="Node" parent="GameManager/TowerManager"]
+script = ExtResource("5_lswn8")
+
 [node name="WaveManager" type="Node2D" parent="GameManager"]
 script = ExtResource("4_d13ii")
 enemy_spawner_path = NodePath("../../SpawnerPath")
@@ -1300,24 +1304,23 @@ offset_bottom = 77.0
 grow_horizontal = 0
 script = ExtResource("11_dg77c")
 
-[node name="Container" type="HBoxContainer" parent="UI/Canvas Layer/CoinCounter"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Canvas Layer/CoinCounter"]
 layout_mode = 0
-offset_left = 6.0
-offset_right = 182.0
-offset_bottom = 41.0
-theme_override_constants/separation = 1
+offset_right = 140.0
+offset_bottom = 40.0
+alignment = 2
 
-[node name="CoinSprite" type="AnimatedSprite2D" parent="UI/Canvas Layer/CoinCounter/Container"]
-position = Vector2(160, 20)
+[node name="CoinSprite" type="AnimatedSprite2D" parent="UI/Canvas Layer/CoinCounter/HBoxContainer"]
+position = Vector2(166, 20)
 sprite_frames = SubResource("SpriteFrames_0rl1p")
 animation = &"Coin_spin"
 frame_progress = 0.6608674
 
-[node name="CoinLabel" type="Label" parent="UI/Canvas Layer/CoinCounter/Container"]
+[node name="CoinLabel" type="Label" parent="UI/Canvas Layer/CoinCounter/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "X"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 visible_characters_behavior = 1
 
