@@ -3,13 +3,13 @@ extends Area2D
 # ===== ENEMY STATS =====
 @export var max_health: int = 100
 @export var damage_to_base: int = 10
-@export var coin_value: int = 15
-@export var run_speed: float = 30.0
+@export var coin_value: int = 6
+@export var run_speed: float = 35.0
 
 # ===== SCALING SETTINGS =====
-@export var base_health: int = 30
-@export var health_growth_rate: float = 1.10  # 10% per wave
-@export var speed_growth_rate: float = 1.03   # 3% per wave
+@export var base_health: int = 100
+@export var health_growth_rate: float = 1.15  # % per wave
+@export var speed_growth_rate: float = 1.01   # % per wave
 @export var base_wave_for_scaling: int = 5    # Start scaling at wave 5
 
 # ===== COIN DROPPING =====

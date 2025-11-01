@@ -8,8 +8,8 @@ extends Area2D
 
 # ===== SCALING SETTINGS =====
 @export var base_health: int = 30
-@export var health_growth_rate: float = 1.10  # 10% per wave
-@export var speed_growth_rate: float = 1.03   # 3% per wave
+@export var health_growth_rate: float = 1.08  # 8% per wave
+@export var speed_growth_rate: float = 1.02   # 2% per wave
 @export var base_wave_for_scaling: int = 5    # Start scaling at wave 5
 
 # ===== COIN DROPPING =====

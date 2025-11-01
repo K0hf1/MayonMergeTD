@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=80 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -26,8 +26,14 @@
 [ext_resource type="Script" uid="uid://d26e8611lm268" path="res://pause_btn.gd" id="15_cegan"]
 [ext_resource type="Texture2D" uid="uid://drmggkehxohfl" path="res://waveboard.png" id="15_getpj"]
 [ext_resource type="PackedScene" uid="uid://b8wcnc3ir6y2e" path="res://PauseMenu/pause_menu.tscn" id="16_82xsv"]
+[ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="20_a6jrf"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_a6jrf"]
+font_color = Color(0.99999994, 0.03827083, 0.03791548, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0xm2m"]
 texture = ExtResource("1_ig7tw")
@@ -1175,7 +1181,8 @@ script = ExtResource("2_ryguw")
 tower_randomizer = NodePath("TowerRandomizer")
 tower_slots_parent_path = NodePath("TowerSlots")
 buy_tower_button_path = NodePath("../../UI/BuyTowerButton")
-cost_growth_rate = 2.0
+cost_growth_rate = 1.067
+feedback_label_path = NodePath("FeedbackLayer/NotEnoughCoins")
 
 [node name="TowerRandomizer" type="Node" parent="GameManager/TowerManager"]
 script = ExtResource("2_dg77c")
@@ -1184,6 +1191,20 @@ script = ExtResource("2_dg77c")
 
 [node name="MergeHandler" type="Node" parent="GameManager/TowerManager"]
 script = ExtResource("5_lswn8")
+
+[node name="FeedbackLayer" type="Node2D" parent="GameManager/TowerManager"]
+
+[node name="NotEnoughCoins" type="Label" parent="GameManager/TowerManager/FeedbackLayer"]
+visible = false
+z_index = 1
+offset_left = 195.0
+offset_top = 743.0
+offset_right = 337.0
+offset_bottom = 766.0
+text = "Not Enough Coins!"
+label_settings = SubResource("LabelSettings_a6jrf")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="WaveManager" type="Node2D" parent="GameManager"]
 script = ExtResource("4_d13ii")
@@ -1333,6 +1354,7 @@ offset_left = 162.0
 offset_top = 1.0
 offset_right = 371.0
 offset_bottom = 98.0
+script = ExtResource("20_a6jrf")
 
 [node name="RecordLabel" type="Label" parent="UI/Canvas Layer/WaveRecord"]
 z_index = 3

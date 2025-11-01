@@ -4,9 +4,9 @@ extends Node2D
 @export var tier: int = 1
 
 # Projectile stats
-@export var damage: int = 6
-@export var projectile_speed: float = 400.0
-@export var attack_cooldown: float = 1.33  # Now used by AttackModule
+@export var damage: int = 5
+@export var projectile_speed: float = 400.0 # Unuseable for balancing
+@export var attack_cooldown: float = 1.0
 
 # List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []
