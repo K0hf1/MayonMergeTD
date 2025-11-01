@@ -3,9 +3,10 @@ extends Node2D
 # Tier of this defender
 @export var tier: int = 13
 
-# Projectile stats - now managed here!
-@export var damage: int = 30
-@export var projectile_speed: float = 400.0
+# Projectile stats
+@export var damage: int = 67
+@export var projectile_speed: float = 400.0 # Unuseable for balancing
+@export var attack_cooldown: float = 0.62
 
 # List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []
@@ -37,10 +38,10 @@ func _process(delta: float) -> void:
 			$AnimatedSprite2D.play("Idle")
 
 # --- Targeting Logic ---
-
 func _update_target_enemy() -> void:
 	for i in range(enemies_in_range.size() - 1, -1, -1):
-		if not is_instance_valid(enemies_in_range[i]):
+		var enemy = enemies_in_range[i]
+		if not is_instance_valid(enemy) or (enemy.has_method("is_dead") and enemy.is_dead()) or not enemy.is_in_group(ENEMY_GROUP_NAME):
 			enemies_in_range.remove_at(i)
 	
 	if enemies_in_range.is_empty():
@@ -49,7 +50,6 @@ func _update_target_enemy() -> void:
 
 	var closest_distance: float = INF
 	var potential_target: Node2D = null
-
 	for enemy in enemies_in_range:
 		var distance = global_position.distance_to(enemy.global_position)
 		if distance < closest_distance:
@@ -59,13 +59,14 @@ func _update_target_enemy() -> void:
 	target_enemy = potential_target
 
 func _track_enemy() -> void:
-	var direction_vector = target_enemy.global_position - global_position
+	if not target_enemy or not is_instance_valid(target_enemy):
+		return
 	
+	var direction_vector = target_enemy.global_position - global_position
 	var abs_x = abs(direction_vector.x)
 	var abs_y = abs(direction_vector.y)
 
 	var animation_name: String
-	
 	if abs_x > abs_y:
 		animation_name = "Attack_Right" if direction_vector.x > 0 else "Attack_Left"
 	else:
@@ -75,7 +76,6 @@ func _track_enemy() -> void:
 		$AnimatedSprite2D.play(animation_name)
 
 # --- Area2D Signal Handlers ---
-
 func _on_detection_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group(ENEMY_GROUP_NAME) and not enemies_in_range.has(area):
 		enemies_in_range.append(area)
@@ -85,12 +85,3 @@ func _on_detection_area_area_exited(area: Area2D) -> void:
 		enemies_in_range.erase(area)
 		if area == target_enemy:
 			target_enemy = null
-
-# NEW: Called by AttackModule to spawn projectiles with proper stats
-func spawn_projectile(projectile_scene: PackedScene, direction: Vector2) -> Area2D:
-	var projectile = projectile_scene.instantiate() as Area2D
-	add_child(projectile)
-	projectile.global_position = global_position
-	projectile.set_direction(direction)
-	projectile.set_stats(damage, projectile_speed)  # Pass stats here!
-	return projectile

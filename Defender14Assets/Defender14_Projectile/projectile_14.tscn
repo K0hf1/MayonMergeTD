@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://hyio2xsst5s4"]
 
 [ext_resource type="Script" uid="uid://dii3pmr3qjg7e" path="res://Defender1Assets/Defender1_Projectile/projectile_script.gd" id="1_2udny"]
-[ext_resource type="Texture2D" uid="uid://nu3luon0pj7j" path="res://Defender14Assets/Defender14_Projectile/Tier_14_projectile.png" id="2_2udny"]
+[ext_resource type="Texture2D" uid="uid://cxfy2cnmjsbm2" path="res://Defender14Assets/Defender14_Projectile/Tier_14_projectile.png" id="2_2udny"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2rnjw"]
 atlas = ExtResource("2_2udny")
@@ -57,6 +57,7 @@ animations = [{
 radius = 22.203604
 
 [node name="Projectile14" type="Area2D"]
+z_index = 5
 script = ExtResource("1_2udny")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -2,20 +2,20 @@ extends Node
 
 # --- Base weights for each tower tier ---
 const BASE_WEIGHTS = {
-	1: 25.0,
-	2: 15.0,
-	3: 12.0,
-	4: 10.0,
-	5: 8.0,
-	6: 7.0,
-	7: 6.0,
-	8: 5.0,
-	9: 4.0,
-	10: 3.0,
-	11: 2.5,
-	12: 2.5,
-	13: 2.5,
-	14: 2.5,
+	1: 50.0,    # ~50% chance
+	2: 25.0,    # ~25% chance
+	3: 12.0,    # ~12% chance
+	4: 6.0,     # ~6% chance
+	5: 3.0,     # ~3% chance
+	6: 1.8,     # ~1.8% chance
+	7: 1.2,     # ~1.2% chance
+	8: 0.8,     # ~0.8% chance
+	9: 0.5,     # ~0.5% chance
+	10: 0.35,   # ~0.35% chance
+	11: 0.2,    # ~0.2% chance
+	12: 0.15,   # ~0.15% chance
+	13: 0.1,    # ~0.1% chance
+	14: 0.05    # ~0.05% chance → roughly 1% after normalization
 }
 
 # --- Calculate the active tier cap based on lifetime highest tier ---

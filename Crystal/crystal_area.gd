@@ -73,6 +73,8 @@ func game_over():
 	print("⏸️  Pausing game...")
 	get_tree().paused = true
 	
-	# ✅ Change to GameOver scene
 	print("🔄 Changing to GameOver scene...")
+	call_deferred("_change_to_game_over")
+	
+func _change_to_game_over():
 	get_tree().change_scene_to_file("res://GameOver/GameOver.tscn")
