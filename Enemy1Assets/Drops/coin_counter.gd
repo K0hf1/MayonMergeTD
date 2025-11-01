@@ -1,7 +1,10 @@
 extends Control
 
 @onready var coin_label = $Container/CoinLabel
-var game_manager: Node = null
+@onready var coin_sprite = $Container/CoinSprite
+
+var coin_manager: Node = null
+
 
 func _ready() -> void:
 	print("=== COIN COUNTER SCRIPT STARTED ===")
@@ -10,22 +13,15 @@ func _ready() -> void:
 	
 	# Verify the label exists
 	if coin_label:
-		print("✓ CoinLabel found")
 		coin_label.text = "0"
-		
-		# Force visibility settings
 		coin_label.visible = true
 		coin_label.modulate = Color.WHITE
 		coin_label.add_theme_color_override("font_color", Color.WHITE)
-		
-		print("Label settings:")
-		print("  - Visible: ", coin_label.visible)
-		print("  - Font Color: ", coin_label.get_theme_color("font_color"))
+		print("✓ CoinLabel configured")
 	else:
 		print("✗ ERROR: CoinLabel NOT found!")
 
-	# 🎬 NEW: Play coin spin animation
-	var coin_sprite = $Container/CoinSprite
+	# Play coin spin animation
 	if coin_sprite and coin_sprite is AnimatedSprite2D:
 		if "Coin_spin" in coin_sprite.sprite_frames.get_animation_names():
 			coin_sprite.play("Coin_spin")
@@ -35,68 +31,37 @@ func _ready() -> void:
 	else:
 		print("❌ CoinSprite not found or not AnimatedSprite2D!")
 
-	# Find and connect to GameManager
-	_find_game_manager()
+	# Find CoinManager and connect signal
+	_find_coin_manager()
 
 
-func _find_game_manager() -> void:
-	"""Find the GameManager from various possible locations"""
-	
-	# Try Path 1: Direct path to GameManager at root
-	game_manager = get_node_or_null("/root/GameManager")
-	
-	# Try Path 2: GameManager in Main
-	if not game_manager:
-		game_manager = get_node_or_null("/root/Main/GameManager")
-	
-	# Try Path 3: Search entire tree
-	if not game_manager:
-		game_manager = get_tree().root.find_child("GameManager", true, false)
-	
-	if game_manager:
-		print("✓ GameManager found at: ", game_manager.get_path())
-		
-		# Connect to coin_collected signal
-		if game_manager.has_signal("coin_collected"):
-			game_manager.coin_collected.connect(_on_coin_collected)
-			print("✓ Connected to coin_collected signal")
-		else:
-			print("❌ GameManager does NOT have coin_collected signal!")
-		
-		# Get initial coin count
-		if game_manager.has_method("get_coins_collected"):
-			var initial_coins = game_manager.get_coins_collected()
-			update_coin_display(initial_coins)
-			print("✓ Initial coins loaded: ", initial_coins)
-		
-		# Display current wave info
-		if "current_wave" in game_manager:
-			print("📊 Current wave: ", game_manager.current_wave)
+func _find_coin_manager() -> void:
+	# Try direct path
+	coin_manager = get_node_or_null("/root/Main/CoinManager")
+	if not coin_manager:
+		coin_manager = get_tree().root.find_child("CoinManager", true, false)
+
+	if coin_manager:
+		print("✓ CoinManager found at:", coin_manager.get_path())
+		if coin_manager.has_signal("coin_changed"):
+			coin_manager.coin_changed.connect(_on_coin_changed)
+			print("✓ Connected to coin_changed signal")
+
+		# Initialize display
+		if "coins" in coin_manager:
+			update_coin_display(coin_manager.coins)
 	else:
-		print("❌ ERROR: GameManager NOT found!")
-		print("   Searched paths:")
-		print("   - /root/GameManager")
-		print("   - /root/Main/GameManager")
-		print("   - Tree search")
+		print("❌ CoinManager NOT found!")
+
+
+func _on_coin_changed(new_amount: int) -> void:
+	update_coin_display(new_amount)
+	print("💰 Coin count updated:", new_amount)
+
 
 func update_coin_display(coin_count: int) -> void:
-	"""Update the coin label with new count"""
 	if coin_label:
-		var old_text = coin_label.text
 		coin_label.text = "                 %d" % coin_count
-		print("💰 Label updated: ", old_text, " → ", coin_label.text)
+		print("💰 CoinLabel updated to:", coin_label.text)
 	else:
 		print("✗ ERROR: coin_label is null!")
-
-func _on_coin_collected(coin_amount: int) -> void:
-	"""Called when the coin_collected signal is emitted"""
-	if game_manager and game_manager.has_method("get_coins_collected"):
-		var total_coins = game_manager.get_coins_collected()
-		update_coin_display(total_coins)
-
-		if coin_amount > 0:
-			print("📈 Gained %d coins. Total: %d" % [coin_amount, total_coins])
-		else:
-			print("📉 Spent %d coins. Total: %d" % [-coin_amount, total_coins])
-	else:
-		print("❌ Cannot get coins from GameManager!")
