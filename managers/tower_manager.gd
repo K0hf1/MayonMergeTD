@@ -72,22 +72,6 @@ func _update_buy_button_text():
 		buy_tower_button.text = "Buy Tower\n(%d Gold)" % current_tower_cost
 
 
-# --- BUTTON INPUT ---
-func _on_buy_tower_button_pressed() -> void:
-	buy_tower()
-
-
-# --- BUY TOWER ---
-func buy_tower():
-	if not coin_manager or not coin_manager.try_deduct(current_tower_cost):
-		print("❌ Not enough gold!")
-		_show_not_enough_coins()  # show feedback label
-		return false
-	_spawn_tower()
-	return true
-
-
-
 func _show_not_enough_coins():
 	if not feedback_label:
 		return
@@ -105,9 +89,19 @@ func _show_not_enough_coins():
 	feedback_tween.tween_property(feedback_label, "modulate:a", 0.0, 1.0)  # fade out over 1 second
 	Callable(feedback_label, "hide")
 
+# --- BUTTON INPUT ---
+func _on_buy_tower_button_pressed() -> void:
+	buy_tower()
 
 
-
+# --- BUY TOWER ---
+func buy_tower():
+	if not coin_manager or not coin_manager.try_deduct(current_tower_cost):
+		print("❌ Not enough gold!")
+		_show_not_enough_coins()  # show feedback label
+		return false
+	_spawn_tower()
+	return true
 
 
 # --- SPAWN TOWER ---
@@ -128,6 +122,7 @@ func _spawn_tower():
 	get_parent().add_child(tower)
 	tower.global_position = chosen_slot.global_position
 	print("🎯 Spawned tower tier", tier)
+	
 
 	# Mark slot as occupied
 	chosen_slot.is_occupied = true

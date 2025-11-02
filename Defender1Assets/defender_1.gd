@@ -5,32 +5,32 @@ extends Node2D
 
 # Projectile stats
 @export var damage: int = 5
-@export var projectile_speed: float = 400.0 # Unuseable for balancing
+@export var projectile_speed: float = 400.0
 @export var attack_cooldown: float = 1.0
 
 # List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []
-
-# Current nearest enemy node
 var target_enemy: Node2D = null
 
 const ENEMY_GROUP_NAME: String = "Enemy"
 
 func _ready() -> void:
 	$AnimatedSprite2D.play("Idle")
-	
-	if has_node("DetectionArea"):
-		$DetectionArea.area_entered.connect(_on_detection_area_area_entered)
-		$DetectionArea.area_exited.connect(_on_detection_area_area_exited)
+
+	# ✅ Try to find the DetectionArea under AttackModule
+	var detection_area = get_node_or_null("AttackModule/DetectionArea")
+	if detection_area:
+		detection_area.area_entered.connect(_on_detection_area_area_entered)
+		detection_area.area_exited.connect(_on_detection_area_area_exited)
 	else:
-		push_error("Defender missing 'DetectionArea' child node.")
+		push_error("⚠️ Defender: Missing 'AttackModule/DetectionArea' path!")
 
 func get_target() -> Node2D:
 	return target_enemy
 
 func _process(delta: float) -> void:
 	_update_target_enemy()
-	
+
 	if target_enemy and is_instance_valid(target_enemy):
 		_track_enemy()
 	else:
@@ -48,7 +48,7 @@ func _update_target_enemy() -> void:
 		target_enemy = null
 		return
 
-	var closest_distance: float = INF
+	var closest_distance := INF
 	var potential_target: Node2D = null
 	for enemy in enemies_in_range:
 		var distance = global_position.distance_to(enemy.global_position)
@@ -71,7 +71,7 @@ func _track_enemy() -> void:
 		animation_name = "Attack_Right" if direction_vector.x > 0 else "Attack_Left"
 	else:
 		animation_name = "Attack_Down" if direction_vector.y > 0 else "Attack_Up"
-			
+
 	if $AnimatedSprite2D.animation != animation_name:
 		$AnimatedSprite2D.play(animation_name)
 

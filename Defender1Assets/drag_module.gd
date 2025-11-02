@@ -12,7 +12,6 @@ var tower_root: Node2D
 # Automatically find the TowerSlots node under TowerManager
 var slots_parent: Node = null
 
-
 # Current slot reference
 var current_slot: MarkerSlot = null
 
@@ -86,9 +85,17 @@ func _on_drag_button_up() -> void:
 
 		print("Collision detected - My tier: %s, Other tier: %s" % [my_tier, other_tier])
 
+		# ✅ Handle merging only if both are same tier AND below max tier
+		var merge_handler = get_tree().root.find_child("MergeHandler", true, false)
+		var max_tier = merge_handler.max_tier if merge_handler else 14
+
 		if my_tier == other_tier:
-			print("✅ Merging defenders of tier %s" % my_tier)
-			_merge_defenders(collided_defender)
+			if my_tier < max_tier:
+				print("✅ Merging defenders of tier %s" % my_tier)
+				_merge_defenders(collided_defender)
+			else:
+				print("⚠️ Both defenders are max tier (%s). No merge, performing swap instead." % my_tier)
+				_swap_with_defender(collided_defender)
 			return
 		else:
 			print("Swapping defenders - Tier %s <-> Tier %s" % [my_tier, other_tier])
@@ -97,6 +104,7 @@ func _on_drag_button_up() -> void:
 
 	# No collision → snap to nearest slot
 	_snap_to_nearest_slot()
+
 
 # --- Helper Methods ---
 
