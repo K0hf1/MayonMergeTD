@@ -12,7 +12,6 @@ var tower_root: Node2D
 # Automatically find the TowerSlots node under TowerManager
 var slots_parent: Node = null
 
-
 # Current slot reference
 var current_slot: MarkerSlot = null
 

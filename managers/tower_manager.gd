@@ -107,9 +107,6 @@ func _show_not_enough_coins():
 
 
 
-
-
-
 # --- SPAWN TOWER ---
 func _spawn_tower():
 	var empty_slots = tower_slots.filter(func(s): return not s.is_occupied)
@@ -128,6 +125,7 @@ func _spawn_tower():
 	get_parent().add_child(tower)
 	tower.global_position = chosen_slot.global_position
 	print("🎯 Spawned tower tier", tier)
+	
 
 	# Mark slot as occupied
 	chosen_slot.is_occupied = true

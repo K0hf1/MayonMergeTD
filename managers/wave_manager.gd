@@ -2,12 +2,14 @@ extends Node
 class_name WaveManager
 
 @export var enemy_spawner_path: NodePath
-@export var wave_start_delay := 3.0
+@export var wave_start_delay := 1.5
 
 var current_wave := 0
 var enemy_spawner: Node
 var active_enemies := 0  # Tracks alive enemies
 var is_wave_active := false
+var auto_wave_enabled := false
+var auto_wave_delay := 3.0
 
 signal wave_started(wave_number)
 signal wave_completed(wave_number)
@@ -53,6 +55,15 @@ func enemy_died(enemy: Node):
 		print("✅ Wave %d complete!" % current_wave)
 		is_wave_active = false   # ✅ Reset active wave flag
 		emit_signal("wave_completed", current_wave)
+		
+		if auto_wave_enabled:
+			await get_tree().create_timer(auto_wave_delay).timeout
+			start_next_wave()
+
+func set_auto_wave(enabled: bool) -> void:
+	auto_wave_enabled = enabled
+	print("🔁 Auto Wave:", "Enabled" if enabled else "Disabled")
+
 
 
 # ---------------------------

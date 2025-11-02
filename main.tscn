@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=81 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://drmggkehxohfl" path="res://waveboard.png" id="15_getpj"]
 [ext_resource type="PackedScene" uid="uid://b8wcnc3ir6y2e" path="res://PauseMenu/pause_menu.tscn" id="16_82xsv"]
 [ext_resource type="Script" uid="uid://hygpu311n1xt" path="res://wave_record.gd" id="20_a6jrf"]
+[ext_resource type="Script" uid="uid://coqcq5vb1s0ol" path="res://auto_wave_toggle.gd" id="22_xuqvo"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
 
@@ -1371,6 +1372,16 @@ vertical_alignment = 1
 position = Vector2(104, 38)
 scale = Vector2(0.7, 0.685)
 texture = ExtResource("15_getpj")
+
+[node name="AutoWaveToggle" type="Button" parent="UI"]
+offset_left = 353.0
+offset_top = 769.0
+offset_right = 445.0
+offset_bottom = 823.0
+toggle_mode = true
+text = "Auto Wave
+ON"
+script = ExtResource("22_xuqvo")
 
 [node name="ButtonSFXManager" type="Node2D" parent="."]
 script = ExtResource("14_w48qg")

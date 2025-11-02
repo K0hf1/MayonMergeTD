@@ -10,9 +10,9 @@ extends Node2D
 
 # List of enemies currently in range
 var enemies_in_range: Array[Node2D] = []
-
 # Current nearest enemy node
 var target_enemy: Node2D = null
+
 
 const ENEMY_GROUP_NAME: String = "Enemy"
 

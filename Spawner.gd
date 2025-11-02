@@ -37,12 +37,13 @@ func prepare_wave(wave_number: int) -> Array:
 	return []
 
 # ---------------------------
-# Spawn Wave
+# Spawn Wave (with random spawn order)
 # ---------------------------
 func spawn_wave(enemy_data: Array, wave_number: int) -> void:
 	current_wave = wave_number
 	spawn_queue.clear()
 
+	# Fill queue based on total counts
 	for enemy_set in enemy_data:
 		for i in range(enemy_set["count"]):
 			spawn_queue.append(enemy_set["type"])
@@ -51,11 +52,15 @@ func spawn_wave(enemy_data: Array, wave_number: int) -> void:
 		push_warning("⚠️ No enemies to spawn for Wave %d" % wave_number)
 		return
 
-	print("🎬 Spawning Wave %d | Total Enemies: %d" % [wave_number, spawn_queue.size()])
+	# 🌀 Shuffle the spawn order randomly
+	spawn_queue.shuffle()
+
+	print("🎬 Spawning Wave %d | Total Enemies: %d (Randomized Order)" % [wave_number, spawn_queue.size()])
+	is_spawning = true
 	_spawn_next_enemy()
 
 # ---------------------------
-# Spawn logic using await
+# Spawn logic using await (unchanged delay)
 # ---------------------------
 func _spawn_next_enemy() -> void:
 	if spawn_queue.is_empty():
@@ -63,10 +68,11 @@ func _spawn_next_enemy() -> void:
 		print("✅ All enemies spawned for Wave %d" % current_wave)
 		return
 
+	# 🧩 Randomized order already handled by shuffle
 	var enemy_type = spawn_queue.pop_front()
 	_spawn_enemy(enemy_type)
 
-	var delay = spawn_interval_wave_1_4 if current_wave <= 4 else spawn_interval_wave_5_plus
+	var delay = 0.5  # fixed spawn rate
 	await get_tree().create_timer(delay).timeout
 	_spawn_next_enemy()
 
