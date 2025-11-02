@@ -162,13 +162,13 @@ offset_top = -26.0
 offset_right = 17.0
 offset_bottom = 10.0
 
-[node name="DetectionArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
-shape = SubResource("CircleShape2D_dx17m")
-
 [node name="AttackModule" type="Node2D" parent="."]
 script = ExtResource("5_lfyry")
 projectile_scene = ExtResource("2_xidqv")
 
 [node name="AttackTimer" type="Timer" parent="AttackModule"]
+
+[node name="DetectionArea" type="Area2D" parent="AttackModule"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackModule/DetectionArea"]
+shape = SubResource("CircleShape2D_dx17m")

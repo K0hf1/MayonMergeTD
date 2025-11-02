@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=82 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -35,6 +35,38 @@
 font_color = Color(0.99999994, 0.03827083, 0.03791548, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_xuqvo"]
+script/source = "extends Node
+
+var selected_tower: Node2D = null
+var towers: Array = []
+
+func register_tower(tower: Node2D):
+	towers.append(tower)
+	var area = tower.get_node_or_null(\"DetectionArea\")
+	if area:
+		area.connect(\"input_event\", Callable(self, \"_on_tower_clicked\").bind(tower))
+
+func _on_tower_clicked(viewport, event, shape_idx, tower):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		select_tower(tower)
+
+func select_tower(tower: Node2D):
+	if selected_tower:
+		_deselect_tower(selected_tower)
+	selected_tower = tower
+	_highlight_tower(tower)
+	print(\"🔍 Selected tower:\", tower.name)
+
+func _highlight_tower(tower: Node2D):
+	# simple example — change modulate color
+	tower.modulate = Color(1, 1, 0.6)
+
+func _deselect_tower(tower: Node2D):
+	tower.modulate = Color(1, 1, 1)
+	selected_tower = null
+"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0xm2m"]
 texture = ExtResource("1_ig7tw")
@@ -1182,7 +1214,6 @@ script = ExtResource("2_ryguw")
 tower_randomizer = NodePath("TowerRandomizer")
 tower_slots_parent_path = NodePath("TowerSlots")
 buy_tower_button_path = NodePath("../../UI/BuyTowerButton")
-cost_growth_rate = 1.067
 feedback_label_path = NodePath("FeedbackLayer/NotEnoughCoins")
 
 [node name="TowerRandomizer" type="Node" parent="GameManager/TowerManager"]
@@ -1210,12 +1241,16 @@ vertical_alignment = 1
 [node name="WaveManager" type="Node2D" parent="GameManager"]
 script = ExtResource("4_d13ii")
 enemy_spawner_path = NodePath("../../SpawnerPath")
+wave_start_delay = 1.0
 
 [node name="CoinManager" type="Node" parent="GameManager"]
 script = ExtResource("5_1u8w0")
 
 [node name="AudioLinker" type="Node" parent="GameManager"]
 script = ExtResource("6_0odxb")
+
+[node name="DefenderSelectionManager" type="Node" parent="GameManager"]
+script = SubResource("GDScript_xuqvo")
 
 [node name="MainMap" type="TileMap" parent="."]
 position = Vector2(0, 1)
