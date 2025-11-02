@@ -78,7 +78,6 @@ func _spawn_merged(def1: Node2D, def2: Node2D, merged_scene: PackedScene, new_ti
 	var merged_defender: Node2D = merged_scene.instantiate()
 	merged_defender.global_position = spawn_pos
 	spawn_parent.add_child(merged_defender)
-	merged_defender.add_to_group("Defender")
 	merged_defender.add_to_group("defender")
 
 	# --- assign tier ---
@@ -119,7 +118,6 @@ func _spawn_merged(def1: Node2D, def2: Node2D, merged_scene: PackedScene, new_ti
 	# --- cleanup originals ---
 	for def in [def1, def2]:
 		if is_instance_valid(def):
-			def.remove_from_group("Defender")
 			def.remove_from_group("defender")
 			def.queue_free()
 
