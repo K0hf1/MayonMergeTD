@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://4e3g0qlduxx7"]
+[gd_scene load_steps=24 format=3 uid="uid://4e3g0qlduxx7"]
 
 [ext_resource type="Script" uid="uid://dq83eb2nmp6cq" path="res://Defender1Assets/defender_1.gd" id="1_7d1u4"]
 [ext_resource type="Texture2D" uid="uid://6140hiw3itq4" path="res://Defender1Assets/Evil-Dwende.png" id="1_512i0"]
@@ -142,6 +142,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_dx17m"]
 radius = 87.20665
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_lfyry"]
+radius = 18.110771
+
 [node name="Node2D" type="Node2D" groups=["defender"]]
 z_index = 5
 script = ExtResource("1_7d1u4")
@@ -161,6 +164,7 @@ offset_left = -16.0
 offset_top = -26.0
 offset_right = 17.0
 offset_bottom = 10.0
+mouse_filter = 1
 
 [node name="AttackModule" type="Node2D" parent="."]
 script = ExtResource("5_lfyry")
@@ -172,3 +176,19 @@ projectile_scene = ExtResource("2_xidqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackModule/DetectionArea"]
 shape = SubResource("CircleShape2D_dx17m")
+
+[node name="InfoLabel" type="Label" parent="."]
+z_index = 5
+offset_left = -109.0
+offset_top = -54.0
+offset_right = 110.0
+offset_bottom = -31.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HoverArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoverArea"]
+z_index = 1
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_lfyry")
