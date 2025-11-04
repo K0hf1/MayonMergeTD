@@ -1,6 +1,6 @@
 extends Node
 
-# --- Base weights for each tower tier ---
+# --- Base weights for each defender tier ---
 const BASE_WEIGHTS = {
 	1: 50.0,    # ~50% chance
 	2: 25.0,    # ~25% chance
@@ -23,10 +23,10 @@ func get_tier_cap_from_progress(highest_tier: int) -> int:
 	return clamp(highest_tier, 1, 14)
 
 # --- Return a randomly selected tier based on lifetime progress ---
-func get_random_tower_tier() -> int:
+func get_random_defender_tier() -> int:
 	var gm = get_parent()
 	if not gm:
-		push_warning("⚠️ TowerRandomizer: Missing GameManager parent — defaulting to Tier 1")
+		push_warning("⚠️ DefenderRandomizer: Missing GameManager parent — defaulting to Tier 1")
 		return 1
 
 	var player_record = PlayerRecord
@@ -56,7 +56,7 @@ func get_random_tower_tier() -> int:
 	for tier in active_tiers.keys():
 		cumulative += active_tiers[tier]
 		if roll <= cumulative:
-			print("🎲 Rolled Tower Tier:", tier, "(from cap:", tier_cap, ")")
+			print("🎲 Rolled Defender Tier:", tier, "(from cap:", tier_cap, ")")
 			return tier
 
 	return tier_cap  # fallback
@@ -81,7 +81,7 @@ func debug_print_probabilities(tier_cap: int = -1) -> void:
 			active_tiers[tier] = BASE_WEIGHTS[tier]
 			total_weight += BASE_WEIGHTS[tier]
 
-	print("📊 Lifetime Tower Distribution (Highest Tier: %d)" % highest_tier)
+	print("📊 Lifetime Defender Distribution (Highest Tier: %d)" % highest_tier)
 	var sorted_tiers = active_tiers.keys()
 	sorted_tiers.sort()
 
