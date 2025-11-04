@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bac55ocvaec4v"]
+[gd_scene load_steps=24 format=3 uid="uid://bac55ocvaec4v"]
 
 [ext_resource type="Script" uid="uid://cnubvn0eawovu" path="res://Defender10Assets/defender_10.gd" id="1_v5u3o"]
 [ext_resource type="Texture2D" uid="uid://c6pu6urjirbu" path="res://Defender10Assets/Kapre.png" id="2_tijbw"]
@@ -142,6 +142,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_oovep"]
 radius = 87.20665
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_v5u3o"]
+radius = 38.013157
+
 [node name="Node2D" type="Node2D" groups=["defender"]]
 z_index = 2
 script = ExtResource("1_v5u3o")
@@ -161,15 +164,32 @@ offset_left = -18.0
 offset_top = -35.0
 offset_right = 18.0
 offset_bottom = 10.0
+mouse_filter = 1
 metadata/_edit_use_anchors_ = true
-
-[node name="DetectionArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
-shape = SubResource("CircleShape2D_oovep")
 
 [node name="AttackModule" type="Node2D" parent="."]
 script = ExtResource("3_tijbw")
 projectile_scene = ExtResource("5_v5u3o")
 
 [node name="AttackTimer" type="Timer" parent="AttackModule"]
+
+[node name="DetectionArea" type="Area2D" parent="AttackModule"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackModule/DetectionArea"]
+shape = SubResource("CircleShape2D_oovep")
+
+[node name="InfoLabel" type="Label" parent="."]
+z_index = 5
+offset_left = -109.0
+offset_top = -81.0
+offset_right = 110.0
+offset_bottom = -58.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HoverArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoverArea"]
+z_index = 1
+position = Vector2(0, -18)
+shape = SubResource("CircleShape2D_v5u3o")
