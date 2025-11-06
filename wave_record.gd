@@ -18,7 +18,7 @@ func _ready():
 	else:
 		push_warning("WaveManager not found!")
 
-	# Show the best wave on game start
+	# Show the best wave from save at game start
 	_update_best_wave_display()
 
 func _update_best_wave_display():
@@ -29,13 +29,8 @@ func _update_best_wave_display():
 		wave_label.text = "Best Wave: 0"
 
 func _on_wave_started(wave_number: int) -> void:
-	# Show current wave
 	wave_label.text = "Wave: %d" % wave_number
 
 func _on_wave_completed(wave_number: int) -> void:
-	if player_record and player_record.has_method("update_highest_wave"):
-		player_record.update_highest_wave(wave_number)
-		var new_best = player_record.get_highest_wave()
-		wave_label.text = "Best Wave: %d" % new_best
-	else:
-		wave_label.text = "Best Wave: %d" % wave_number
+	# Simply re-fetch from PlayerRecord each time
+	_update_best_wave_display()
