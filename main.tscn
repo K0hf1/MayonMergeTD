@@ -1200,7 +1200,6 @@ vertical_alignment = 1
 [node name="WaveManager" type="Node2D" parent="GameManager"]
 script = ExtResource("4_d13ii")
 enemy_spawner_path = NodePath("../../SpawnerPath")
-wave_start_delay = 1.0
 
 [node name="CoinManager" type="Node" parent="GameManager"]
 script = ExtResource("5_1u8w0")
