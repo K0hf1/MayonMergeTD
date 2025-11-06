@@ -2,7 +2,7 @@ extends Marker2D
 class_name MarkerSlot
 
 var is_occupied: bool = false
-var current_tower: Node2D = null
+var current_defender: Node2D = null
 @export var snap_radius: float = 50.0
 
 # Visual debug indicator (optional)
@@ -32,8 +32,8 @@ func _create_debug_label() -> void:
 
 func _update_debug_label() -> void:
 	if debug_label:
-		if is_occupied and current_tower:
-			var tier = current_tower.tier if "tier" in current_tower else "?"
+		if is_occupied and current_defender:
+			var tier = current_defender.tier if "tier" in current_defender else "?"
 			debug_label.text = "T%s" % tier
 			debug_label.add_theme_color_override("font_color", Color.RED)
 		else:

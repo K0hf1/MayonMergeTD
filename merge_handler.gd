@@ -3,7 +3,7 @@ extends Node
 ## Compatible with Defender.tscn scenes that are instantiated dynamically.
 
 @export var max_tier: int = 14
-var tower_manager: Node = null   # optional reference back to TowerManager
+var defender_manager: Node = null   # optional reference back to DefenderManager
 
 # --------------------------------------------------------------------------
 # PUBLIC API
@@ -69,10 +69,10 @@ func _spawn_merged(def1: Node2D, def2: Node2D, merged_scene: PackedScene, new_ti
 
 	if slot1:
 		slot1.is_occupied = false
-		slot1.current_tower = null
+		slot1.current_defender = null
 	if slot2:
 		slot2.is_occupied = false
-		slot2.current_tower = null
+		slot2.current_defender = null
 
 	# --- instantiate merged defender ---
 	var merged_defender: Node2D = merged_scene.instantiate()
@@ -91,7 +91,7 @@ func _spawn_merged(def1: Node2D, def2: Node2D, merged_scene: PackedScene, new_ti
 	if assigned_slot:
 		merged_defender.global_position = assigned_slot.global_position
 		assigned_slot.is_occupied = true
-		assigned_slot.current_tower = merged_defender
+		assigned_slot.current_defender = merged_defender
 		merged_defender.set_meta("current_slot", assigned_slot)
 		print("✅ Merged defender snapped to freed slot at", assigned_slot.global_position)
 	else:
@@ -100,8 +100,8 @@ func _spawn_merged(def1: Node2D, def2: Node2D, merged_scene: PackedScene, new_ti
 	# --- configure DragModule ---
 	var drag_module := merged_defender.get_node_or_null("DragModule")
 	if drag_module:
-		if tower_manager and tower_manager.has_node("TowerSlots"):
-			drag_module.slots_parent = tower_manager.get_node("TowerSlots")
+		if defender_manager and defender_manager.has_node("DefenderSlots"):
+			drag_module.slots_parent = defender_manager.get_node("DefenderSlots")
 		# ensure on_spawn runs after node fully added to scene
 		if drag_module.has_method("on_spawn"):
 			drag_module.call_deferred("on_spawn")
