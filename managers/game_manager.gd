@@ -12,7 +12,7 @@ signal coin_changed(new_amount)
 func _ready():
 	print("✅ GameManager initialized")
 
-	PlayerRecord.load()
+	PlayerRecord.load_record()
 	print("Best Wave:", PlayerRecord.highest_wave)
 
 	# Link signals
