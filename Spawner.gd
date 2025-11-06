@@ -17,6 +17,7 @@ var enemy_scenes: Dictionary = {
 	"Archer": preload("res://Enemy2Assets/EnemyArcher.tscn"),
 	"Lancer": preload("res://Enemy3Assets/EnemyLancer.tscn"),
 	"Monk": preload("res://Enemy4Assets/EnemyMonk.tscn"),
+	"Boss1": preload("res://EnemyBoss1Assets/WaveBoss1.tscn"),
 }
 
 func _ready() -> void:

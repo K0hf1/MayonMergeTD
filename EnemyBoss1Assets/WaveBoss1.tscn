@@ -1,0 +1,90 @@
+[gd_scene load_steps=14 format=3 uid="uid://7th40sa8v26k"]
+
+[ext_resource type="Script" uid="uid://d0lhrp8w05h7q" path="res://EnemyBoss1Assets/wave_boss_1.gd" id="1_1i6lu"]
+[ext_resource type="Texture2D" uid="uid://w8ox3g6htx5n" path="res://EnemyBoss1Assets/Walk.png" id="1_mq66i"]
+[ext_resource type="PackedScene" uid="uid://ccig8euhl4cbp" path="res://Enemy1Assets/Drops/Coins.tscn" id="2_6yd53"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1i6lu"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(0, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrwa7"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(128, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6yd53"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(256, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hc5w8"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(384, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6y2l8"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(512, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0sym"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(640, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0w0v"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(768, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4m7l"]
+atlas = ExtResource("1_mq66i")
+region = Rect2(896, 0, 64, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2nxwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1i6lu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrwa7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6yd53")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hc5w8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6y2l8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0sym")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0w0v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4m7l")
+}],
+"loop": true,
+"name": &"EnemyRun",
+"speed": 7.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt7e2"]
+radius = 21.0
+height = 72.0
+
+[node name="WaveBoss1" type="Area2D" groups=["Enemy"]]
+z_index = 1
+script = ExtResource("1_1i6lu")
+coin_scene = ExtResource("2_6yd53")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_2nxwx")
+animation = &"EnemyRun"
+frame_progress = 0.59357905
+offset = Vector2(0, -60.115)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(0, -29)
+shape = SubResource("CapsuleShape2D_tt7e2")

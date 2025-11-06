@@ -2,14 +2,13 @@ extends Node
 class_name WaveManager
 
 @export var enemy_spawner_path: NodePath
-@export var wave_start_delay := 1.5
 
 var current_wave := 0
 var enemy_spawner: Node
 var active_enemies := 0  # Tracks alive enemies
 var is_wave_active := false
 var auto_wave_enabled := false
-var auto_wave_delay := 3.0
+var auto_wave_delay := 2.0
 
 signal wave_started(wave_number)
 signal wave_completed(wave_number)
@@ -78,8 +77,14 @@ func _calculate_wave_enemy_count(wave_number: int) -> int:
 		return 10 + 3 + (wave_number - 6) * 3
 
 func _generate_wave_enemies(wave_number: int) -> Array:
-	var total_enemies = _calculate_wave_enemy_count(wave_number)
 	var enemy_composition = []
+
+	# 🎯 Every 10th wave is a boss wave
+	if wave_number % 10 == 0:
+		enemy_composition.append({"type": "Boss1", "count": 1})
+		return enemy_composition
+
+	var total_enemies = _calculate_wave_enemy_count(wave_number)
 
 	if wave_number == 1:
 		enemy_composition.append({"type": "Warrior", "count": total_enemies})
