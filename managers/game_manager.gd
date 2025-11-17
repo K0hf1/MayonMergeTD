@@ -3,7 +3,7 @@ extends Node2D
 @onready var defender_manager: Node = $DefenderManager
 @onready var wave_manager: Node = $WaveManager
 @onready var coin_manager: Node = $CoinManager
-@onready var audio_linker: Node = $AudioLinker
+@onready var music_manager: Node = $"../MusicManager"
 
 signal wave_started(wave_number)
 signal wave_ended(wave_number)
@@ -24,15 +24,17 @@ func _ready():
 func _on_wave_started(wave_number):
 	print("▶️ Wave started:", wave_number)
 	wave_started.emit(wave_number)
+	music_manager.play_gameplay_music()
 
 func _on_wave_completed(wave_number):
 	print("✅ Wave ended:", wave_number)
 	PlayerRecord.update_wave_record(wave_number)
 	wave_ended.emit(wave_number)
+	music_manager.play_wave_complete_music()
 
-	# ✅ Update DefenderManager with new wave (so defender cost refreshes)
 	if defender_manager and defender_manager.has_method("set_current_wave"):
 		defender_manager.set_current_wave(wave_number)
+
 
 
 func _on_coin_changed(new_amount):
