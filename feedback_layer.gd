@@ -4,6 +4,7 @@ extends Node2D
 # Dictionary of labels keyed by feedback type
 @onready var labels := {
 	"not_enough_coins": $NotEnoughCoins,
+	"no_slots_left": $NoSlotsLeft
 }
 
 var tweens := {}

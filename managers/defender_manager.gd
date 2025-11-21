@@ -93,12 +93,21 @@ func _on_buy_defender_button_pressed() -> void:
 # BUY DEFENDER
 # ---------------------------
 func buy_defender():
+	# Check if all slots are full first
+	var empty_slots = defender_slots.filter(func(s): return not s.is_occupied)
+	if empty_slots.is_empty():
+		_trigger_feedback("no_slots_left")
+		return false
+
+	# Then check if player has enough coins
 	if not coin_manager or not coin_manager.try_deduct(current_defender_cost):
 		_trigger_feedback("not_enough_coins")
 		return false
 
+	# Spawn defender
 	_spawn_defender()
 	return true
+
 
 
 func _trigger_feedback(type: String):
