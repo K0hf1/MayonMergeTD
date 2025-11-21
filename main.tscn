@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://c465oi4ipgg4j"]
+[gd_scene load_steps=80 format=3 uid="uid://c465oi4ipgg4j"]
 
 [ext_resource type="Texture2D" uid="uid://cwj6t6w1xf15q" path="res://overworld_tileset_grass.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://r72nkfpdcwr7" path="res://TX Props.png" id="2_0xm2m"]
@@ -11,8 +11,10 @@
 [ext_resource type="Script" uid="uid://1ykehtyae66o" path="res://merge_handler.gd" id="5_lswn8"]
 [ext_resource type="Script" uid="uid://dhft3xlwoedyw" path="res://audio_linker.gd" id="6_0odxb"]
 [ext_resource type="Script" uid="uid://co4fqphm8xuiu" path="res://Spawner.gd" id="6_5vw27"]
+[ext_resource type="Script" uid="uid://bbjpx1yq0t46p" path="res://feedback_manager.gd" id="6_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://cb78y0kctovyd" path="res://EnemyPath.tscn" id="7_5vw27"]
 [ext_resource type="Script" uid="uid://cjht2v1hragfh" path="res://Crystal/crystal_area.gd" id="7_272bh"]
+[ext_resource type="Script" uid="uid://eurocf14wn5x" path="res://feedback_layer.gd" id="7_kq58d"]
 [ext_resource type="PackedScene" uid="uid://bdtgpuc4xxooq" path="res://defender_slots.tscn" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://c2kx6wecwwh2h" path="res://managers/game_manager.gd" id="10_4c57u"]
 [ext_resource type="Texture2D" uid="uid://4a3om8mx0s44" path="res://MainMenu/MainMenuAssets/unclicked-square.png" id="11_074og"]
@@ -1173,7 +1175,6 @@ script = ExtResource("2_ryguw")
 defender_randomizer = NodePath("DefenderRandomizer")
 defender_slots_parent_path = NodePath("DefenderSlots")
 buy_defender_button_path = NodePath("../../UI/BuyDefenderButton")
-feedback_label_path = NodePath("FeedbackLayer/NotEnoughCoins")
 
 [node name="DefenderRandomizer" type="Node" parent="GameManager/DefenderManager"]
 script = ExtResource("2_dg77c")
@@ -1183,9 +1184,13 @@ script = ExtResource("2_dg77c")
 [node name="MergeHandler" type="Node" parent="GameManager/DefenderManager"]
 script = ExtResource("5_lswn8")
 
-[node name="FeedbackLayer" type="Node2D" parent="GameManager/DefenderManager"]
+[node name="FeedbackManager" type="Node2D" parent="GameManager"]
+script = ExtResource("6_qsp4k")
 
-[node name="NotEnoughCoins" type="Label" parent="GameManager/DefenderManager/FeedbackLayer"]
+[node name="FeedbackLayer" type="Node2D" parent="GameManager/FeedbackManager"]
+script = ExtResource("7_kq58d")
+
+[node name="NotEnoughCoins" type="Label" parent="GameManager/FeedbackManager/FeedbackLayer"]
 visible = false
 z_index = 1
 offset_left = 195.0
@@ -1193,6 +1198,18 @@ offset_top = 743.0
 offset_right = 337.0
 offset_bottom = 766.0
 text = "Not Enough Coins!"
+label_settings = SubResource("LabelSettings_a6jrf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NoSlotsLeft" type="Label" parent="GameManager/FeedbackManager/FeedbackLayer"]
+visible = false
+z_index = 1
+offset_left = 191.0
+offset_top = 743.0
+offset_right = 341.0
+offset_bottom = 766.0
+text = "Defender Slots Full!"
 label_settings = SubResource("LabelSettings_a6jrf")
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -4,13 +4,14 @@ extends Area2D
 @export var max_health: int = 100
 @export var damage_to_base: int = 10
 @export var coin_value: int = 6
-@export var run_speed: float = 35.0
+@export var run_speed: float = 35.0  # base speed
 
 # ===== SCALING SETTINGS =====
 @export var base_health: int = 100
-@export var health_growth_rate: float = 1.15  # % per wave
-@export var speed_growth_rate: float = 1.01   # % per wave
+@export var health_growth_rate: float = 1.15  # 15% per wave
+@export var speed_growth_rate: float = 1.01   # 1% per wave
 @export var base_wave_for_scaling: int = 5    # Start scaling at wave 5
+@export var speed_multiplier_cap: float = 2.5 # max 2.5x base speed
 
 # ===== COIN DROPPING =====
 @export var coin_scene: PackedScene
@@ -32,7 +33,6 @@ func _ready() -> void:
 	_find_game_manager()
 	add_to_group("Enemy")
 
-	# Apply wave scaling if needed
 	if current_wave >= base_wave_for_scaling:
 		_apply_wave_scaling()
 
@@ -50,9 +50,13 @@ func _apply_wave_scaling() -> void:
 	if waves_above_base < 0:
 		return
 
+	# Health scaling
 	current_health = int(base_health * pow(health_growth_rate, waves_above_base))
 	max_health = current_health
-	run_speed = run_speed * pow(speed_growth_rate, waves_above_base)
+
+	# Speed scaling with relative cap
+	var scaled_speed = run_speed * pow(speed_growth_rate, waves_above_base)
+	run_speed = min(scaled_speed, run_speed * speed_multiplier_cap)
 
 	print("🌊 Wave %d scaling applied! Health: %d | Speed: %.2f" % [current_wave, max_health, run_speed])
 
@@ -148,7 +152,6 @@ func die():
 	remove_from_group("Enemy")
 	print("✓ Removed from 'Enemy' group")
 
-	# Notify WaveManager instead of GameManager
 	if game_manager:
 		var wave_manager = game_manager.get_node_or_null("WaveManager")
 		if wave_manager and wave_manager.has_method("enemy_died"):

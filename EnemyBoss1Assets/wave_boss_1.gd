@@ -4,20 +4,20 @@ extends Area2D
 @export var max_health: int = 1000
 @export var damage_to_base: int = 50
 @export var coin_value: int = 100
-@export var run_speed: float = 25.0
+@export var run_speed: float = 25.0  # base speed
 
 # ===== BOSS SCALING =====
 @export var base_health: int = 1000
 @export var health_growth_rate: float = 1.15   # 15% more health per wave
 @export var speed_growth_rate: float = 1.03    # 3% faster per wave
 @export var base_wave_for_scaling: int = 10    # start scaling at wave 10
+@export var speed_multiplier_cap: float = 2.5  # max 2.5x base speed
 
 # ===== COINS =====
 @export var coin_scene: PackedScene
 @export var coin_spawn_offset: Vector2 = Vector2.ZERO
-@export var coin_growth_rate: float = 1.10     # +10% per wave after base wave
+@export var coin_growth_rate: float = 1.10     # +10% per wave
 @export var coin_max_value: int = 9999         # safety cap
-
 
 # ===== INTERNAL =====
 var current_health: int
@@ -51,16 +51,17 @@ func _apply_wave_scaling() -> void:
 	if waves_above_base < 0:
 		return
 
-	# Scale boss stats
+	# Health scaling
 	current_health = int(base_health * pow(health_growth_rate, waves_above_base))
 	max_health = current_health
-	run_speed = run_speed * pow(speed_growth_rate, waves_above_base)
 
-	# 🪙 Coin scaling
-	# 🪙 Coin scaling (no flat bonus)
+	# Speed scaling with relative cap
+	var scaled_speed = run_speed * pow(speed_growth_rate, waves_above_base)
+	run_speed = min(scaled_speed, run_speed * speed_multiplier_cap)
+
+	# Coin scaling
 	var scaled_coin = int(coin_value * pow(coin_growth_rate, waves_above_base))
 	coin_value = clamp(scaled_coin, 0, coin_max_value)
-
 
 	print("👑 Boss wave scaling | Wave:", current_wave, "| HP:", max_health, "| Speed:", run_speed, "| Coins:", coin_value)
 
@@ -86,7 +87,6 @@ func create_health_bar():
 	health_bar.custom_minimum_size = Vector2(100, 12)
 	health_bar.position = Vector2(-50, -80)
 	health_bar.z_index = 200
-
 
 	health_bar_style_bg = StyleBoxFlat.new()
 	health_bar_style_bg.bg_color = Color(0.1, 0.1, 0.1, 0.9)
